@@ -6,7 +6,7 @@ Agriculture is the backbone of Ethiopia’s economy but millions of ethiopian fa
 Our mission is to tackle the root causes of agricultural inefficiency and rural poverty by addressing five critical main points in the sector:
 ### Key Problems We Target
 1. #### Lack of Access to Market Prices
-   Many Ethiopian farmers are forced to sell their produce at unfairly low prices due to the lack of access to real time market information and limited exposure to             different marketplaces.
+   Many Ethiopian farmers are forced to sell their produce at unfairly low prices due to the lack of access to real-time market information and limited exposure to             different marketplaces.
    Agrolink aims to empower farmers by offering a digital platform where they can:
      * Access live market price data for crops across regions.
      * List and sell their products directly to buyers through our online marketplace.
@@ -16,9 +16,9 @@ Our mission is to tackle the root causes of agricultural inefficiency and rural 
 2. #### Crop Disease Identification
    Many farmers struggle to diagnose plant diseases early, leading to crop losses. We aim to introduce image-based disease detection using AI or community-sourced support      to help farmers respond faster and save their yields.
 3. #### Weather Unpredictability
-   With changing climate conditions, weather patterns are more dynamic than ever. AgriConnect will integrate localized weather forecasts and alerts to help farmers plan         sowing, harvesting, and irrigation more efficiently and effectively.
+   With changing climate conditions, weather patterns are more dynamic than ever. Agrolink will integrate localized weather forecasts and alerts to help farmers plan           sowing, harvesting, and irrigation more efficiently and effectively.
 4. #### Supply Chain Inefficiencies
-   Farmers often face delays, lack of transport systems due to limited infrustructures, and poor connections to buyers. We will work on building a simplified digital supply     chain through the platform.
+   Farmers often face delays, lack of transport systems due to limited infrastructure, and poor connections to buyers. We will work on building a simplified digital supply     chain through the platform.
 5. #### Absence of Localized Farming Advice
    Farming techniques that work in one region may not work in another. Our platform will offer location-aware, crop-specific guidance in Amharic languages, based on region,    soil type, and farming practices.
 
@@ -34,7 +34,7 @@ Our mission is to tackle the root causes of agricultural inefficiency and rural 
   Weather APIs – to provide real-time weather information tailored to farmers' locations.
   Agricultural Datasets – to offer localized farming advice and market insights.
   Machine Learning Model – integrated via API to enable crop disease detection based on image or symptom data.
-- Hosting & Deployment:render
+- Hosting & Deployment - render
 
 ### Target Users
 Agrolink is designed to serve the entire agricultural value chain, with a focus on empowerment. Our primary users include:
@@ -57,7 +57,7 @@ We envision a future where every Ethiopian farmer has access to vital agricultur
 
 ### Business Features
 
-Note: This is a planned project currently in the design and planning phase.
+**Note**: This is a planned project currently in the design and planning phase.
 
 #### Feature 1: Digital Brokerage Marketplace
 
@@ -68,9 +68,9 @@ Functionality:
 Farmer submits product to Agrolink physically or via verified local agents.
 Agrolink posts the product with:
 
-  * Crop details (name, quantity, price)
-  * Photo of the product
-  * Farmer’s phone number, location, and identity
+  - Crop details (name, quantity, price)
+  - Photo of the product
+  - Farmer’s phone number, location, and identity
 * Buyers browse the listed products, select what they want, and initiate purchase.
 
 Transaction Process:
