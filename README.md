@@ -92,7 +92,7 @@ Functionality:
   * Farmers can manage product listings and view payments.
   * Buyers can browse products and make purchases.
 
-### Feature 3: Crop Disease Diagnosis Tool
+#### Feature 3: Crop Disease Diagnosis Tool
 
 Functionality:
 
@@ -102,7 +102,7 @@ Functionality:
   * Disease identification
   * Recommended treatments or next steps
 
-### Feature 4: Localized Weather Forecasting
+#### Feature 4: Localized Weather Forecasting
 
 Functionality:
 
@@ -110,7 +110,7 @@ Functionality:
 * Timely alerts about rain, drought, and temperature trends.
 * Helps farmers plan planting, harvesting, and irrigation.
 
-### Feature 5: Location-Based Farming Advice
+#### Feature 5: Location-Based Farming Advice
 
 Functionality:
 
@@ -121,7 +121,7 @@ Functionality:
   * Geographic location.
 
 
-### Feature 6: Transparent Transaction History
+#### Feature 6: Transparent Transaction History
 
 Functionality:
 
@@ -131,7 +131,7 @@ Functionality:
   * Payment status
   * Commission breakdowns
 * Enhances trust and accountability.
-### Feature 7: Commission Management System
+#### Feature 7: Commission Management System
 
 Functionality:
 
