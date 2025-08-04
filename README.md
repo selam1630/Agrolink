@@ -5,22 +5,22 @@ Agriculture is the backbone of Ethiopia’s economy but millions of ethiopian fa
 
 Our mission is to tackle the root causes of agricultural inefficiency and rural poverty by addressing five critical main points in the sector:
 ### Key Problems We Target
-1. Lack of Access to Market Prices
-   Many Ethiopian farmers are forced to sell their produce at unfairly low prices due to the lack of access to real time market information and limited exposure to different    marketplaces.
+1. ### Lack of Access to Market Prices
+   Many Ethiopian farmers are forced to sell their produce at unfairly low prices due to the lack of access to real time market information and limited exposure to             different marketplaces.
    Agrolink aims to empower farmers by offering a digital platform where they can:
-     Access live market price data for crops across regions.
-     List and sell their products directly to buyers through our online marketplace.
-     Compare prices and demand, helping them make informed selling decisions.
+     * Access live market price data for crops across regions.
+     * List and sell their products directly to buyers through our online marketplace.
+     * Compare prices and demand, helping them make informed selling decisions.
    By bridging this gap, Agrolink ensures farmers receive fair value for their products and reducing exploitation by middlemen.
 
-2. Crop Disease Identification
+2. ### Crop Disease Identification
    Many farmers struggle to diagnose plant diseases early, leading to crop losses. We aim to introduce image-based disease detection using AI or community-sourced support      to help farmers respond faster and save their yields.
-3. Weather Unpredictability
+3. ### Weather Unpredictability
    With changing climate conditions, weather patterns are more dynamic than ever. AgriConnect will integrate localized weather forecasts and alerts to help farmers plan         sowing, harvesting, and irrigation more efficiently and effectively.
-4. Supply Chain Inefficiencies
+4. ### Supply Chain Inefficiencies
    Farmers often face delays, lack of transport systems due to limited infrustructures, and poor connections to buyers. We will work on building a simplified digital supply     chain through the platform.
-5. Absence of Localized Farming Advice
-   Farming techniques that work in one region may not work in another. Our platform will offer location-aware, crop-specific guidance in Amharic languages, based on region,     soil type, and farming practices.
+5. ### Absence of Localized Farming Advice
+   Farming techniques that work in one region may not work in another. Our platform will offer location-aware, crop-specific guidance in Amharic languages, based on region,    soil type, and farming practices.
 
 
 ### Tech Stack Overview
