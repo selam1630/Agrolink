@@ -40,16 +40,16 @@ Our mission is to tackle the root causes of agricultural inefficiency and rural 
 Agrolink is designed to serve the entire agricultural value chain, with a focus on empowerment. Our primary users include:
 
 1. #### Ethiopian Farmers
-Smallholder and medium-scale farmers across Ethiopia who need access to fair marketplaces, accurate market prices, disease detection tools, and localized farming advice.
+   Smallholder and medium-scale farmers across Ethiopia who need access to fair marketplaces, accurate market prices, disease detection tools, and localized farming advice.
 
 2. #### Public Buyers / Consumers
-Individuals or businesses who wish to purchase fresh produce directly from trusted local farmers.
+   Individuals or businesses who wish to purchase fresh produce directly from trusted local farmers.
 
 3. #### Cooperatives & Farmer Unions
-Organizations that manage or support groups of farmers and are looking for efficient ways to market bulk produce, get advice, or access logistics.
+   Organizations that manage or support groups of farmers and are looking for efficient ways to market bulk produce, get advice, or access logistics.
 
 4. #### Suppliers & Agro-dealers
-Vendors that supply seeds, fertilizers, pesticides, and farming equipment.
+   Vendors that supply seeds, fertilizers, pesticides, and farming equipment.
   
 
 ### Vision
