@@ -14,13 +14,46 @@ Our mission is to tackle the root causes of agricultural inefficiency and rural 
    By bridging this gap, Agrolink ensures farmers receive fair value for their products and reducing exploitation by middlemen.
 
 2. Crop Disease Identification
-   Many farmers struggle to diagnose plant diseases early, leading to crop losses. We aim to introduce image-based disease detection using AI or community-sourced support to    help farmers respond faster and save their yields.
+   Many farmers struggle to diagnose plant diseases early, leading to crop losses. We aim to introduce image-based disease detection using AI or community-sourced support      to help farmers respond faster and save their yields.
 3. Weather Unpredictability
    With changing climate conditions, weather patterns are more dynamic than ever. AgriConnect will integrate localized weather forecasts and alerts to help farmers plan         sowing, harvesting, and irrigation more efficiently and effectively.
 4. Supply Chain Inefficiencies
    Farmers often face delays, lack of transport systems due to limited infrustructures, and poor connections to buyers. We will work on building a simplified digital supply     chain through the platform.
 5. Absence of Localized Farming Advice
    Farming techniques that work in one region may not work in another. Our platform will offer location-aware, crop-specific guidance in Amharic languages, based on region,     soil type, and farming practices.
+
+
+### Tech Stack Overview
+- Frontend:
+  React with TypeScript – for building a responsive, user-friendly, and dynamic web interface.
+- Backend:
+  Node.js with Express (TypeScript) – to handle server-side logic, API endpoints, and user authentication.
+- Database:
+  MongoDB – a flexible and scalable NoSQL database for storing user profiles, market data, crop records, and more.
+- APIs & Integrations:
+  Weather APIs – to provide real-time weather information tailored to farmers' locations.
+  Agricultural Datasets – to offer localized farming advice and market insights.
+  Machine Learning Model – integrated via API to enable crop disease detection based on image or symptom data.
+- Hosting & Deployment:render
+
+### Target Users
+Agrolink is designed to serve the entire agricultural value chain, with a focus on empowerment. Our primary users include:
+
+1. Ethiopian Farmers
+Smallholder and medium-scale farmers across Ethiopia who need access to fair marketplaces, accurate market prices, disease detection tools, and localized farming advice.
+
+2. Public Buyers / Consumers
+Individuals or businesses who wish to purchase fresh produce directly from trusted local farmers.
+
+3. Cooperatives & Farmer Unions
+Organizations that manage or support groups of farmers and are looking for efficient ways to market bulk produce, get advice, or access logistics.
+
+4. Suppliers & Agro-dealers
+Vendors that supply seeds, fertilizers, pesticides, and farming equipment.
+  
+
+### Vision
+We envision a future where every Ethiopian farmer has access to vital agricultural knowledge and real-time market connections to break the cycle of poverty. By combining technology with community, Agrolink aims to be a catalyst for inclusive and sustainable agricultural development.
 
 ### Business Features
 
@@ -106,50 +139,18 @@ Functionality:
 * Tracks platform earnings for sustainability.
 * Transparent for all users to see what was charged and paid.
    
-### Tech Stack Overview
-- Frontend:
-  React with TypeScript – for building a responsive, user-friendly, and dynamic web interface.
-- Backend:
-  Node.js with Express (TypeScript) – to handle server-side logic, API endpoints, and user authentication.
-- Database:
-  MongoDB – a flexible and scalable NoSQL database for storing user profiles, market data, crop records, and more.
-- APIs & Integrations:
-  Weather APIs – to provide real-time weather information tailored to farmers' locations.
-  Agricultural Datasets – to offer localized farming advice and market insights.
-  Machine Learning Model – integrated via API to enable crop disease detection based on image or symptom data.
-- Hosting & Deployment:render
-
-### Target Users
-Agrolink is designed to serve the entire agricultural value chain, with a focus on empowerment. Our primary users include:
-
-1. Ethiopian Farmers
-Smallholder and medium-scale farmers across Ethiopia who need access to fair marketplaces, accurate market prices, disease detection tools, and localized farming advice.
-
-2. Public Buyers / Consumers
-Individuals or businesses who wish to purchase fresh produce directly from trusted local farmers.
-
-3. Cooperatives & Farmer Unions
-Organizations that manage or support groups of farmers and are looking for efficient ways to market bulk produce, get advice, or access logistics.
-
-4. Suppliers & Agro-dealers
-Vendors that supply seeds, fertilizers, pesticides, and farming equipment.
-  
-
-### Vision
-We envision a future where every Ethiopian farmer has access to vital agricultural knowledge and real-time market connections to break the cycle of poverty. By combining technology with community, Agrolink aims to be a catalyst for inclusive and sustainable agricultural development.
-
 ### Future Roadmap
 
  #### Short-Term (Next 3 Months):
- Finalize UI/UX design mockups
- Build MVP with core marketplace features
- Integrate payment system 
- Start pilot onboarding with select Ethiopian farmers
+ * Finalize UI/UX design mockups
+ * Build MVP with core marketplace features
+ * Integrate payment system 
+ * Start pilot onboarding with select Ethiopian farmers
  
  #### Long-Term 
- AI disease diagnosis expansion
- Partnerships with cooperatives
- Integration with Telebirr 
+ * AI disease diagnosis expansion
+ * Partnerships with cooperatives
+ * Integration with Telebirr 
 
  
 
