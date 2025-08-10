@@ -54,8 +54,6 @@ export const login = async (req: Request, res: Response) => {
     });
 
     if (!user) return res.status(401).json({ error: 'Invalid credentials' });
-
-    // IMPORTANT: Check if user.password exists (not null)
     if (!user.password) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }

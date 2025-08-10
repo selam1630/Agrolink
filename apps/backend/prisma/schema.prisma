@@ -1,4 +1,4 @@
-// prisma/schema.prisma
+// File: prisma/schema.prisma
 
 generator client {
   provider = "prisma-client-js"
@@ -15,14 +15,17 @@ model User {
   name     String?
   role     String
   email    String?
-  password String?  
+  password String?
   products Product[]
 }
 
 model Product {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  quantity Int
-  userId   String @db.ObjectId
-  user     User   @relation(fields: [userId], references: [id])
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  quantity    Int
+  price       Float?   
+  description String? 
+  imageUrl    String?  
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
 }

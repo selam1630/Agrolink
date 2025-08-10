@@ -61,12 +61,11 @@ role: 'Farmer',
 email: null
 }
 });
-// Send Amharic confirmation message to new user
 await axios.post(
 `${BASE_URL}/gateway/devices/${TEXTBEE_DEVICE_ID}/send-sms`,
 {
 recipients: [from],
-message: 'ተመዝግበዋል! ምርቶችዎን ለመሸጥ የምርቶቹን አይነት እና ብዛት ይላኩ።'
+message: 'እንኳን ወደ አግሮLink በሰላም መጡ! የአገልግሎቶቻችን ተጠቃሚ ለመሆን ያሎትን ምርቶች ዝርዝር አይነት፣ ብዛት እና ዋጋ ይላኩ። እኛን ስለመረጡ እናመሰግናለን።'
 },
 {
 headers: { 
