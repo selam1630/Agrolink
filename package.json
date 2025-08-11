@@ -2,9 +2,17 @@
   "name": "agrolink-monorepo",
   "private": true,
   "workspaces": [
-    "apps/*"
+    "apps/backend",
+    "apps/frontend"
   ],
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "dev:backend": "docker-compose up --build",
+    "dev:frontend": "cd apps/frontend && npm run dev",
+    "dev:apps": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
+  },
   "devDependencies": {
-    "turbo": "^1.13.4"
+    "turbo": "^1.13.4",
+    "concurrently": "^8.2.0"
   }
 }
