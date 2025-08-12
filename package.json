@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "dev": "turbo run dev --parallel",
-    "dev:backend": "docker-compose up --build",
+    "dev:backend": "docker compose up",
     "dev:frontend": "cd apps/frontend && npm run dev",
     "dev:apps": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
   },

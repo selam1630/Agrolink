@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "onlyBack": "nodemon index.ts",
-    "dev": "docker compose up backend",
+    "dev": "nodemon --legacy-watch index.ts",
     "build": "tsc",
     "lint": "eslint ."
   },
