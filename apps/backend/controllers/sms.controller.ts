@@ -85,7 +85,6 @@ if (axios.isAxiosError(smsError)) {
 } else {
 	console.error('Error sending welcome SMS:', smsError);
 }
-// Don't return an error here, since the user was still created in the database.
 }
 }
 return res.status(200).json({ message: 'User added or exists', userId: user.id });
@@ -125,8 +124,6 @@ quantity,
 userId: user.id
 }
 });
-
-// Added console.log and try/catch block for debugging
 try {
 console.log('Attempting to send product confirmation SMS...');
 await axios.post(
@@ -149,7 +146,6 @@ if (axios.isAxiosError(smsError)) {
 } else {
 	console.error('Error sending product confirmation SMS:', smsError);
 }
-// Don't return an error here, since the product was still created.
 }
 
 return res.status(200).json({ message: 'Product added and confirmation sent', product });

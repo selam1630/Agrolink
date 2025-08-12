@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import agriIcon from '@/assets/images/agriIcon.png'; // Assuming this is a valid path
+import { useAuth } from '@/context/AuthContext'; // Import useAuth hook
 
 interface SignInData {
   phoneNumber: string;
@@ -8,6 +9,8 @@ interface SignInData {
 }
 
 const SignIn: React.FC = () => {
+  const { setAuth } = useAuth(); 
+
   const [formData, setFormData] = useState<SignInData>({
     phoneNumber: '',
     password: '',
@@ -26,6 +29,17 @@ const SignIn: React.FC = () => {
       ...formData,
       [name]: value,
     });
+  };
+
+  const handleLoginSuccess = (data: any) => {
+    setSuccessMessage('Login successful! Redirecting...');
+    setAuth(data.token, data.userId); 
+    localStorage.setItem('role', data.role);
+    if (data.role === 'farmer') {
+      navigate('/create-product');
+    } else {
+      navigate('/dashboard');
+    }
   };
 
   const handlePasswordLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -51,10 +65,7 @@ const SignIn: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setSuccessMessage('Login successful! Redirecting...');
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('role', data.role);
-        navigate('/dashboard');
+        handleLoginSuccess(data);
       } else {
         setError(data.error || 'Unknown error');
       }
@@ -124,10 +135,7 @@ const SignIn: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setSuccessMessage('Login successful! Redirecting...');
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('role', data.role);
-        navigate('/dashboard');
+        handleLoginSuccess(data);
       } else {
         setError(data.error || 'Invalid or expired OTP.');
       }

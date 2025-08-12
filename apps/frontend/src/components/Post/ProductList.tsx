@@ -7,8 +7,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-
-// The Product type now reflects the data structure from your backend API
 type Product = {
   id: string;
   name: string;
@@ -24,8 +22,6 @@ const ProductsList: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-
-  // Fetch products from the backend API
   useEffect(() => {
     const fetchProducts = async () => {
       try {

@@ -1,5 +1,21 @@
 import { Request, Response } from 'express';
 import prisma from '../prisma/prisma';
+import jwt from 'jsonwebtoken';
+const JWT_SECRET = process.env.JWT_SECRET || 'YOUR_JWT_SECRET_FALLBACK';
+const getUserIdFromToken = (req: Request): string | null => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return null;
+  }
+  const token = authHeader.split(' ')[1];
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    return (decoded as { userId: string }).userId;
+  } catch (error) {
+    console.error('Invalid token:', error);
+    return null;
+  }
+};
 
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
@@ -14,6 +30,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Server error fetching products.' });
   }
 };
+
 export const addProduct = async (req: Request, res: Response) => {
   const { phone } = req.body;
 
@@ -36,9 +53,15 @@ export const addProduct = async (req: Request, res: Response) => {
       });
       return res.status(201).json({ message: 'Product added via SMS', product });
     } else {
-      const { name, quantity, price, description, imageUrl, userId } = req.body;
-      if (!name || quantity === undefined || price === undefined || !imageUrl || !userId) {
-        return res.status(400).json({ error: 'Missing required product fields: name, quantity, price, imageUrl, or userId.' });
+      const userIdFromToken = getUserIdFromToken(req);
+
+      if (!userIdFromToken) {
+        return res.status(401).json({ error: 'You must be logged in to post a product.' });
+      }
+
+      const { name, quantity, price, description, imageUrl } = req.body;
+      if (!name || quantity === undefined || price === undefined || !imageUrl || !description) {
+        return res.status(400).json({ error: 'Missing required product fields: name, quantity, price, imageUrl, or description.' });
       }
       const product = await prisma.product.create({
         data: {
@@ -47,7 +70,7 @@ export const addProduct = async (req: Request, res: Response) => {
           price: parseFloat(price),
           description,
           imageUrl,
-          userId,
+          userId: userIdFromToken,
         },
       });
       return res.status(201).json({ message: 'Product posted with image successfully!', product });

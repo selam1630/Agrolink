@@ -19,8 +19,8 @@ model User {
   products  Product[]
   otp       String?
   otpExpiresAt DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime? @default(now()) @map("createdAt")
+  updatedAt DateTime? @updatedAt @map("updatedAt")
 }
 
 model Product {
@@ -33,6 +33,6 @@ model Product {
   userId      String    @db.ObjectId
   user        User      @relation(fields: [userId], references: [id])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime? @default(now()) @map("createdAt")
+  updatedAt DateTime? @updatedAt @map("updatedAt")
 }
