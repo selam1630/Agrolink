@@ -1,61 +1,38 @@
 // File: prisma/schema.prisma
 
-
-
 generator client {
-
-  provider = "prisma-client-js"
-
+  provider = "prisma-client-js"
 }
-
-
 
 datasource db {
-
-  provider = "mongodb"
-
-  url      = env("DATABASE_URL")
-
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
-
-
 
 model User {
-
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-
-  phone    String    @unique
-
-  name     String?
-
-  role     String
-
-  email    String?
-
-  password String?
-
-  products Product[]
-
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  phone     String    @unique
+  name      String?
+  role      String
+  email     String?
+  password  String?
+  products  Product[]
+  otp       String?
+  otpExpiresAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-
-
 model Product {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  quantity    Int
+  price       Float?
+  description String?
+  imageUrl    String?
+  userId      String    @db.ObjectId
+  user        User      @relation(fields: [userId], references: [id])
 
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-
-  name        String
-
-  quantity    Int
-
-  price       Float?   
-
-  description String? 
-
-  imageUrl    String?  
-
-  userId      String   @db.ObjectId
-
-  user        User     @relation(fields: [userId], references: [id])
-
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
