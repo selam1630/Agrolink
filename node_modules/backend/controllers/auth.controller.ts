@@ -42,7 +42,7 @@ const sendTextBeeSMS = async (recipient: string, message: string) => {
 
 /**
  * @route POST /api/auth/register
- * @description Original registration endpoint (now unused in the new flow)
+ * @description Original registration endpoint
  */
 export const register = async (req: Request, res: Response) => {
   const { name, phone, email, password, role } = req.body;
@@ -133,8 +133,6 @@ export const registerAndSendOtp = async (req: Request, res: Response) => {
       const otp = generateOTP();
       const hashedPassword = await bcrypt.hash(password, 10);
       const otpExpiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes validity
-  
-      // Store the registration data in a temporary in-memory map
       registrationData.set(phone, {
         name,
         email,
@@ -149,7 +147,7 @@ export const registerAndSendOtp = async (req: Request, res: Response) => {
       if (smsSent) {
         return res.status(200).json({ message: 'OTP sent successfully. Please verify to complete registration.' });
       } else {
-        registrationData.delete(phone); // Clean up on failure
+        registrationData.delete(phone); 
         return res.status(500).json({ error: 'Failed to send OTP. Please try again.' });
       }
     } catch (error) {
@@ -177,7 +175,6 @@ export const registerAndSendOtp = async (req: Request, res: Response) => {
     }
   
     try {
-      // Create the user in the database now that the OTP is verified
       const user = await prisma.user.create({
         data: {
           phone,
@@ -196,3 +193,81 @@ export const registerAndSendOtp = async (req: Request, res: Response) => {
       res.status(500).json({ error: 'Registration failed' });
     }
   };
+
+/**
+ * @route POST /api/auth/login-with-otp
+ * @description Sends an OTP to an existing user for login.
+ */
+export const loginAndSendOtp = async (req: Request, res: Response) => {
+  const { phone } = req.body;
+
+  if (!phone) {
+    return res.status(400).json({ error: 'Phone number is required.' });
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { phone },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    const otp = generateOTP();
+    const otpExpiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes validity
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { otp, otpExpiresAt },
+    });
+
+    const smsSent = await sendTextBeeSMS(phone, `Agrolink Login Code: ${otp}. Do not share this code.`);
+
+    if (smsSent) {
+      return res.status(200).json({ message: 'OTP sent successfully. Please verify to log in.' });
+    } else {
+      return res.status(500).json({ error: 'Failed to send OTP. Please try again.' });
+    }
+  } catch (error) {
+    console.error('Error during OTP login request:', error);
+    res.status(500).json({ error: 'Login failed' });
+  }
+};
+
+/**
+ * @route POST /api/auth/verify-login-otp
+ * @description Verifies OTP for login and returns a JWT token.
+ */
+export const verifyLoginOtp = async (req: Request, res: Response) => {
+  const { phone, otp } = req.body;
+
+  if (!phone || !otp) {
+    return res.status(400).json({ error: 'Phone number and OTP are required.' });
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { phone },
+    });
+
+    if (!user || user.otp !== otp || !user.otpExpiresAt || user.otpExpiresAt < new Date()) {
+      if (user) {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { otp: null, otpExpiresAt: null },
+        });
+      }
+      return res.status(401).json({ error: 'Invalid or expired OTP.' });
+    }
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { otp: null, otpExpiresAt: null },
+    });
+    const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '1d' });
+
+    return res.status(200).json({ message: 'Login successful.', token, role: user.role });
+  } catch (error) {
+    console.error('Error during OTP login verification:', error);
+    res.status(500).json({ error: 'Login failed' });
+  }
+};
