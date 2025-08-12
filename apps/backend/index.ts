@@ -4,6 +4,7 @@ import cors from "cors";
 import authRoutes from "./routes/auth.route";
 import smsRoutes from "./routes/sms.route";
 import productRoutes from "./routes/product.route";
+import adviceRoutes from "./routes/advice.route";
 
 dotenv.config();
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRoutes);
 app.use("/api/sms", smsRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api", adviceRoutes);
 
 app.listen(5000, "0.0.0.0", () => {
   console.log("Server running on port 5000");
