@@ -13,14 +13,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useAuth } from '@/context/AuthContext';
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
 const Label = LabelPrimitive.Root;
 
 const PostProduct: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { userId, token } = useAuth(); 
+  const { userId, token } = useAuth(); // Get userId and token from AuthContext
 
   const [product, setProduct] = useState({
     name: "",
@@ -58,10 +58,11 @@ const PostProduct: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setMessage("");
-    if (!token) {
+
+    if (!token || !userId) {
       setMessage("Error: You must be logged in to post a product.");
       setIsSubmitting(false);
-      navigate("/sign-in"); 
+      navigate("/sign-in");
       return;
     }
 
@@ -87,6 +88,8 @@ const PostProduct: React.FC = () => {
 
       const result = await response.json();
       setMessage(result.message);
+      
+      // Clear the form on successful submission
       setProduct({
         name: "",
         quantity: "",
@@ -107,6 +110,7 @@ const PostProduct: React.FC = () => {
       setIsSubmitting(false);
     }
   };
+
   if (token === null) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-green-50 p-6">
@@ -126,9 +130,13 @@ const PostProduct: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="space-y-8">
           <CardContent className="px-6 py-8">
+            {/* Name, Quantity, and Price side by side */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
               <div>
-                <Label htmlFor="name" className="block mb-2 text-lg font-semibold text-green-800">
+                <Label
+                  htmlFor="name"
+                  className="block mb-2 text-lg font-semibold text-green-800"
+                >
                   {t("postProduct.productName")}
                 </Label>
                 <Input
@@ -144,7 +152,10 @@ const PostProduct: React.FC = () => {
               </div>
 
               <div>
-                <Label htmlFor="quantity" className="block mb-2 text-lg font-semibold text-green-800">
+                <Label
+                  htmlFor="quantity"
+                  className="block mb-2 text-lg font-semibold text-green-800"
+                >
                   {t("postProduct.quantity")}
                 </Label>
                 <Input
@@ -162,7 +173,10 @@ const PostProduct: React.FC = () => {
               </div>
 
               <div>
-                <Label htmlFor="price" className="block mb-2 text-lg font-semibold text-green-800">
+                <Label
+                  htmlFor="price"
+                  className="block mb-2 text-lg font-semibold text-green-800"
+                >
                   {t("postProduct.price")}
                 </Label>
                 <Input
@@ -181,8 +195,12 @@ const PostProduct: React.FC = () => {
               </div>
             </div>
 
+            {/* Description */}
             <div className="mb-6">
-              <Label htmlFor="description" className="block mb-2 text-lg font-semibold text-green-800">
+              <Label
+                htmlFor="description"
+                className="block mb-2 text-lg font-semibold text-green-800"
+              >
                 {t("postProduct.description")}
               </Label>
               <Textarea
@@ -197,8 +215,12 @@ const PostProduct: React.FC = () => {
               />
             </div>
 
+            {/* Image Upload */}
             <div className="mb-6">
-              <Label htmlFor="image" className="block mb-2 text-lg font-semibold text-green-800">
+              <Label
+                htmlFor="image"
+                className="block mb-2 text-lg font-semibold text-green-800"
+              >
                 {t("postProduct.uploadImage")}
               </Label>
               <Input

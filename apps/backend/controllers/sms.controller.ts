@@ -2,23 +2,19 @@ import crypto from 'crypto';
 import { Request, Response, NextFunction } from 'express';
 import prisma from '../prisma/prisma';
 import axios from 'axios';
+
 const TEXTBEE_SIGNING_SECRET = process.env.TEXTBEE_SIGNING_SECRET || '';
 const TEXTBEE_API_KEY = process.env.TEXTBEE_API_KEY || '';
 const TEXTBEE_DEVICE_ID = process.env.TEXTBEE_DEVICE_ID || '';
 const BASE_URL = 'https://api.textbee.dev/api/v1';
+const MAX_REGISTRATION_ATTEMPTS_PER_DAY = 3;
+const TWENTY_FOUR_HOURS_IN_MS = 24 * 60 * 60 * 1000;
 const generateProductImage = async (prompt: string) => {
   const fullPrompt = `A photorealistic image of a product, specifically: "${prompt}".`;
   const apiKey = "";
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-preview-image-generation:generateContent?key=${apiKey}`;
+  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
 
-  const payload = {
-    contents: [{
-      parts: [{ text: fullPrompt }]
-    }],
-    generationConfig: {
-      responseModalities: ['TEXT', 'IMAGE']
-    },
-  };
+  const payload = { instances: { prompt: fullPrompt }, parameters: { "sampleCount": 1 } };
 
   try {
     const response = await fetch(apiUrl, {
@@ -33,15 +29,13 @@ const generateProductImage = async (prompt: string) => {
     }
 
     const result: any = await response.json();
-    const base64Data = result?.candidates?.[0]?.content?.parts?.find(
-      (p: { inlineData: { data: string; mimeType: string; } }) => p.inlineData
-    )?.inlineData?.data;
+    const base64Data = result?.predictions?.[0]?.bytesBase64Encoded;
 
     if (base64Data) {
       console.log('Image generation successful!');
       return `data:image/png;base64,${base64Data}`;
     }
-    
+
     console.error('API Error: Response did not contain base64 image data.');
     return null;
   } catch (error) {
@@ -68,12 +62,42 @@ export const verifyTextBeeSignature = (req: Request, res: Response, next: NextFu
   next();
 };
 
+const generateOTP = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
+const sendSms = async (recipient: string, message: string) => {
+  try {
+    await axios.post(
+      `${BASE_URL}/gateway/devices/${TEXTBEE_DEVICE_ID}/send-sms`,
+      {
+        recipients: [recipient],
+        message: message,
+      },
+      {
+        headers: {
+          'x-api-key': TEXTBEE_API_KEY,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    console.log(`SMS sent successfully to ${recipient}.`);
+  } catch (smsError) {
+    if (axios.isAxiosError(smsError)) {
+      console.error('Error sending SMS:', smsError.response ? smsError.response.data : smsError.message);
+    } else {
+      console.error('Error sending SMS:', smsError);
+    }
+  }
+};
+
 const amharicToArabic = (text: string) => {
   const map: Record<string, string> = {
     '፩': '1', '፪': '2', '፫': '3', '፬': '4', '፭': '5',
-    '፮': '6', '፯': '7', '፰': '8', '፱': '9', '፲': '10'
+    '፮': '6', '፯': '7', '፰': '8', '፱': '9', '፲': '10',
+    '0': '0'
   };
-  return text.replace(/[፩-፲]/g, (char) => map[char] || char);
+  return text.replace(/[\u1369-\u137B]/g, (char) => map[char] || char);
 };
 
 const amharicToEnglish: { [key: string]: string } = {
@@ -95,127 +119,124 @@ export const receiveSMS = async (req: Request, res: Response) => {
   console.log('Incoming SMS webhook payload:', req.body);
   const from = req.body.sender;
   const rawText = req.body.message?.trim();
+  const amharicHa = 'ሀ';
 
   if (!from || !rawText) {
     return res.status(400).json({ error: 'Missing sender or text' });
   }
 
   const text = amharicToArabic(rawText);
-  const amharicHa = 'ሀ';
 
   try {
+    let user = await prisma.user.findUnique({ where: { phone: from } });
     if (text.includes(amharicHa)) {
-      let user = await prisma.user.findUnique({
-        where: { phone: from }
-      });
-
       if (!user) {
-        user = await prisma.user.create({
-          data: {
+        const now = new Date();
+        const attemptsToday = await prisma.user.count({
+          where: {
             phone: from,
-            name: 'New User',
-            role: 'Farmer',
-            email: null
+            lastRegistrationAttempt: { gte: new Date(now.getTime() - TWENTY_FOUR_HOURS_IN_MS) }
           }
         });
 
-        try {
-          console.log('Attempting to send welcome SMS to new user...');
-          await axios.post(
-            `${BASE_URL}/gateway/devices/${TEXTBEE_DEVICE_ID}/send-sms`,
-            {
-              recipients: [from],
-              message: 'እንኳን ወደ አግሮLink በሰላም መጡ! የአገልግሎቶቻችን ተጠቃሚ ለመሆን ያሎትን ምርቶች ዝርዝር አይነት፣ ብዛት እና ዋጋ ይላኩ። እኛን ስለመረጡ እናመሰግናለን።'
-            },
-            {
-              headers: { 
-                'x-api-key': TEXTBEE_API_KEY,
-                'Content-Type': 'application/json'
-              }
-            }
-          );
-          console.log('Welcome SMS sent successfully.');
-        } catch (smsError) {
-          if (axios.isAxiosError(smsError)) {
-            console.error('Error sending welcome SMS:', smsError.response ? smsError.response.data : smsError.message);
-          } else {
-            console.error('Error sending welcome SMS:', smsError);
-          }
+        if (attemptsToday >= MAX_REGISTRATION_ATTEMPTS_PER_DAY) {
+          await sendSms(from, 'እባክዎ በቀን 3 ጊዜ ብቻ ነው ለመመዝገብ መሞከር የሚችሉት።');
+          return res.status(200).json({ message: 'Rate limit exceeded' });
         }
-      }
-      return res.status(200).json({ message: 'User added or exists', userId: user.id });
-    }
 
-    const explicitEnglish = text.match(/product:\s*(.+?),\s*qty:\s*(\d+)/i);
-    const explicitAmharic = text.match(/ምርት[:：]?\s*(.+?),\s*ብዛት[:：]?\s*(\d+)/i);
-    const looseMatch = text.match(/^(?:(\d+)\s*([\p{L}\p{M}\s]+)|([\p{L}\p{M}\s]+)\s*(\d+))$/u);
-
-    let name: string | undefined;
-    let quantity: number | undefined;
-
-    if (explicitEnglish || explicitAmharic) {
-      const [, n, q] = (explicitEnglish || explicitAmharic)!;
-      name = n.trim();
-      quantity = parseInt(q, 10);
-    } else if (looseMatch) {
-      if (looseMatch[1] && looseMatch[2]) {
-        quantity = parseInt(looseMatch[1], 10);
-        name = looseMatch[2].trim();
-      } else {
-        name = looseMatch[3].trim();
-        quantity = parseInt(looseMatch[4], 10);
-      }
-    }
-
-    if (name && quantity) {
-      const user = await prisma.user.findUnique({ where: { phone: from } });
-      if (!user) {
-        return res.status(404).json({ error: 'Farmer not registered' });
-      }
-
-      const englishName = amharicToEnglish[name] || name;
-      const imageUrl = await generateProductImage(englishName);
-
-      const product = await prisma.product.create({
-        data: {
-          name,
-          quantity,
-          imageUrl, // Save the generated image URL
-          userId: user.id
-        }
-      });
-
-      try {
-        console.log('Attempting to send product confirmation SMS...');
-        await axios.post(
-          `${BASE_URL}/gateway/devices/${TEXTBEE_DEVICE_ID}/send-sms`,
-          {
-            recipients: [from], 
-            message: `ምርት "${product.name}" (ብዛት: ${product.quantity}) በትክክል ተመዝግቧል።`
+        user = await prisma.user.create({
+          data: {
+            phone: from,
+            status: 'name_account_pending',
+            lastRegistrationAttempt: now,
+            role: 'Farmer',
           },
-          {
-            headers: { 
-              'x-api-key': TEXTBEE_API_KEY,
-              'Content-Type': 'application/json'
-            }
-          }
-        );
-        console.log('Product confirmation SMS sent successfully.');
-      } catch (smsError) {
-        if (axios.isAxiosError(smsError)) {
-          console.error('Error sending product confirmation SMS:', smsError.response ? smsError.response.data : smsError.message);
-        } else {
-          console.error('Error sending product confirmation SMS:', smsError);
-        }
+        });
+        await sendSms(from, 'እንኳን ወደ አግሮLink በደህና መጡ። እባክዎ ሙሉ ስምዎን እና የባንክ አካውንት ቁጥርዎን ለምሳሌ "ሙሉ ስም፣ 123456789" ብለው ይላኩ።');
+        return res.status(200).json({ message: 'Registration initiated, waiting for name and account number' });
+      } else if (user.status === 'registered') {
+        await sendSms(from, 'እርስዎ ቀድሞውኑ ተመዝግበዋል። ምርት ለመለጠፍ የርስዎ ምርት፣ ብዛት እና ዋጋ ይላኩ።');
+        return res.status(200).json({ message: 'User already registered' });
+      } else {
+        await sendSms(from, 'እርስዎ ቀድሞውኑ ወደ መመዝገቢያ ሂደት ገብተዋል። እባክዎ የቀድሞውን መልዕክት ተከትለው ያጠናቁ።');
+        return res.status(200).json({ message: 'User is in a registration flow, cannot restart' });
+      }
+    }
+    if (user && user.status === 'name_account_pending') {
+      const parts = text.split(/[,，፣]\s*/);
+      if (parts.length === 2 && !isNaN(Number(parts[1]))) {
+        const name = parts[0];
+        const accountNumber = parts[1];
+        const otp = generateOTP();
+        const otpExpiresAt = new Date(Date.now() + 5 * 60 * 1000);
+
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { name, accountNumber, otp, otpExpiresAt, status: 'otp_pending' },
+        });
+
+        await sendSms(from, `የርስዎ ማረጋገጫ ኮድ: ${otp} ነው:: እባክዎ ኮዱን ለምዝገባ ይላኩ።`);
+        return res.status(200).json({ message: 'OTP sent, waiting for verification' });
+      } else {
+        await sendSms(from, 'ያስገቡት መረጃ ትክክል አይደለም። እባክዎ ሙሉ ስምዎን እና የባንክ አካውንት ቁጥርዎን በትክክለኛው ቅርፅ ይላኩ (ለምሳሌ: "ሙሉ ስም፣ 123456789")።');
+        return res.status(200).json({ message: 'Invalid name/account number format' });
+      }
+    }
+    if (user && user.status === 'otp_pending') {
+      if (text === user.otp && user.otpExpiresAt && user.otpExpiresAt > new Date()) {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { status: 'registered', otp: null, otpExpiresAt: null },
+        });
+        await sendSms(from, 'በአግሮLink በተሳካ ሁኔታ ተመዝግበዋል! ምርት ለመለጠፍ የርስዎ ምርት፣ ብዛት እና ዋጋ ይላኩ።');
+        return res.status(200).json({ message: 'Registration complete' });
+      } else {
+        await sendSms(from, 'ያልተገባ ወይም ጊዜው ያለፈበት ኮድ። እባክዎ ኮዱን በድጋሚ ይሞክሩ።');
+        return res.status(200).json({ message: 'Invalid or expired OTP' });
+      }
+    }
+    if (user && user.status === 'registered') {
+      console.log('Attempting to parse product message:', text);
+      console.log('User message character codes:', Array.from(text).map(char => char.charCodeAt(0)));
+      const productMatch = text.match(/ምርት\s*[:：]?\s*(.+?)\s*[,，፣]\s*ብዛት\s*[:：]?\s*(\d+)\s*ኪ\.ግ\s*[,，፣]\s*ዋጋ\s*[:：]?\s*(\d+)\s*ብር/u);
+      
+      console.log('Regex match result:', productMatch);
+      
+      let name: string | undefined;
+      let quantity: number | undefined;
+      let price: number | undefined;
+
+      if (productMatch) {
+        const [, n, q, p] = productMatch;
+        name = n.trim();
+        quantity = parseInt(q, 10);
+        price = parseFloat(p);
       }
 
-      return res.status(200).json({ message: 'Product added and confirmation sent', product });
+      if (name && quantity && price) {
+        const englishName = amharicToEnglish[name] || name;
+        const imageUrl = await generateProductImage(englishName);
+        
+        const product = await prisma.product.create({
+          data: {
+            name,
+            quantity,
+            price,
+            imageUrl,
+            userId: user.id,
+          },
+        });
+
+        await sendSms(from, `ምርት "${product.name}" (ብዛት: ${product.quantity} ኪ.ግ, ዋጋ: ${product.price} ብር) በትክክል ተመዝግቧል።`);
+        return res.status(200).json({ message: 'Product added and confirmation sent', product });
+      } else {
+        await sendSms(from, 'መልዕክትዎ አልገባኝም። ምርት ለመለጠፍ የርስዎ ምርት፣ ብዛት እና ዋጋ ይላኩ። ለምሳሌ: "ምርት: ጤፍ, ብዛት፡ 100ኪ.ግ, ዋጋ ፡10000ብር".');
+      }
     }
-
     return res.status(200).json({ message: 'No action needed' });
-
   } catch (error) {
     console.error('Error processing SMS:', error);
+    await sendSms(from, 'በመመዝገብዎ ላይ ችግር አጋጥሟል። እባክዎ በኋላ ይሞክሩ።');
     return res.status(500).json({ error: 'Server error' });
   }
 };
