@@ -8,6 +8,8 @@ import ResetPassword from './components/authPages/ResetPassword';
 import PostProduct from './components/Post/PostProduct';
 import ProductsList from './components/Post/ProductList';
 import { Link } from 'react-router-dom';
+import Calendar from './components/Calendar';
+
 import './index.css';
 
 function App() {
@@ -23,7 +25,7 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/products" element={<ProductsList />} />
           <Route path="/create-product" element={<PostProduct />} />
-          {/* <Route path="/calendar" element={<CalendarPage />} /> */}
+          <Route path="/calendar" element={<Calendar />} />
        
         </Route>
 
