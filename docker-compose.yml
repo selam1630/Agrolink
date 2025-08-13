@@ -12,6 +12,17 @@ services:
       - ./apps/backend:/app
       - /app/node_modules
 
+  frontend:
+    build: ./apps/frontend
+    container_name: frontend
+    ports:
+      - "5173:80"
+    volumes:
+      - ./apps/frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
   mongo:
     image: mongo:6
     container_name: mongo_db
