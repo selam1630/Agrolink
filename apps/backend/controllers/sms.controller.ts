@@ -8,7 +8,7 @@ const TEXTBEE_DEVICE_ID = process.env.TEXTBEE_DEVICE_ID || '';
 const BASE_URL = 'https://api.textbee.dev/api/v1';
 const generateProductImage = async (prompt: string) => {
   const fullPrompt = `A photorealistic image of a product, specifically: "${prompt}".`;
-  const apiKey = "AIzaSyAmQxnKpGX6SZPvhYDavW3DuvozP-6jRIg";
+  const apiKey = "";
   const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-preview-image-generation:generateContent?key=${apiKey}`;
 
   const payload = {
