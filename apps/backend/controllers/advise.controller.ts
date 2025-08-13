@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Request, Response } from "express";
+import prisma from "../prisma/prisma";
 
 const API_KEY = process.env.GEMINI_API_KEY;
 
@@ -29,6 +30,17 @@ export const getAgriculturalAdvice = async (req: Request, res: Response) => {
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
+
+    const adviceRecord = await prisma.advice.create({
+      data: {
+        crop,
+        region,
+        problem,
+        advice: text,
+        userId: "232323999239239",
+      },
+    });
+    return res.status(200).json(adviceRecord);
 
     res.status(200).json({ advice: text });
   } catch (error) {
