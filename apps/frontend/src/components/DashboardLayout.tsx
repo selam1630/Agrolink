@@ -1,13 +1,10 @@
-import React, { useState, ReactNode } from "react";
+import React, { useState } from "react";
 import Header from "./Header";
 import SidebarLayout from "./SidebarLayout";
 import { XIcon } from "lucide-react";
+import { Outlet } from "react-router-dom"; // <-- Import Outlet
 
-interface DashboardLayoutProps {
-  children: ReactNode;
-}
-
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+const DashboardLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -39,7 +36,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         </aside>
 
         <main className="flex-1 overflow-auto bg-gray-50 pt-16 md:pt-0">
-          {children}
+          <Outlet /> {/* <-- Render child route here */}
         </main>
       </div>
     </div>

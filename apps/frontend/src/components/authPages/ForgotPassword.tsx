@@ -1,18 +1,39 @@
 import React, { useState } from 'react';
 import agriIcon from '@/assets/images/agriIcon.png';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const ForgotPassword: React.FC = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Password reset requested for:', email);
-    alert('If this email is registered, you will receive password reset instructions.');
+
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(t('forgotPassword.success'));
+        console.log('Backend response:', data);
+      } else {
+        alert(`${t('forgotPassword.failed')}: ${data.error || t('forgotPassword.unknownError')}`);
+      }
+    } catch (error) {
+      console.error('Error requesting password reset:', error);
+      alert(t('forgotPassword.networkError'));
+    }
+
     setEmail('');
   };
 
@@ -28,17 +49,17 @@ const ForgotPassword: React.FC = () => {
 
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-green-700">
-            Forgot Password
+            {t('forgotPassword.title')}
           </h1>
           <p className="text-gray-600 mt-2">
-            Enter your email address to reset your password.
+            {t('forgotPassword.description')}
           </p>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-8">
             <label htmlFor="email" className="block text-sm font-medium text-gray-800 mb-2">
-              Email Address
+              {t('forgotPassword.emailLabel')}
             </label>
             <input
               type="email"
@@ -46,8 +67,8 @@ const ForgotPassword: React.FC = () => {
               name="email"
               value={email}
               onChange={handleChange}
+              placeholder={t('forgotPassword.emailPlaceholder')}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
-              placeholder="you@example.com"
               required
             />
           </div>
@@ -56,14 +77,14 @@ const ForgotPassword: React.FC = () => {
             type="submit"
             className="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300"
           >
-            Send Reset Link
+            {t('forgotPassword.button')}
           </button>
         </form>
 
         <div className="text-center mt-6 text-sm text-gray-600">
-          Remember your password?{' '}
+          {t('forgotPassword.remember')} {' '}
           <Link to="/sign-in" className="font-medium text-green-600 hover:text-green-800 transition-colors duration-300 ml-1">
-            Sign in here
+            {t('forgotPassword.signInLink')}
           </Link>
         </div>
       </div>

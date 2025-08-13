@@ -105,13 +105,13 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                 <div className="bg-gray-100 p-1 rounded-md mr-2">
                   <CloudSunIcon className="w-5 h-5 text-green-700" />
                 </div>
-                Weather
+                {t("nav.weather")}
               </NavLink>
               <NavLink to="/settings" isActive={isActive("/settings")}>
                 <div className="bg-gray-100 p-1 rounded-md mr-2">
                   <SettingsIcon className="w-5 h-5 text-green-700" />
                 </div>
-                Settings
+                {t("nav.settings")}
               </NavLink>
             </nav>
           </div>
@@ -129,7 +129,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-green-600" />
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder={t("header.searchPlaceholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10 pr-4 py-2 w-full bg-green-50 rounded-full focus:outline-none focus:ring-2 focus:ring-green-200 text-sm text-green-700 placeholder-green-400"
@@ -182,13 +182,13 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               <DropdownMenuContent align="end" className="w-72 p-0">
                 <div className="px-4 py-3 border-b">
                   <h3 className="text-sm font-semibold text-green-800">
-                    Notifications
+                    {t("header.notifications")}
                   </h3>
                 </div>
                 <div className="max-h-60 overflow-y-auto">
                   {notificationsSample.length === 0 ? (
                     <div className="px-4 py-6 text-center text-gray-500 text-sm">
-                      No new notifications.
+                      {t("header.noNotifications")}
                     </div>
                   ) : (
                     notificationsSample.map((note) => (
@@ -233,7 +233,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                       className="w-full flex items-center gap-2 text-sm px-3 py-2 cursor-pointer"
                     >
                       <UserIcon className="w-4 h-4" />
-                      My Profile
+                      {t("profile.myProfile")}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem
@@ -241,7 +241,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                     onClick={() => console.log("Logout")}
                   >
                     <LogOutIcon className="w-4 h-4" />
-                    Logout
+                    {t("profile.logout")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -253,25 +253,26 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                   className="border-green-600 text-green-700 hover:bg-green-50"
                   asChild
                 >
-                  <Link to="/sign-in">Sign In</Link>
+                  <Link to="/sign-in">{t("auth.signIn")}</Link>
                 </Button>
                 <Button
                   size="sm"
                   className="bg-yellow-400 hover:bg-yellow-500 text-green-900 shadow-md"
                   asChild
                 >
-                  <Link to="/sign-up">Sign Up</Link>
+                  <Link to="/sign-up">{t("auth.signUp")}</Link>
                 </Button>
               </div>
             )}
           </div>
         </div>
+
         {isSearchVisible && (
           <div className="absolute top-0 left-0 right-0 bg-white flex items-center p-3 shadow-md animate-slideDown md:hidden">
             <SearchIcon className="w-5 h-5 text-green-600 mr-2" />
             <input
               type="text"
-              placeholder="Search..."
+              placeholder={t("header.searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="flex-1 bg-green-50 rounded-full px-4 py-2 text-sm text-green-700 placeholder-green-400 focus:outline-none focus:ring-2 focus:ring-green-200"

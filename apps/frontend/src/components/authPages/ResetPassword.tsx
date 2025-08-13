@@ -1,20 +1,39 @@
 import React, { useState } from 'react';
 import agriIcon from '@/assets/images/agriIcon.png';
+import { useTranslation } from 'react-i18next';
 
 const ResetPassword: React.FC = () => {
+  const { t } = useTranslation();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      alert('Passwords do not match.');
+      alert(t('resetPassword.passwordMismatch'));
       return;
     }
 
-    console.log('New password:', newPassword);
-    alert('Password reset successful!');
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: newPassword }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(t('resetPassword.success'));
+        console.log('Backend response:', data);
+      } else {
+        alert(`${t('resetPassword.failed')}: ${data.error || t('resetPassword.unknownError')}`);
+      }
+    } catch (error) {
+      console.error('Error resetting password:', error);
+      alert(t('resetPassword.networkError'));
+    }
   };
 
   return (
@@ -29,17 +48,17 @@ const ResetPassword: React.FC = () => {
 
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-green-700">
-            Reset Password
+            {t('resetPassword.title')}
           </h1>
           <p className="text-gray-600 mt-2">
-            Enter your new password...
+            {t('resetPassword.description')}
           </p>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
             <label htmlFor="newPassword" className="block text-sm font-medium text-gray-800 mb-2">
-              New Password
+              {t('resetPassword.newPassword')}
             </label>
             <input
               type="password"
@@ -47,15 +66,15 @@ const ResetPassword: React.FC = () => {
               name="newPassword"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
+              placeholder={t('resetPassword.newPasswordPlaceholder')}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
-              placeholder="Enter your new password"
               required
             />
           </div>
 
           <div className="mb-8">
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-800 mb-2">
-              Confirm Password
+              {t('resetPassword.confirmPassword')}
             </label>
             <input
               type="password"
@@ -63,8 +82,8 @@ const ResetPassword: React.FC = () => {
               name="confirmPassword"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder={t('resetPassword.confirmPasswordPlaceholder')}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
-              placeholder="Confirm your password"
               required
             />
           </div>
@@ -73,7 +92,7 @@ const ResetPassword: React.FC = () => {
             type="submit"
             className="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300"
           >
-            Reset Password
+            {t('resetPassword.button')}
           </button>
         </form>
       </div>
