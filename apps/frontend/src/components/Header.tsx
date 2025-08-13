@@ -36,7 +36,10 @@ const Header: React.FC = () => {
     <header className="sticky top-0 z-50 backdrop-blur-lg bg-white/70 border-b border-green-100 shadow-md">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-3 group transition-all duration-300">
+        <Link
+          to="/"
+          className="flex items-center gap-3 group transition-all duration-300"
+        >
           <div className="p-1 bg-gradient-to-br from-green-600 to-green-800 rounded-full group-hover:rotate-12 transition-transform duration-500">
             <img
               src={agriIcon}
@@ -184,7 +187,9 @@ const Header: React.FC = () => {
                     alt="AgroLink"
                     className="w-10 h-10 rounded-full border-2 border-white"
                   />
-                  <span className="font-bold text-green-800 text-lg">አግሮLink</span>
+                  <span className="font-bold text-green-800 text-lg">
+                    አግሮLink
+                  </span>
                 </SheetTitle>
               </SheetHeader>
 
