@@ -61,6 +61,10 @@ role: 'Farmer',
 email: null
 }
 });
+
+// Added console.log and try/catch block for debugging
+try {
+console.log('Attempting to send welcome SMS to new user...');
 await axios.post(
 `${BASE_URL}/gateway/devices/${TEXTBEE_DEVICE_ID}/send-sms`,
 {
@@ -74,9 +78,19 @@ headers: {
 }
 }
 );
+console.log('Welcome SMS sent successfully.');
+} catch (smsError) {
+if (axios.isAxiosError(smsError)) {
+	console.error('Error sending welcome SMS:', smsError.response ? smsError.response.data : smsError.message);
+} else {
+	console.error('Error sending welcome SMS:', smsError);
+}
+// Don't return an error here, since the user was still created in the database.
+}
 }
 return res.status(200).json({ message: 'User added or exists', userId: user.id });
 }
+
 const explicitEnglish = text.match(/product:\s*(.+?),\s*qty:\s*(\d+)/i);
 const explicitAmharic = text.match(/ምርት[:：]?\s*(.+?),\s*ብዛት[:：]?\s*(\d+)/i);
 const looseMatch = text.match(/^(?:(\d+)\s*([\p{L}\p{M}\s]+)|([\p{L}\p{M}\s]+)\s*(\d+))$/u);
@@ -112,6 +126,9 @@ userId: user.id
 }
 });
 
+// Added console.log and try/catch block for debugging
+try {
+console.log('Attempting to send product confirmation SMS...');
 await axios.post(
 `${BASE_URL}/gateway/devices/${TEXTBEE_DEVICE_ID}/send-sms`,
 {
@@ -125,6 +142,15 @@ headers: {
 }
 }
 );
+console.log('Product confirmation SMS sent successfully.');
+} catch (smsError) {
+if (axios.isAxiosError(smsError)) {
+	console.error('Error sending product confirmation SMS:', smsError.response ? smsError.response.data : smsError.message);
+} else {
+	console.error('Error sending product confirmation SMS:', smsError);
+}
+// Don't return an error here, since the product was still created.
+}
 
 return res.status(200).json({ message: 'Product added and confirmation sent', product });
 }
