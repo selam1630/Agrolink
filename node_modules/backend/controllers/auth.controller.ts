@@ -265,7 +265,6 @@ export const verifyLoginOtp = async (req: Request, res: Response) => {
       where: { id: user.id },
       data: { otp: null, otpExpiresAt: null },
     });
-    // CRITICAL FIX: Change 'id' to 'userId' to match the products.controller
     const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, { expiresIn: '1d' });
 
     return res.status(200).json({ message: 'Login successful.', token, role: user.role });
