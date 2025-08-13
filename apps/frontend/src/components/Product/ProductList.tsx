@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { ShoppingCart } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useCart } from "../cart/CartContext";
+
 type Product = {
   id: string;
   name: string;
@@ -18,6 +21,8 @@ type Product = {
 
 const ProductsList: React.FC = () => {
   const { t } = useTranslation();
+  const { addToCart } = useCart();
+  const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -116,32 +121,56 @@ const ProductsList: React.FC = () => {
               key={product.id}
               className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-green-100"
             >
-              <div className="relative h-64 overflow-hidden">
-                <img
-                  src={product.imageUrl || 'https://placehold.co/600x400/E5E7EB/4B5563?text=No+Image'}
-                  alt={product.name}
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute top-3 right-3 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                  {product.quantity} {t('inStock')}
+              <Link to={`/products/${product.id}`}>
+                <div className="relative h-64 overflow-hidden">
+                  <img
+                    src={product.imageUrl || 'https://placehold.co/600x400/E5E7EB/4B5563?text=No+Image'}
+                    alt={product.name}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute top-3 right-3 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    {product.quantity} {t('product.list.inStock')}
+                  </div>
                 </div>
-              </div>
+              </Link>
 
               <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-2">
                   <CardTitle className="text-xl font-bold text-gray-900">{product.name}</CardTitle>
                   <span className="text-lg font-bold text-green-700">
-                    {product.price ? `${product.price.toFixed(2)}` : 'N/A'}
+                    {product.price ? `$${product.price.toFixed(2)}` : 'N/A'}
                   </span>
                 </div>
                 <p className="text-gray-600 mb-4">{product.description || 'No description provided.'}</p>
-                <Button
-                  className="flex items-center gap-2 w-full bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors duration-300 font-medium"
-                  // onClick={() => handleAddToCart(product)} // Placeholder for future cart logic
-                >
-                  <ShoppingCart size={20} /> {t('addToCart')}
-                </Button>
+                
+                <div className="flex gap-2">
+                    <Button
+                        className="flex-1 items-center gap-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors duration-300 font-medium"
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            if (product.price !== undefined) {
+                                addToCart({
+                                    id: product.id,
+                                    name: product.name,
+                                    price: product.price,
+                                    imageUrl: product.imageUrl,
+                                }, 1);
+                                navigate('/cart');
+                            }
+                        }}
+                    >
+                        <ShoppingCart size={20} /> {t('addToCart')}
+                    </Button>
+                    <Link to={`/products/${product.id}`} className="flex-1">
+                        <Button
+                            variant="outline"
+                            className="w-full text-green-600 border-green-600 hover:bg-green-50 transition-colors duration-300"
+                        >
+                            {t('product.list.viewDetails')}
+                        </Button>
+                    </Link>
+                </div>
               </CardContent>
             </Card>
           ))}
