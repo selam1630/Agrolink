@@ -11,6 +11,35 @@
     "uploadImage": "Upload Image",
     "postButton": "Post"
   },
+  
+  "dashboard": {
+    "welcome": "Welcome back",
+    "welcomeSubtitle": "Here's what's happening with your agricultural products today",
+    "totalProducts": "Total Products",
+    "activeOrders": "Active Orders",
+    "newMessages": "New Messages",
+    "monthlyEarnings": "Monthly Earnings",
+    "recentProducts": "Your Recent Products",
+    "viewAll": "View All",
+    "product": "Product",
+    "price": "Price",
+    "location": "Location",
+    "status": "Status",
+    "date": "Date",
+    "available": "Available",
+    "sold": "Sold",
+    "quickActions": "Quick Actions",
+    "addProduct": "Add New Product",
+    "requestService": "Request Farming Service",
+    "browseMarket": "Browse Marketplace",
+    "resources": "Resources",
+    "agriculturalTips": "Agricultural Tips",
+    "tipsDescription": "Learn best practices for your crops and livestock",
+    "communityForum": "Community Forum",
+    "forumDescription": "Connect with other farmers and experts",
+    "viewAllResources": "View All Resources"
+  },
+
   "header": {
     "connectingFarmers": "Connecting Farmers"
   },
