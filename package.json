@@ -1,32 +1,18 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "agrolink-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/backend",
+    "apps/frontend"
+  ],
   "scripts": {
-    "dev": "nodemon backend/index.ts"
-  },
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "@types/bcrypt": "^6.0.0",
-    "@types/cookie-parser": "^1.4.9",
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.3",
-    "@types/jsonwebtoken": "^9.0.10",
-    "bcrypt": "^6.0.0",
-    "cookie-parser": "^1.4.7",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.1",
-    "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "mongodb": "^6.18.0",
-    "mongoose": "^8.17.0",
-    "typescript": "^5.8.3",
-    "zod": "^4.0.14"
+    "dev": "turbo run dev --parallel",
+    "dev:backend": "docker compose up",
+    "dev:frontend": "cd apps/frontend && npm run dev",
+    "dev:apps": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
   },
   "devDependencies": {
-    "@types/node": "^24.1.0",
-    "nodemon": "^3.1.10"
+    "turbo": "^1.13.4",
+    "concurrently": "^8.2.0"
   }
 }
