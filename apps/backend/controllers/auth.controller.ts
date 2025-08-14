@@ -103,7 +103,7 @@ export const login = async (req: Request, res: Response) => {
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ error: "Invalid credentials" }); // CRITICAL FIX: Change 'id' to 'userId' to match the products.controller
+    if (!isMatch) return res.status(401).json({ error: "Invalid credentials" }); 
 
     const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, {
       expiresIn: "1d",
@@ -200,7 +200,7 @@ export const verifyAndCompleteRegistration = async (
         role: storedData.role,
       },
     });
-    registrationData.delete(phone); // CRITICAL FIX: Change 'id' to 'userId' to match the products.controller
+    registrationData.delete(phone); 
     const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, {
       expiresIn: "1d",
     });
@@ -234,7 +234,7 @@ export const loginAndSendOtp = async (req: Request, res: Response) => {
     }
 
     const otp = generateOTP();
-    const otpExpiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes validity
+    const otpExpiresAt = new Date(Date.now() + 5 * 60 * 1000); 
     await prisma.user.update({
       where: { id: user.id },
       data: { otp, otpExpiresAt },
