@@ -132,5 +132,40 @@
   },
   "footer": {
     "copyright": "© 2025 AgroLink. All rights reserved."
-  }
+  },
+  "product": {
+    "list": {
+      "title": "Fresh & Organic Produce",
+      "subtitle": "Discover a wide range of locally sourced, high-quality products delivered to your door.",
+      "searchPlaceholder": "Search products...",
+      "inStock": "in stock",
+      "noProductsFound": "No Products Found",
+      "adjustSearch": "Please adjust your search terms or check back later.",
+      "viewDetails": "View Details"
+    },
+    "detail": {
+      "loading": "Loading product details...",
+      "notFound": "Product not found",
+      "errorMessage": "There was an error loading the product details. Error: {{error}}",
+      "backToProducts": "Back to Products",
+      "noDescription": "No description provided.",
+      "inStock": "In Stock",
+      "addToCart": "Add to Cart"
+    }
+  },
+  "cart": {
+    "title": "Your Shopping Cart",
+    "empty": "Your Cart is Empty",
+    "emptyMessage": "Looks like you haven't added anything to your cart yet.",
+    "startShopping": "Start Shopping",
+    "orderSummary": "Order Summary",
+    "finalizeOrder": "Finalize your order before payment.",
+    "items": "Items ({{count}})",
+    "total": "Total",
+    "payWithChapa": "Pay with Chapa",
+    "continueShopping": "Continue Shopping",
+    "itemPerItem": "per item",
+    "chapaPaymentMessage": "Proceeding to Chapa payment. Your backend will handle the integration."
+  },
+  "addToCart": "Add to Cart"
 }

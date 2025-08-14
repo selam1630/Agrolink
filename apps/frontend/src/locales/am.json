@@ -132,5 +132,40 @@
   },
   "footer": {
     "copyright": "© 2025 አግሮLink. ሁሉም መብቶች የተጠበቁ ናቸው።"
-  }
+  },
+  "product": {
+    "list": {
+      "title": "ትኩስ እና ኦርጋኒክ ምርቶች",
+      "subtitle": "በአገር ውስጥ የተመረቱ ከፍተኛ ጥራት ያላቸውን ምርቶች ወደ ደጃፍዎ ደርሰን እናቀርባለን።",
+      "searchPlaceholder": "ምርቶችን ይፈልጉ...",
+      "inStock": "በመጋዘን",
+      "noProductsFound": "ምንም ምርቶች አልተገኙም",
+      "adjustSearch": "እባክዎ የፍለጋ ቃላትዎን ይቀይሩ ወይም በኋላ ይሞክሩ።",
+      "viewDetails": "ዝርዝሩን ይመልከቱ"
+    },
+    "detail": {
+      "loading": "የምርት ዝርዝሮች እየተጫኑ ነው...",
+      "notFound": "ምርት አልተገኘም",
+      "errorMessage": "የምርት ዝርዝሮችን በመጫን ላይ ስህተት ተፈጥሯል። ስህተት: {{error}}",
+      "backToProducts": "ወደ ምርቶች ተመለስ",
+      "noDescription": "ምንም መግለጫ አልተሰጠም።",
+      "inStock": "በክምችት ውስጥ",
+      "addToCart": "ወደ ጋሪ አክል"
+    }
+  },
+  "cart": {
+    "title": "የግዢ ጋሪዎ",
+    "empty": "ጋሪዎ ባዶ ነው",
+    "emptyMessage": "ምንም ምርት ገና ወደ ጋሪዎ አላኩም።",
+    "startShopping": "ግዢ ይጀምሩ",
+    "orderSummary": "የትዕዛዝ ማጠቃለያ",
+    "finalizeOrder": "ከመክፈልዎ በፊት ትዕዛዝዎን ያጠናቅቁ።",
+    "items": "እቃዎች ({{count}})",
+    "total": "ጠቅላላ",
+    "payWithChapa": "በቻፓ ይክፈሉ",
+    "continueShopping": "ግዢ ይቀጥሉ",
+    "itemPerItem": "ለእያንዳንዱ ዕቃ",
+    "chapaPaymentMessage": "ወደ ቻፓ ክፍያ በመሄድ ላይ። የእርስዎ የባክኤንድ ክፍያውን ይቆጣጠራል።"
+  },
+  "addToCart": "ወደ ጋሪ ጨምር"
 }
