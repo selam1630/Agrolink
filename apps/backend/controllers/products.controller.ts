@@ -39,18 +39,20 @@ const generateProductImage = async (prompt: string) => {
   }
 };
 
-const getUserIdFromToken = (req: Request): string | null => {
+const getUserIdFromToken = (req: Request): string => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return null;
+    throw new Error('Authorization header is missing or malformed. Expected format: "Bearer [token]".');
   }
   const token = authHeader.split(' ')[1];
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     return (decoded as { userId: string }).userId;
   } catch (error) {
-    console.error('Invalid token:', error);
-    return null;
+    if (error instanceof jwt.JsonWebTokenError) {
+      throw new Error(`Invalid token: ${error.message}`);
+    }
+    throw error;
   }
 };
 
@@ -68,6 +70,31 @@ export const getAllProducts = async (req: Request, res: Response) => {
   }
 };
 
+// NEW: Function to get a single product by its ID
+export const getProductById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ error: 'Product ID is required.' });
+    }
+    const product = await prisma.product.findUnique({
+      where: {
+        id: String(id), 
+      },
+      include: {
+        user: true,
+      },
+    });
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found.' });
+    }
+    return res.status(200).json(product);
+  } catch (error) {
+    console.error('Error fetching product by ID:', error);
+    return res.status(500).json({ error: 'Server error fetching product.' });
+  }
+};
+
 export const addProduct = async (req: Request, res: Response) => {
   const { phone } = req.body;
 
@@ -81,15 +108,13 @@ export const addProduct = async (req: Request, res: Response) => {
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }
-
-      // Generate a relevant image based on the product name for the text post
       const imageUrl = await generateProductImage(name);
       
       const product = await prisma.product.create({
         data: {
           name,
           quantity,
-          imageUrl, // Use the generated image URL
+          imageUrl, 
           userId: user.id,
         },
       });
@@ -97,11 +122,14 @@ export const addProduct = async (req: Request, res: Response) => {
       return res.status(201).json({ message: 'Product added via SMS', product });
     }
     else {
-      // ... (your existing code for image-based posts remains unchanged)
-      const userIdFromToken = getUserIdFromToken(req);
-
-      if (!userIdFromToken) {
-        return res.status(401).json({ error: 'You must be logged in to post a product.' });
+      let userIdFromToken: string;
+      try {
+        userIdFromToken = getUserIdFromToken(req);
+      } catch (authError) {
+        if (authError instanceof Error) {
+          return res.status(401).json({ error: authError.message });
+        }
+        return res.status(401).json({ error: 'Authentication failed.' });
       }
 
       const { name, quantity, price, description, imageUrl } = req.body;

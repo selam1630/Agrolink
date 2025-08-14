@@ -4,21 +4,46 @@
     "productName": "የምርት ስም",
     "quantity": "መጠን",
     "quantityPlaceholder": "መጠን እንደ 10 ኩንታል, 30 ኪሎግራም ያስገቡ",
-     "price": "ዋጋ",
+    "price": "ዋጋ",
     "pricePlaceholder": "ዋጋ[ሰላሳ ሺ ብር]",
+    "unit": "አሃድ",
     "description": "ስለ ምርቱ መግለጫ",
     "uploadImage": "ምስል ያስገቡ",
     "postButton": "ማሳወቂያውን አስገባ"
   },
- 
+  "header": {
+    "connectingFarmers": "አርሶ አደሮችን በማገናኘት"
+  },
+  "product": {
+    "list": {
+      "title": "የምርት ዝርዝር",
+      "subtitle": "አርሶ አደሮችን ከተጠቃሚዎች ጋር በማገናኘት",
+      "searchPlaceholder": "ምርቶችን ይፈልጉ...",
+      "noProductsFound": "ምርቶች አልተገኙም"
+    },
+    "detail": {
+      "loading": "የምርት ዝርዝሮችን እየጫነ ነው...",
+      "notFound": "ምርት አልተገኘም።",
+      "errorMessage": "ስህተት ተከስቷል: {{error}}",
+      "backToProducts": "ወደ ምርቶች ተመለስ",
+      "noDescription": "መግለጫ የለም።",
+      "inStock": "በመጋዘን ውስጥ",
+      "addToCart": "ወደ ጋሪ ጨምር"
+    }
+  },
   "nav": {
     "home": "መነሻ",
-        "createProduct": "ምርት ፍጠር",
-
+    "createProduct": "ምርት ፍጠር",
     "marketplace": "ገበያ",
     "allProducts": "ሁሉም ምርቶች",
     "services": "አገልግሎቶች",
-    "aboutUs": "ስለ እኛ"
+    "aboutUs": "ስለ እኛ",
+    "diseaseDetection": "የበሽታ መለየት",
+    "news": "ዜና",
+    "products": "ምርቶች",
+    "calendar": "የጊዜ ሰሌዳ",
+    "helpCenter": "የእርዳታ ማዕከል",
+    "logout": "ውጣ"
   },
   "auth": {
     "signIn": "ግባ",
@@ -36,12 +61,11 @@
     "phoneNumberPlaceholder": "ስልክ ቁጥርዎን ያስገቡ",
     "passwordLabel": "የይለፍ ቃል",
     "passwordPlaceholder": "የይለፍ ቃልዎን ያስገቡ",
-  "forgotPassword": "የይለፍ ቃል ረስተዋል?",
+    "forgotPassword": "የይለፍ ቃል ረስተዋል?",
     "signInButton": "ግባ",
     "noAccountText": "አካውንት የለዎትም?",
     "signUpNow": "አሁን ይመዝገቡ"
   },
-   
   "signUp": {
     "title": "አግሮLink",
     "description": "ከማህበሩ ጋር ለመገናኘት ይመዝገቡ።",
@@ -54,5 +78,33 @@
     "submitButton": "መለያዎን ይፍጠሩ",
     "alreadyAccountText": "አካውንት አለዎት?",
     "loginHere": "እዚህ ይግቡ"
+  },
+  "cart": {
+    "title": "ጋሪዬ",
+    "subtitle": "ትዕዛዝዎን ከማጠናቀቅዎ በፊት የተመረጡትን እቃዎች ይከልሱ።",
+    "loading": "እየጫነ ነው...",
+    "error": "እቃዎቹን ለመጫን ችግር ተፈጥሯል",
+    "empty": "ጋሪዎ ባዶ ነው!",
+    "emptyMessage": "ገና ምንም ነገር ወደ ጋሪዎ ያላስገቡ ይመስላል።",
+    "startShopping": "ግዢ ይጀምሩ",
+    "product": "ምርት",
+    "price": "ዋጋ",
+    "orderSummary": "የግዢ ማጠቃለያ",
+    "finalizeOrder": "ትዕዛዝዎን ለማጠናቀቅ ዝግጁ ነዎት",
+    "items": "እቃዎች",
+    "total": "ጠቅላላ",
+    "payWithChapa": "በቻፓ ይክፈሉ",
+    "continueShopping": "ግዢ ይቀጥሉ",
+    "addToCart": "ወደ ጋሪ ጨምር",
+    "addedToCart": "ወደ ጋሪ ገብቷል"
+  },
+  "checkout": {
+    "title": "ክፍያ",
+    "subtitle": "ትዕዛዝዎን ያጠናቅቁ እና ክፍያ ይፈጽሙ።",
+    "summary": "የትዕዛዝ ማጠቃለያ",
+    "summaryDescription": "ከመክፈልዎ በፊት ጋሪዎን ይገምግሙ።",
+    "itemsInCart": "በጋሪ ውስጥ ያሉ እቃዎች",
+    "totalAmount": "ጠቅላላ ዋጋ",
+    "payWithChapa": "በቻፓ ይክፈሉ"
   }
 }

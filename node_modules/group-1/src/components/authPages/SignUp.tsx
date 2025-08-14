@@ -88,7 +88,6 @@ const SignUp: React.FC = () => {
     };
 
     try {
-      // Step 2: Verify the OTP and complete the registration
       const response = await fetch('http://localhost:5000/api/auth/verify-registration-otp', {
         method: 'POST',
         headers: {
@@ -101,10 +100,15 @@ const SignUp: React.FC = () => {
 
       if (response.ok) {
         setSuccessMessage('Registration successful! Redirecting...');
-        // Store the token and redirect
         localStorage.setItem('token', data.token);
         localStorage.setItem('role', data.role);
-        navigate('/dashboard'); 
+        if (data.role === 'farmer') {
+          navigate('/create-product');
+        } else if (data.role === 'buyer') {
+          navigate('/products');
+        } else {
+          navigate('/dashboard');
+        }
       } else {
         setError(data.error || 'Invalid or expired OTP.');
       }

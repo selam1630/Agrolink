@@ -11,7 +11,7 @@ const MAX_REGISTRATION_ATTEMPTS_PER_DAY = 3;
 const TWENTY_FOUR_HOURS_IN_MS = 24 * 60 * 60 * 1000;
 const generateProductImage = async (prompt: string) => {
   const fullPrompt = `A photorealistic image of a product, specifically: "${prompt}".`;
-  const apiKey = "";
+  const apiKey = "AIzaSyAmQxnKpGX6SZPvhYDavW3DuvozP-6jRIg";
   const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
 
   const payload = { instances: { prompt: fullPrompt }, parameters: { "sampleCount": 1 } };

@@ -101,8 +101,6 @@ export const login = async (req: Request, res: Response) => {
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
-
-    // CRITICAL FIX: Change 'id' to 'userId' to match the products.controller
     const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, { expiresIn: '1d' });
 
     res.status(200).json({ token, role: user.role });
@@ -185,8 +183,6 @@ export const registerAndSendOtp = async (req: Request, res: Response) => {
           role: storedData.role,
         },
       });
-      registrationData.delete(phone);
-      // CRITICAL FIX: Change 'id' to 'userId' to match the products.controller
       const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, { expiresIn: '1d' });
   
       return res.status(200).json({ message: 'Registration complete.', token, role: user.role });

@@ -20,7 +20,7 @@ const Label = LabelPrimitive.Root;
 const PostProduct: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { userId, token } = useAuth(); // Get userId and token from AuthContext
+  const { userId, token } = useAuth(); 
 
   const [product, setProduct] = useState({
     name: "",
@@ -88,8 +88,6 @@ const PostProduct: React.FC = () => {
 
       const result = await response.json();
       setMessage(result.message);
-      
-      // Clear the form on successful submission
       setProduct({
         name: "",
         quantity: "",
