@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'agromerce_secret';
+
 declare global {
   namespace Express {
     interface Request {
@@ -14,9 +15,7 @@ declare global {
 }
 
 /**
- * @param req
- * @param res 
- * @param next 
+ * Middleware to authenticate token and attach user to request
  */
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(' ')[1];
@@ -25,16 +24,16 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string; role: string };
-    req.user = { id: decoded.id, role: decoded.role };
+    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string; role: string };
+    req.user = { id: decoded.userId, role: decoded.role };
     next();
   } catch (error) {
-    res.status(401).json({ error: 'Unauthorized: Invalid or expired token' });
+    return res.status(401).json({ error: 'Unauthorized: Invalid or expired token' });
   }
 };
 
 /**
- * @param roles 
+ * Middleware to protect routes by role
  */
 export const protect = (roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -44,15 +43,15 @@ export const protect = (roles: string[]) => {
     }
 
     try {
-      const decoded = jwt.verify(token, JWT_SECRET) as { id: string; role: string };
+      const decoded = jwt.verify(token, JWT_SECRET) as { userId: string; role: string };
       if (!roles.includes(decoded.role)) {
         return res.status(403).json({ error: 'Forbidden: You do not have the required role' });
       }
 
-      req.user = { id: decoded.id, role: decoded.role };
+      req.user = { id: decoded.userId, role: decoded.role };
       next();
     } catch (error) {
-      res.status(401).json({ error: 'Unauthorized: Invalid or expired token' });
+      return res.status(401).json({ error: 'Unauthorized: Invalid or expired token' });
     }
   };
 };

@@ -1,153 +1,93 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { useCart } from "./CartContext";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { ArrowLeft, Trash2, ShoppingCart } from "lucide-react";
-
-type CartItem = {
-  id: string;
-  name: string;
-  price?: number;
-  imageUrl?: string;
-  quantity: number;
-};
+import React from 'react';
+import { useCart } from './CartContext';
+import { useAuth } from '../../context/AuthContext';
 
 const CartPage: React.FC = () => {
-  const { t } = useTranslation();
-  const { cartItems, removeFromCart } = useCart();
-  const [totalPrice, setTotalPrice] = useState<number>(0);
+    const { cartItems, removeFromCart, loading: cartLoading, error: cartError } = useCart();
+    const { token, loading: authLoading } = useAuth();
+    if (authLoading) {
+        return (
+            <div className="flex items-center justify-center h-screen bg-gray-100">
+                <p className="text-xl text-gray-600">Loading user data...</p>
+            </div>
+        );
+    }
+    
+    if (!token) {
+        return (
+            <div className="flex items-center justify-center h-screen bg-gray-100">
+                <p className="text-xl text-gray-600">Please log in to view your cart.</p>
+            </div>
+        );
+    }
 
-  useEffect(() => {
-    const total = cartItems.reduce((sum, item) => sum + (item.price || 0) * item.quantity, 0);
-    setTotalPrice(total);
-  }, [cartItems]);
+    if (cartLoading) {
+        return (
+            <div className="flex items-center justify-center h-screen bg-gray-100">
+                <p className="text-xl text-gray-600">Loading cart items...</p>
+            </div>
+        );
+    }
 
-  const handleRemoveFromCart = (productId: string) => {
-    removeFromCart(productId);
-  };
+    if (cartError) {
+        return (
+            <div className="flex items-center justify-center h-screen bg-gray-100">
+                <p className="text-xl text-red-500">Error: {cartError}</p>
+            </div>
+        );
+    }
 
-  return (
-    <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold text-green-800 mb-2">{t("cart.title")}</h1>
-      <p className="text-xl text-gray-600 mb-8">{t("cart.subtitle")}</p>
+    if (cartItems.length === 0) {
+        return (
+            <div className="flex items-center justify-center h-screen bg-gray-100">
+                <p className="text-xl text-gray-600">Your cart is empty.</p>
+            </div>
+        );
+    }
+    const totalPrice = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
 
-      {cartItems.length === 0 ? (
-        <div className="flex flex-col items-center justify-center p-12 bg-gray-50 rounded-xl shadow-inner text-center">
-          <ShoppingCart size={64} className="text-gray-400 mb-4" />
-          <h3 className="text-2xl font-semibold text-gray-700">{t("cart.empty")}</h3>
-          <p className="text-gray-500 mt-2 mb-6">{t("cart.emptyMessage")}</p>
-          <Link to="/products">
-            <Button className="bg-green-600 text-white hover:bg-green-700 transition-colors duration-300">
-              <ArrowLeft size={16} className="mr-2" />
-              {t("cart.startShopping")}
-            </Button>
-          </Link>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Cart Items Table */}
-          <div className="lg:col-span-2">
-            <Card className="rounded-xl shadow-lg">
-              <CardHeader className="border-b">
-                <CardTitle>{t("cart.items")}</CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>{t("cart.product")}</TableHead>
-                      <TableHead>{t("cart.quantity")}</TableHead>
-                      <TableHead className="text-right">{t("cart.price")}</TableHead>
-                      <TableHead className="w-[50px]"></TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
+    return (
+        <div className="container mx-auto p-4 bg-gray-100 min-h-screen">
+            <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">Shopping Cart</h1>
+            <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="space-y-6">
                     {cartItems.map((item) => (
-                      <TableRow key={item.id}>
-                        <TableCell className="font-medium flex items-center gap-4">
-                          <img
-                            src={item.imageUrl || 'https://placehold.co/60x60/E5E7EB/4B5563?text=N/A'}
-                            alt={item.name}
-                            className="w-12 h-12 object-cover rounded-md"
-                          />
-                          <span>{item.name}</span>
-                        </TableCell>
-                        <TableCell>{item.quantity}</TableCell>
-                        <TableCell className="text-right">
-                          {item.price ? `ETB ${item.price.toFixed(2)}` : 'Price not available'}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleRemoveFromCart(item.id)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            <Trash2 size={20} />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
+                        <div key={item.product.id} className="flex items-center p-4 bg-gray-50 rounded-lg shadow-sm">
+                            <img
+                                src={item.product.imageUrl}
+                                alt={item.product.name}
+                                className="w-24 h-24 object-cover rounded-lg mr-6"
+                                onError={(e) => { e.currentTarget.src = "https://placehold.co/96x96/e5e7eb/4b5563?text=No+Image" }}
+                            />
+                            <div className="flex-1">
+                                <h2 className="text-xl font-semibold text-gray-800">{item.product.name}</h2>
+                                <p className="text-gray-600">Quantity: {item.quantity}</p>
+                                <p className="text-gray-900 font-bold mt-1">${(item.product.price * item.quantity).toFixed(2)}</p>
+                            </div>
+                            <button
+                                onClick={() => removeFromCart(item.product.id)}
+                                className="px-4 py-2 bg-red-500 text-white font-medium rounded-lg shadow-md hover:bg-red-600 transition duration-300"
+                            >
+                                Remove
+                            </button>
+                        </div>
                     ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </div>
+                </div>
+                <div className="mt-8 pt-4 border-t-2 border-gray-200 flex flex-col md:flex-row justify-between items-center">
+    <p className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">
+        Total: <span className="text-green-600">${totalPrice.toFixed(2)}</span>
+    </p>
+    <button
+        
+        className="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition duration-300"
+    >
+        Pay with Chapa
+    </button>
+</div>
 
-          {/* Order Summary Card */}
-          <div className="lg:col-span-1">
-            <Card className="rounded-xl shadow-lg">
-              <CardHeader className="border-b">
-                <CardTitle>{t("cart.orderSummary")}</CardTitle>
-                <CardDescription>{t("cart.finalizeOrder")}</CardDescription>
-              </CardHeader>
-              <CardContent className="p-6">
-                <div className="flex justify-between items-center mb-4 text-lg">
-                  <span>{t("cart.items")}:</span>
-                  <span className="font-semibold text-gray-700">{cartItems.length}</span>
-                </div>
-                <div className="flex justify-between items-center text-2xl font-bold border-t pt-4 mt-4">
-                  <span>{t("cart.total")}:</span>
-                  <span className="text-green-700">ETB {totalPrice.toFixed(2)}</span>
-                </div>
-                {/* Updated the button to use Link to navigate to the checkout page */}
-                <Link to="/checkout">
-                  <Button className="w-full mt-6 bg-green-600 text-white hover:bg-green-700 transition-colors duration-300">
-                    {t("cart.payWithChapa")}
-                  </Button>
-                </Link>
-                <Link to="/products">
-                  <Button
-                    variant="outline"
-                    className="w-full mt-4 text-green-600 border-green-600 hover:bg-green-50 transition-colors duration-300"
-                  >
-                    <ArrowLeft size={16} className="mr-2" />
-                    {t("cart.continueShopping")}
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-          </div>
+            </div>
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default CartPage;

@@ -8,9 +8,10 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
 model User {
-  id                      String     @id @default(auto()) @map("_id") @db.ObjectId
-  phone                   String     @unique
+  id                      String      @id @default(auto()) @map("_id") @db.ObjectId
+  phone                   String      @unique
   name                    String?
   accountNumber           String?
   role                    String
@@ -18,60 +19,82 @@ model User {
   password                String?
   otp                     String?
   otpExpiresAt            DateTime?
-  status                  String     @default("unregistered")
+  status                  String      @default("unregistered")
   lastRegistrationAttempt DateTime?
   
   products                Product[]
   cartItems               CartItem[]
-  orders                  Order[] 
+  orders                  Order[]
+  transactions            Transaction[]
 
-  createdAt               DateTime?  @default(now()) @map("createdAt")
-  updatedAt               DateTime?  @updatedAt @map("updatedAt")
+  createdAt               DateTime?   @default(now()) @map("createdAt")
+  updatedAt               DateTime?   @updatedAt @map("updatedAt")
 }
 
 model Product {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   quantity    Int
   price       Float?
   description String?
   imageUrl    String?
-  userId      String     @db.ObjectId
-  user        User       @relation(fields: [userId], references: [id])
+  userId      String      @db.ObjectId
+  user        User        @relation(fields: [userId], references: [id])
   cartItems   CartItem[]
-  orderItems  OrderItem[] 
-
-  createdAt   DateTime?  @default(now()) @map("createdAt")
-  updatedAt   DateTime?  @updatedAt @map("updatedAt")
+  orderItems  OrderItem[]
+  
+  createdAt   DateTime?   @default(now()) @map("createdAt")
+  updatedAt   DateTime?   @updatedAt @map("updatedAt")
 }
 
 model CartItem {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String     @db.ObjectId
-  productId   String     @db.ObjectId
-  quantity    Int
-  createdAt   DateTime   @default(now())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  productId String   @db.ObjectId
+  quantity  Int
+  
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
 
-  user        User       @relation(fields: [userId], references: [id])
-  product     Product    @relation(fields: [productId], references: [id])
+  @@unique([userId, productId])
 }
 
 model Order {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String     @db.ObjectId
-  user        User       @relation(fields: [userId], references: [id])
-  status      String     @default("pending")
-  orderItems  OrderItem[] 
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String      @db.ObjectId
+  user            User        @relation(fields: [userId], references: [id])
+  status          String      @default("pending") // <-- Added status field
+  orderItems      OrderItem[]
   
-  createdAt   DateTime   @default(now())
-}
-model OrderItem {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  orderId     String     @db.ObjectId
-  productId   String     @db.ObjectId
-  quantity    Int
-  priceAtTime Float 
+  transactionId   String?     @unique @db.ObjectId
+  transaction     Transaction?
 
-  order       Order      @relation(fields: [orderId], references: [id])
-  product     Product    @relation(fields: [productId], references: [id])
+  createdAt       DateTime    @default(now())
+}
+
+model OrderItem {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  orderId     String    @db.ObjectId
+  productId   String    @db.ObjectId
+  quantity    Int
+  priceAtTime Float
+
+  order       Order     @relation(fields: [orderId], references: [id])
+  product     Product   @relation(fields: [productId], references: [id])
+}
+
+model Transaction {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  txRef     String    @unique 
+  amount    Float
+  status    String    @default("pending") 
+  
+  orderId   String    @unique @db.ObjectId
+  order     Order     @relation(fields: [orderId], references: [id])
+
+  userId    String    @db.ObjectId
+  user      User      @relation(fields: [userId], references: [id])
+
+  createdAt DateTime? @default(now()) @map("createdAt")
+  updatedAt DateTime? @updatedAt @map("updatedAt")
 }

@@ -1,21 +1,15 @@
 import { Router } from 'express';
-import { addToCart, getCart } from '../controllers/cart.controller';
+import {
+  getCart,
+  addToCart,
+  removeFromCart,
+} from '../controllers/cart.controller';
 import { authenticateToken } from '../middlewares/auth.middleware';
 
-const cartRouter = Router();
+const router = Router();
+router.use(authenticateToken);
+router.get('/', getCart);
+router.post('/', addToCart);
+router.delete('/:productId', removeFromCart);
 
-/**
- * @route 
- * @desc 
- * @access 
- */
-cartRouter.post('/add-to-cart', authenticateToken, addToCart);
-
-/**
- * @route 
- * @desc 
- * @access 
- */
-cartRouter.get('/', authenticateToken, getCart);
-
-export default cartRouter;
+export default router;
