@@ -1,22 +1,20 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ForgotPassword from './components/authPages/ForgotPassword';
 import ResetPassword from './components/authPages/ResetPassword';
 import SignUp from './components/authPages/SignUp';
 import SignIn from './components/authPages/SignIn';
-import PostProduct from './components/Post/PostProduct';
+import PostProduct from './components/Product/PostProduct';
 import DashboardLayout from './components/DashboardLayout';
-import ProductsList from './components/Post/ProductList';
+import ProductsList from './components/Product/ProductList';
 import './index.css';
 import Dashboard from './pages/Dashboard';
-import ProductDetail from './components/Post/ProductDetail';
+import ProductDetail from './components/Product/ProductDetail';
 import { CartProvider } from './components/cart/CartContext';
 import CartPage from './components/cart/CartPage';
 import MainLayout from './components/MainLayout';
 import About from './pages/About';
 import Services from './pages/Services';
 import Calendar from './pages/Calendar';
-import CheckoutPage from './components/cart/CheckoutPage';
 import PaymentSuccessPage from './components/cart/PaymentSuccessPage';
 
 function App() {
@@ -40,7 +38,6 @@ function App() {
             <Route path="/products" element={<ProductsList />} />
             <Route path="/cart" element={<CartPage />} />
             {/* Added the CheckoutPage route */}
-            <Route path="/checkout" element={<CheckoutPage />} />
             {/* Added the PaymentSuccessPage route to handle Chapa redirects */}
             <Route path="/payment-success" element={<PaymentSuccessPage />} />
             <Route path="/create-product" element={<PostProduct />} />
@@ -54,5 +51,4 @@ function App() {
     </CartProvider>
   );
 }
-
-export default App;
+ export default App

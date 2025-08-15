@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../cart/CartContext';
-import { useAuth } from '../../context/AuthContext'; // Import useAuth
+import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/card';
 import { Plus, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
+import type { Variants } from 'framer-motion'; 
 
 interface Product {
     id: string;
@@ -24,16 +25,14 @@ interface Product {
 const ProductList: React.FC = () => {
     const { t } = useTranslation();
     const { cartItems, addToCart } = useCart();
-    const { token, loading: authLoading } = useAuth(); // Use token and loading from useAuth
+    const { token, loading: authLoading } = useAuth();
     const [products, setProducts] = useState<Product[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchProducts = async () => {
-            // Wait until authentication is done and a token is available
             if (authLoading || !token) {
-                // We're either still authenticating or not logged in, so don't fetch products yet.
                 setIsLoading(false);
                 return;
             }
@@ -59,13 +58,13 @@ const ProductList: React.FC = () => {
             }
         };
         fetchProducts();
-    }, [token, authLoading]); // Re-run effect when token or authLoading state changes
+    }, [token, authLoading]);
 
     const handleAddToCart = (productId: string) => {
         addToCart(productId);
     };
 
-    const containerVariants = {
+    const containerVariants: Variants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
@@ -74,7 +73,8 @@ const ProductList: React.FC = () => {
             },
         },
     };
-    const itemVariants = {
+
+    const itemVariants: Variants = {
         hidden: { y: 50, opacity: 0, scale: 0.9 },
         visible: {
             y: 0,
@@ -83,11 +83,10 @@ const ProductList: React.FC = () => {
             transition: {
                 type: 'spring',
                 stiffness: 100,
-            }
+            },
         },
     };
 
-    // Show loading state while auth is loading or products are being fetched
     if (isLoading || authLoading) {
         return (
             <div className="container mx-auto px-4 py-12 text-center text-gray-500">
@@ -109,7 +108,7 @@ const ProductList: React.FC = () => {
             <div className="container mx-auto px-4 py-12 text-center text-gray-500">
                 <p>{t('product.list.noProducts')}</p>
             </div>
-        )
+        );
     }
 
     return (
@@ -124,14 +123,16 @@ const ProductList: React.FC = () => {
                 animate="visible"
             >
                 {products.map((product) => {
-                    // Check if the product is in the cart
                     const isProductInCart = cartItems.some(item => item.product.id === product.id);
 
                     return (
                         <motion.div
                             key={product.id}
                             variants={itemVariants}
-                            whileHover={{ scale: 1.05, boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)' }}
+                            whileHover={{
+                                scale: 1.05,
+                                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                            }}
                             transition={{ duration: 0.2 }}
                         >
                             <Card className="rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col h-full">
@@ -163,7 +164,7 @@ const ProductList: React.FC = () => {
                                     ) : (
                                         <Button
                                             className="w-full bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors"
-                                            onClick={() => handleAddToCart(product.id as string)}
+                                            onClick={() => handleAddToCart(product.id)}
                                         >
                                             <Plus className="mr-2 h-4 w-4" />
                                             {t('add.to.cart')}

@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
 const monthsAmharic = [
   "መስከረም", "ጥቅምት", "ህዳር", "ታህሳስ", "ጥር", "የካቲት", "መጋቢት",
   "ሚያዝያ", "ግንቦት", "ሰኔ", "ሐምሌ", "ነሐሴ", "ጳጉሜ"
@@ -13,8 +12,6 @@ const monthsAmharic = [
 const daysAmharic = [
   "እሁድ", "ሰኞ", "ማክሰኞ", "ረቡዕ", "ሐሙስ", "አርብ", "ቅዳሜ"
 ];
-
-// Updated Ethiopian public holidays with accurate dates
 const ethiopianPublicHolidays = [
   { month: 1, day: 1, name: "እንቁጣጣሽ (Ethiopian New Year)" },
   { month: 1, day: 17, name: "መስቀል (Finding of the True Cross)" },
@@ -34,23 +31,19 @@ const Calendar = () => {
   const [currentEthDate, setCurrentEthDate] = useState({ day: 0, month: 0, year: 0 });
   const [displayMonth, setDisplayMonth] = useState(0);
   const [displayYear, setDisplayYear] = useState(0);
-
   useEffect(() => {
     const updateDateTime = () => {
       const now = new Date();
       setCurrentTime(now);
       const eth = toEthiopian(now.getFullYear(), now.getMonth() + 1, now.getDate());
       setCurrentEthDate(eth);
-
       if (!displayMonth) {
         setDisplayMonth(eth.month);
         setDisplayYear(eth.year);
       }
     };
-
     const timerId = setInterval(updateDateTime, 1000);
     updateDateTime();
-
     return () => clearInterval(timerId);
   }, [displayMonth]);
   const getDaysInEthMonth = (year: number, month: number): number => (month === 13 ? (year % 4 === 3 ? 6 : 5) : 30);
@@ -69,38 +62,30 @@ const Calendar = () => {
     setDisplayMonth(newMonth);
     setDisplayYear(newYear);
   };
-
   const renderMonthDays = () => {
     const days = [];
     const totalDays = getDaysInEthMonth(displayYear, displayMonth);
-
-    // Calculate the starting day of the week
     const gregFirst = toGregorian(displayYear, displayMonth, 1);
     const firstDate = new Date(gregFirst.year, gregFirst.month - 1, gregFirst.day);
     const firstDayOfWeek = firstDate.getDay();
-
     for (let i = 0; i < firstDayOfWeek; i++) {
       days.push(<div key={`empty-start-${i}`} className="p-2"></div>);
     }
-
     for (let i = 1; i <= totalDays; i++) {
       const isCurrentDay = i === currentEthDate.day &&
-                           displayMonth === currentEthDate.month &&
-                           displayYear === currentEthDate.year;
+        displayMonth === currentEthDate.month &&
+        displayYear === currentEthDate.year;
       const isHoliday = ethiopianPublicHolidays.some(
         (h) => h.month === displayMonth && h.day === i
       );
-
       let dayClass = "bg-white text-gray-800 border-gray-200 hover:bg-gray-50";
       if (isCurrentDay) {
         dayClass = "bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 text-white font-bold border-blue-700 shadow-lg scale-105";
       } else if (isHoliday) {
         dayClass = "bg-yellow-100 text-yellow-800 font-semibold border-yellow-200 hover:bg-yellow-200";
       }
-
       const holidayName = isHoliday ?
         ethiopianPublicHolidays.find(h => h.month === displayMonth && h.day === i)?.name : '';
-
       days.push(
         <div
           key={i}
@@ -118,7 +103,6 @@ const Calendar = () => {
 
     return days;
   };
-
   const renderHolidays = () => {
     const monthHolidays = ethiopianPublicHolidays.filter(h => h.month === displayMonth);
     return monthHolidays.length > 0 ? (

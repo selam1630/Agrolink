@@ -26,6 +26,7 @@ model User {
   cartItems               CartItem[]
   orders                  Order[]
   transactions            Transaction[]
+  advices                 Advice[] // This is the new field to fix the relation error
 
   createdAt               DateTime?   @default(now()) @map("createdAt")
   updatedAt               DateTime?   @updatedAt @map("updatedAt")
@@ -60,16 +61,16 @@ model CartItem {
 }
 
 model Order {
-  id              String      @id @default(auto()) @map("_id") @db.ObjectId
-  userId          String      @db.ObjectId
-  user            User        @relation(fields: [userId], references: [id])
-  status          String      @default("pending") // <-- Added status field
-  orderItems      OrderItem[]
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String      @db.ObjectId
+  user          User        @relation(fields: [userId], references: [id])
+  status        String      @default("pending") // <-- Added status field
+  orderItems    OrderItem[]
   
-  transactionId   String?     @unique @db.ObjectId
-  transaction     Transaction?
+  transactionId String?     @unique @db.ObjectId
+  transaction   Transaction?
 
-  createdAt       DateTime    @default(now())
+  createdAt     DateTime    @default(now())
 }
 
 model OrderItem {
@@ -84,17 +85,37 @@ model OrderItem {
 }
 
 model Transaction {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  txRef     String    @unique 
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  txRef     String      @unique 
   amount    Float
-  status    String    @default("pending") 
+  status    String      @default("pending") 
   
-  orderId   String    @unique @db.ObjectId
-  order     Order     @relation(fields: [orderId], references: [id])
+  orderId   String      @unique @db.ObjectId
+  order     Order       @relation(fields: [orderId], references: [id])
 
-  userId    String    @db.ObjectId
-  user      User      @relation(fields: [userId], references: [id])
+  userId    String      @db.ObjectId
+  user      User        @relation(fields: [userId], references: [id])
 
-  createdAt DateTime? @default(now()) @map("createdAt")
-  updatedAt DateTime? @updatedAt @map("updatedAt")
+  createdAt DateTime?   @default(now()) @map("createdAt")
+  updatedAt DateTime?   @updatedAt @map("updatedAt")
+}
+
+model Advice {
+  id      String @id @default(cuid()) @map("_id") @db.ObjectId
+  advice  String
+  crop    String
+  region  String
+  problem String
+  userId  String @db.ObjectId
+  user    User   @relation(fields: [userId], references: [id])
+}
+
+model DiseaseAdvice {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  image       String
+  diseaseName String
+  causes      String
+  treatment   String
+  
+  createdAt   DateTime @default(now())
 }

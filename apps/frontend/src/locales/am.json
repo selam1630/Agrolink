@@ -8,8 +8,13 @@
     "pricePlaceholder": "ዋጋ[ሰላሳ ሺ ብር]",
     "unit": "አሃድ",
     "description": "ስለ ምርቱ መግለጫ",
+    "quantityPlaceholder": "መጠን እንደ 1, 30 ያስገቡ",
+    "price": "ዋጋ",
+    "pricePlaceholder": "ዋጋ ያስገቡ",
+    "unit": "መለኪያ",
+    "description": "መግለጫ",
     "uploadImage": "ምስል ያስገቡ",
-    "postButton": "ማሳወቂያውን አስገባ"
+    "postButton": "ማሳወቂያ አስገባ"
   },
   "header": {
     "connectingFarmers": "አርሶ አደሮችን በማገናኘት"
@@ -32,79 +37,160 @@
     }
   },
   "nav": {
+    "weather": "አየር ሁኔታ",
+    "settings": "ቅንብሮች",
     "home": "መነሻ",
     "createProduct": "ምርት ፍጠር",
     "marketplace": "ገበያ",
     "allProducts": "ሁሉም ምርቶች",
+    "products": "ምርቶች",
     "services": "አገልግሎቶች",
     "aboutUs": "ስለ እኛ",
-    "diseaseDetection": "የበሽታ መለየት",
+    "diseaseDetection": "የበሽታ ማወቂያ",
     "news": "ዜና",
-    "products": "ምርቶች",
-    "calendar": "የጊዜ ሰሌዳ",
-    "helpCenter": "የእርዳታ ማዕከል",
-    "logout": "ውጣ"
+    "calendar": "ቀን መቁጠሪያ",
+    "helpCenter": "የእርዳታ መረጃ ማዕከል"
+  },
+  "header": {
+    "searchPlaceholder": "ፈልግ...",
+    "notifications": "ማሳሰቢያዎች",
+    "noNotifications": "አዲስ ማሳሰቢያዎች የሉም።",
+    "connectingFarmers": "ገበሬዎችን ማገናኘት"
   },
   "auth": {
     "signIn": "ግባ",
-    "signUp": "ይመዝገቡ"
+    "signUp": "ይመዝገቡ",
+    "forgotPassword": "የይለፍ ቃል ረስተዋል?",
+    "resetPassword": "የይለፍ ቃል ዳግመኛ ማድረግ"
   },
   "profile": {
     "myProfile": "መለያዬ",
     "myProducts": "ምርቶቼ",
     "logout": "ውጣ"
   },
+  "dashboard": {
+    "welcome": "እንኳን በደህና መጡ",
+    "welcomeSubtitle": "ዛሬ በግብርና ምርቶችዎ ላይ የሚከናወነው ይህ ነው",
+    "totalProducts": "ጠቅላላ ምርቶች",
+    "activeOrders": "እየተካሄዱ ያሉ ትዕዛዞች",
+    "newMessages": "አዲስ መልዕክቶች",
+    "monthlyEarnings": "ወርሃዊ ገቢ",
+    "recentProducts": "የቅርብ ጊዜ ምርቶችዎ",
+    "viewAll": "ሁሉንም ይመልከቱ",
+    "product": "ምርት",
+    "price": "ዋጋ",
+    "location": "አካባቢ",
+    "status": "ሁኔታ",
+    "date": "ቀን",
+    "available": "ይገኛል",
+    "sold": "ተሸጠ",
+    "quickActions": "በፍጥነት የሚደረጉ እርምጃዎች",
+    "addProduct": "አዲስ ምርት ጨምር",
+    "requestService": "የግብርና አገልግሎት ይጠይቁ",
+    "browseMarket": "ገበያ ይመልከቱ",
+    "resources": "ሀብቶች",
+    "agriculturalTips": "የግብርና ምክሮች",
+    "tipsDescription": "ለእርሻዎ እና ለእንስሳትዎ የሚረዱ የተሻለ ዘዴዎችን ይማሩ",
+    "communityForum": "ማህበረሰብ መድረክ",
+    "forumDescription": "ከሌሎች ገበሬዎች እና ከባለሙያዎች ጋር ይገናኙ",
+    "viewAllResources": "ሁሉንም ሀብቶች ይመልከቱ"
+  },
   "signIn": {
-    "welcomeBack": "በድጋሚ እንኳን ደህና መጡ!",
-    "signInToAccount": "ወደ አግሮLink አካውንትዎ ይግቡ።",
-    "phoneNumberLabel": "ስልክ ቁጥር",
-    "phoneNumberPlaceholder": "ስልክ ቁጥርዎን ያስገቡ",
+    "title": "ግባ",
+    "description": "ወደ አግሮLink መለያዎ ይግቡ።",
+    "phoneLabel": "ስልክ ቁጥር",
+    "phonePlaceholder": "ስልክ ቁጥርዎን ያስገቡ",
     "passwordLabel": "የይለፍ ቃል",
     "passwordPlaceholder": "የይለፍ ቃልዎን ያስገቡ",
     "forgotPassword": "የይለፍ ቃል ረስተዋል?",
     "signInButton": "ግባ",
-    "noAccountText": "አካውንት የለዎትም?",
-    "signUpNow": "አሁን ይመዝገቡ"
+    "noAccount": "አካውንት የለዎትም?",
+    "signUpNow": "አሁን ይመዝገቡ",
+    "loginSuccess": "በተሳካ ሁኔታ ገቡ",
+    "loginFailed": "የግባት እንቅስቃሴ አልተሳካም",
+    "networkError": "የኔትዎርክ ስህተት",
+    "unknownError": "ያልታወቀ ስህተት"
   },
   "signUp": {
     "title": "አግሮLink",
     "description": "ከማህበሩ ጋር ለመገናኘት ይመዝገቡ።",
     "nameLabel": "ሙሉ ስም",
     "namePlaceholder": "ሙሉ ስምዎን ያስገቡ",
-    "phoneNumberLabel": "ስልክ ቁጥር",
-    "phoneNumberPlaceholder": "ለምሳሌ፣ +251912345678",
+    "phoneLabel": "ስልክ ቁጥር",
+    "phonePlaceholder": "ለምሳሌ፣ +251912345678",
     "emailLabel": "የኢሜል አድራሻ (አማራጭ)",
     "emailPlaceholder": "ለምሳሌ፣ you@example.com",
-    "submitButton": "መለያዎን ይፍጠሩ",
-    "alreadyAccountText": "አካውንት አለዎት?",
-    "loginHere": "እዚህ ይግቡ"
+    "passwordLabel": "የይለፍ ቃል",
+    "passwordPlaceholder": "የይለፍ ቃልዎን ያስገቡ",
+    "roleSelect": "ሚናዎትን ይምረጡ",
+    "roleFarmer": "ገበሬ",
+    "roleBuyer": "ገዢ",
+    "createAccount": "መለያዎን ይፍጠሩ",
+    "alreadyAccount": "አካውንት አለዎት?",
+    "loginHere": "እዚህ ይግቡ",
+    "registrationSuccess": "መለያዎት በተሳካ ሁኔታ ተመዝግቧል",
+    "registrationFailed": "የመመዝገቢያ ሂደት አልተሳካም",
+    "networkError": "የኔትዎርክ ስህተት",
+    "unknownError": "ያልታወቀ ስህተት"
+  },
+  "forgotPassword": {
+    "title": "የይለፍ ቃል ረስተዋል?",
+    "description": "የኢሜል አድራሻዎን ያስገቡ እና የይለፍ ቃልዎን ዳግመኛ ያድርጉ",
+    "emailLabel": "የኢሜል አድራሻ",
+    "emailPlaceholder": "you@example.com",
+    "button": "የይለፍ ቃል መልእክት ላክ",
+    "remember": "የይለፍ ቃልዎን አስታወስተዋል?",
+    "signInLink": "እዚህ ይግቡ",
+    "success": "ይህ ኢሜል ተመዝግቧል ከሆነ የይለፍ ቃል የማዘዣ አገልግሎት ይላካል",
+    "failed": "የይለፍ ቃል ማዘዣ አልተሳካም",
+    "networkError": "የኔትዎርክ ስህተት ወይም አገልግሎት አልተገኘም",
+    "unknownError": "ያልታወቀ ስህተት"
+  },
+  "resetPassword": {
+    "title": "የይለፍ ቃል ዳግመኛ ማድረግ",
+    "description": "አዲስ የይለፍ ቃልዎን ያስገቡ",
+    "newPasswordLabel": "አዲስ የይለፍ ቃል",
+    "newPasswordPlaceholder": "አዲስ የይለፍ ቃልዎን ያስገቡ",
+    "confirmPasswordLabel": "የይለፍ ቃል አረጋግጥ",
+    "confirmPasswordPlaceholder": "የይለፍ ቃልዎን ያረጋግጡ",
+    "button": "የይለፍ ቃል ዳግመኛ አድርግ"
+  },
+  "footer": {
+    "copyright": "© 2025 አግሮLink. ሁሉም መብቶች የተጠበቁ ናቸው።"
+  },
+  "product": {
+    "list": {
+      "title": "ትኩስ እና ኦርጋኒክ ምርቶች",
+      "subtitle": "በአገር ውስጥ የተመረቱ ከፍተኛ ጥራት ያላቸውን ምርቶች ወደ ደጃፍዎ ደርሰን እናቀርባለን።",
+      "searchPlaceholder": "ምርቶችን ይፈልጉ...",
+      "inStock": "በመጋዘን",
+      "noProductsFound": "ምንም ምርቶች አልተገኙም",
+      "adjustSearch": "እባክዎ የፍለጋ ቃላትዎን ይቀይሩ ወይም በኋላ ይሞክሩ።",
+      "viewDetails": "ዝርዝሩን ይመልከቱ"
+    },
+    "detail": {
+      "loading": "የምርት ዝርዝሮች እየተጫኑ ነው...",
+      "notFound": "ምርት አልተገኘም",
+      "errorMessage": "የምርት ዝርዝሮችን በመጫን ላይ ስህተት ተፈጥሯል። ስህተት: {{error}}",
+      "backToProducts": "ወደ ምርቶች ተመለስ",
+      "noDescription": "ምንም መግለጫ አልተሰጠም።",
+      "inStock": "በክምችት ውስጥ",
+      "addToCart": "ወደ ጋሪ አክል"
+    }
   },
   "cart": {
-    "title": "ጋሪዬ",
-    "subtitle": "ትዕዛዝዎን ከማጠናቀቅዎ በፊት የተመረጡትን እቃዎች ይከልሱ።",
-    "loading": "እየጫነ ነው...",
-    "error": "እቃዎቹን ለመጫን ችግር ተፈጥሯል",
-    "empty": "ጋሪዎ ባዶ ነው!",
-    "emptyMessage": "ገና ምንም ነገር ወደ ጋሪዎ ያላስገቡ ይመስላል።",
+    "title": "የግዢ ጋሪዎ",
+    "empty": "ጋሪዎ ባዶ ነው",
+    "emptyMessage": "ምንም ምርት ገና ወደ ጋሪዎ አላኩም።",
     "startShopping": "ግዢ ይጀምሩ",
-    "product": "ምርት",
-    "price": "ዋጋ",
-    "orderSummary": "የግዢ ማጠቃለያ",
-    "finalizeOrder": "ትዕዛዝዎን ለማጠናቀቅ ዝግጁ ነዎት",
-    "items": "እቃዎች",
+    "orderSummary": "የትዕዛዝ ማጠቃለያ",
+    "finalizeOrder": "ከመክፈልዎ በፊት ትዕዛዝዎን ያጠናቅቁ።",
+    "items": "እቃዎች ({{count}})",
     "total": "ጠቅላላ",
     "payWithChapa": "በቻፓ ይክፈሉ",
     "continueShopping": "ግዢ ይቀጥሉ",
-    "addToCart": "ወደ ጋሪ ጨምር",
-    "addedToCart": "ወደ ጋሪ ገብቷል"
+    "itemPerItem": "ለእያንዳንዱ ዕቃ",
+    "chapaPaymentMessage": "ወደ ቻፓ ክፍያ በመሄድ ላይ። የእርስዎ የባክኤንድ ክፍያውን ይቆጣጠራል።"
   },
-  "checkout": {
-    "title": "ክፍያ",
-    "subtitle": "ትዕዛዝዎን ያጠናቅቁ እና ክፍያ ይፈጽሙ።",
-    "summary": "የትዕዛዝ ማጠቃለያ",
-    "summaryDescription": "ከመክፈልዎ በፊት ጋሪዎን ይገምግሙ።",
-    "itemsInCart": "በጋሪ ውስጥ ያሉ እቃዎች",
-    "totalAmount": "ጠቅላላ ዋጋ",
-    "payWithChapa": "በቻፓ ይክፈሉ"
-  }
+  "addToCart": "ወደ ጋሪ ጨምር"
 }
