@@ -5,6 +5,47 @@ import { useAuth } from '../../context/AuthContext';
 const CartPage: React.FC = () => {
     const { cartItems, removeFromCart, loading: cartLoading, error: cartError } = useCart();
     const { token, loading: authLoading } = useAuth();
+
+    const totalPrice = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+    const handlePayment = async () => {
+        if (!token) {
+            alert('You must be logged in to make a payment');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:5000/api/payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    amount: totalPrice,
+                    currency: 'USD',
+                    items: cartItems,
+                }),
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                alert(err.error || 'Payment initialization failed');
+                return;
+            }
+
+            const data = await response.json();
+
+            if (data?.data?.checkout_url) {
+                window.location.href = data.data.checkout_url; 
+            } else {
+                alert('Payment URL not found');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Failed to initiate payment');
+        }
+    };
+
     if (authLoading) {
         return (
             <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -44,7 +85,6 @@ const CartPage: React.FC = () => {
             </div>
         );
     }
-    const totalPrice = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
 
     return (
         <div className="container mx-auto p-4 bg-gray-100 min-h-screen">
@@ -74,17 +114,16 @@ const CartPage: React.FC = () => {
                     ))}
                 </div>
                 <div className="mt-8 pt-4 border-t-2 border-gray-200 flex flex-col md:flex-row justify-between items-center">
-    <p className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">
-        Total: <span className="text-green-600">${totalPrice.toFixed(2)}</span>
-    </p>
-    <button
-        
-        className="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition duration-300"
-    >
-        Pay with Chapa
-    </button>
-</div>
-
+                    <p className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">
+                        Total: <span className="text-green-600">${totalPrice.toFixed(2)}</span>
+                    </p>
+                    <button
+                        onClick={handlePayment}
+                        className="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition duration-300"
+                    >
+                        Pay with Chapa
+                    </button>
+                </div>
             </div>
         </div>
     );

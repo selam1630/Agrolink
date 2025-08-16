@@ -7,6 +7,7 @@ import productRoutes from "./routes/product.route";
 import adviceRoutes from "./routes/advice.route";
 import weatherPredictionRoutes from "./routes/weatherPrediction.Route";
 import cartRoutes from './routes/cart.routes';
+import paymentRoute from './routes/paymentRoute';
 
 dotenv.config();
 const app = express();
@@ -18,6 +19,7 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '50mb' }));
 
+app.use('/api/payment', paymentRoute);
 app.use("/api/auth", authRoutes);
 app.use("/api/sms", smsRoutes);
 app.use("/api/products", productRoutes);

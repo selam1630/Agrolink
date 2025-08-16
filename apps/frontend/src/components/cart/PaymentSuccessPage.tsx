@@ -6,10 +6,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-// This is a placeholder component. In a real application, you would
-// also handle the Chapa redirect, verify the payment status from your
-// backend, and then clear the user's cart.
-
 const PaymentSuccessPage: React.FC = () => {
   const { t } = useTranslation();
 
