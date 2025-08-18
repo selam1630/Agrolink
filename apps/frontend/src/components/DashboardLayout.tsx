@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import Header from "./Header";
 import SidebarLayout from "./SidebarLayout";
 import { XIcon } from "lucide-react";
-import { Outlet } from "react-router-dom"; 
+import { Outlet, useLocation } from "react-router-dom";
 
 const DashboardLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
 
   return (
     <div className="flex flex-col h-screen relative">
@@ -35,8 +36,27 @@ const DashboardLayout: React.FC = () => {
           <SidebarLayout />
         </aside>
 
-        <main className="flex-1 overflow-auto bg-gray-50 pt-16 md:pt-0">
-          <Outlet /> 
+        <main className="flex-1 overflow-auto bg-gray-50 pt-16 md:pt-0 p-6">
+          {/* Show AgroLink Home Page text only when on dashboard root */}
+          {location.pathname === "/dashboard" && (
+            <div className="max-w-3xl mx-auto text-center mt-10">
+              <h1 className="text-3xl font-bold text-green-700 mb-4">
+                🌱 Welcome to AgroLink
+              </h1>
+              <p className="text-gray-600 text-lg">
+                AgroLink is your smart agricultural assistant.  
+                We connect farmers, buyers, and experts in one platform 
+                to improve productivity, decision-making, and market access.
+              </p>
+              <p className="text-gray-600 text-lg mt-3">
+                Explore weather predictions, crop recommendations, 
+                and trading opportunities – all in one place.
+              </p>
+            </div>
+          )}
+
+          {/* Render child routes */}
+          <Outlet />
         </main>
       </div>
     </div>

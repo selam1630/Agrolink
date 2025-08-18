@@ -5,7 +5,9 @@
     "useDefineForClassFields": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "types": ["node"],
+
+    /* Remove overriding types to include React types */
+    // "types": ["node"],  <-- removed
     "skipLibCheck": true,
 
     /* Bundler mode */
@@ -16,15 +18,14 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
-    /* Linting */
+    /* Linting / strictness */
     "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    /* 👇 Add these for shadcn alias */
+    /* Aliases for shadcn UI or project paths */
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]

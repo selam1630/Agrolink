@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../cart/CartContext';
 import { useAuth } from '../../context/AuthContext';
-import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -13,17 +12,17 @@ import {
 } from '@/components/ui/card';
 import { Plus, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
-import type { Variants } from 'framer-motion'; 
+import type { Variants } from 'framer-motion';
 
 interface Product {
     id: string;
     name: string;
     price?: number;
     imageUrl: string;
+    isSold: boolean; // Added the isSold property
 }
 
 const ProductList: React.FC = () => {
-    const { t } = useTranslation();
     const { cartItems, addToCart } = useCart();
     const { token, loading: authLoading } = useAuth();
     const [products, setProducts] = useState<Product[]>([]);
@@ -90,7 +89,7 @@ const ProductList: React.FC = () => {
     if (isLoading || authLoading) {
         return (
             <div className="container mx-auto px-4 py-12 text-center text-gray-500">
-                <p>{t('product.list.loading')}</p>
+                <p>Loading products...</p>
             </div>
         );
     }
@@ -98,7 +97,7 @@ const ProductList: React.FC = () => {
     if (error) {
         return (
             <div className="container mx-auto px-4 py-12 text-center text-red-500">
-                <p>{t('product.list.error')}: {error}</p>
+                <p>Error: {error}</p>
             </div>
         );
     }
@@ -106,15 +105,15 @@ const ProductList: React.FC = () => {
     if (products.length === 0) {
         return (
             <div className="container mx-auto px-4 py-12 text-center text-gray-500">
-                <p>{t('product.list.noProducts')}</p>
+                <p>No products available at the moment.</p>
             </div>
         );
     }
 
     return (
         <div className="container mx-auto px-4 py-12">
-            <h1 className="text-4xl font-bold text-green-800 mb-2">{t('product.list.title')}</h1>
-            <p className="text-xl text-gray-600 mb-8">{t('product.list.subtitle')}</p>
+            <h1 className="text-4xl font-bold text-green-800 mb-2">Product List</h1>
+            <p className="text-xl text-gray-600 mb-8">Browse our available products below.</p>
 
             <motion.div
                 className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
@@ -150,7 +149,7 @@ const ProductList: React.FC = () => {
                                     <p className="text-2xl font-bold text-green-700">
                                         {product.price ? `ETB ${product.price.toFixed(2)}` : 'Price not available'}
                                     </p>
-                                    <p className="text-sm text-gray-500 mt-1">{t('unit')}</p>
+                                    <p className="text-sm text-gray-500 mt-1">per unit</p>
                                 </CardContent>
                                 <CardFooter className="p-4 pt-0">
                                     {isProductInCart ? (
@@ -159,7 +158,7 @@ const ProductList: React.FC = () => {
                                             disabled
                                         >
                                             <Check className="mr-2 h-4 w-4" />
-                                            {t('cart.addedToCart')}
+                                            Added to Cart
                                         </Button>
                                     ) : (
                                         <Button
@@ -167,7 +166,7 @@ const ProductList: React.FC = () => {
                                             onClick={() => handleAddToCart(product.id)}
                                         >
                                             <Plus className="mr-2 h-4 w-4" />
-                                            {t('add.to.cart')}
+                                            Add to Cart
                                         </Button>
                                     )}
                                 </CardFooter>

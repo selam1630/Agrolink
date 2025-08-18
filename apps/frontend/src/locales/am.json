@@ -3,11 +3,6 @@
     "title": "የምርት ማሳወቂያ",
     "productName": "የምርት ስም",
     "quantity": "መጠን",
-    "quantityPlaceholder": "መጠን እንደ 10 ኩንታል, 30 ኪሎግራም ያስገቡ",
-    "price": "ዋጋ",
-    "pricePlaceholder": "ዋጋ[ሰላሳ ሺ ብር]",
-    "unit": "አሃድ",
-    "description": "ስለ ምርቱ መግለጫ",
     "quantityPlaceholder": "መጠን እንደ 1, 30 ያስገቡ",
     "price": "ዋጋ",
     "pricePlaceholder": "ዋጋ ያስገቡ",
@@ -16,36 +11,18 @@
     "uploadImage": "ምስል ያስገቡ",
     "postButton": "ማሳወቂያ አስገባ"
   },
-  "header": {
-    "connectingFarmers": "አርሶ አደሮችን በማገናኘት"
-  },
-  "product": {
-    "list": {
-      "title": "የምርት ዝርዝር",
-      "subtitle": "አርሶ አደሮችን ከተጠቃሚዎች ጋር በማገናኘት",
-      "searchPlaceholder": "ምርቶችን ይፈልጉ...",
-      "noProductsFound": "ምርቶች አልተገኙም"
-    },
-    "detail": {
-      "loading": "የምርት ዝርዝሮችን እየጫነ ነው...",
-      "notFound": "ምርት አልተገኘም።",
-      "errorMessage": "ስህተት ተከስቷል: {{error}}",
-      "backToProducts": "ወደ ምርቶች ተመለስ",
-      "noDescription": "መግለጫ የለም።",
-      "inStock": "በመጋዘን ውስጥ",
-      "addToCart": "ወደ ጋሪ ጨምር"
-    }
-  },
   "nav": {
     "weather": "አየር ሁኔታ",
     "settings": "ቅንብሮች",
+
+    "about us": "ስለ እኛ",
+    "contact": "ያግኙን",
     "home": "መነሻ",
     "createProduct": "ምርት ፍጠር",
     "marketplace": "ገበያ",
     "allProducts": "ሁሉም ምርቶች",
     "products": "ምርቶች",
     "services": "አገልግሎቶች",
-    "aboutUs": "ስለ እኛ",
     "diseaseDetection": "የበሽታ ማወቂያ",
     "news": "ዜና",
     "calendar": "ቀን መቁጠሪያ",
@@ -139,9 +116,9 @@
     "emailLabel": "የኢሜል አድራሻ",
     "emailPlaceholder": "you@example.com",
     "button": "የይለፍ ቃል መልእክት ላክ",
-    "remember": "የይለፍ ቃልዎን አስታወስተዋል?",
+    "remember": "የይለፍ ቃልዎን አስታውሰዋል?",
     "signInLink": "እዚህ ይግቡ",
-    "success": "ይህ ኢሜል ተመዝግቧል ከሆነ የይለፍ ቃል የማዘዣ አገልግሎት ይላካል",
+    "success": "ይህ ኢሜል ከተመዘገበ የይለፍ ቃል የማዘዣ አገልግሎት ይላካል",
     "failed": "የይለፍ ቃል ማዘዣ አልተሳካም",
     "networkError": "የኔትዎርክ ስህተት ወይም አገልግሎት አልተገኘም",
     "unknownError": "ያልታወቀ ስህተት"
@@ -181,7 +158,7 @@
   "cart": {
     "title": "የግዢ ጋሪዎ",
     "empty": "ጋሪዎ ባዶ ነው",
-    "emptyMessage": "ምንም ምርት ገና ወደ ጋሪዎ አላኩም።",
+    "emptyMessage": "ምንም ምርት ገና ወደ ጋሪዎ አላከሉም።",
     "startShopping": "ግዢ ይጀምሩ",
     "orderSummary": "የትዕዛዝ ማጠቃለያ",
     "finalizeOrder": "ከመክፈልዎ በፊት ትዕዛዝዎን ያጠናቅቁ።",

@@ -8,6 +8,7 @@ import adviceRoutes from "./routes/advice.route";
 import weatherPredictionRoutes from "./routes/weatherPrediction.Route";
 import cartRoutes from './routes/cart.routes';
 import paymentRoute from './routes/paymentRoute';
+import profileRoutes from './routes/profile.route'; 
 
 dotenv.config();
 const app = express();
@@ -26,6 +27,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/advice", adviceRoutes);
 app.use("/api/weather-prediction", weatherPredictionRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/profile', profileRoutes);
 
 const PORT = 5000;
 app.listen(PORT, "0.0.0.0", () => {

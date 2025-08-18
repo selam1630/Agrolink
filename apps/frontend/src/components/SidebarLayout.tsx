@@ -161,7 +161,7 @@ const SidebarLayout: React.FC = () => {
       </nav>
 
       <div className="p-1 space-y-1 border-t border-gray-200 mt-">
-        <Link
+        {/* <Link
           to="/about"
           className={`flex items-center gap-3 px-2 py-2 rounded ${transitionClass} ${
             isActive("/about")
@@ -171,7 +171,7 @@ const SidebarLayout: React.FC = () => {
         >
           <InfoIcon className="w-5 h-5" />
           {t("nav.aboutUs")}
-        </Link>
+        </Link> */}
 
         <Link
           to="/settings"
@@ -185,22 +185,22 @@ const SidebarLayout: React.FC = () => {
           {t("nav.settings")}
         </Link>
 
-        <Link
+        {/* <Link
           to="/help"
           className={`flex items-center gap-3 px-2 py-2 rounded ${transitionClass} ${defaultBgClass} ${hoverBgClass}`}
         >
           <HelpCircleIcon className="w-5 h-5" />
           {t("nav.helpCenter")}
-        </Link>
+        </Link> */}
 
-        {isLoggedIn && (
+        {/* {isLoggedIn && (
           <button
             className={`flex items-center gap-3 w-full px-2 py-2 rounded ${transitionClass} ${defaultBgClass} ${hoverBgClass}`}
           >
             <LogOutIcon className="w-5 h-5" />
             {t("profile.logout")}
           </button>
-        )}
+        )} */}
       </div>
 
       <div className="p-2 text-sm text-gray-500 border-t border-gray-200">

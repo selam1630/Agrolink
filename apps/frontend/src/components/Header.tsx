@@ -1,17 +1,9 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-const useTranslation = () => {
-  const t = (key: string): string => key.split('.').pop() || key;
-  const i18n = {
-    changeLanguage: (lng: string) => console.log(`Mock i18n changeLanguage called with: ${lng}`),
-  };
-  return { t, i18n };
-};
-const useCart = () => ({
-  cartItems: [{ id: 1 }, { id: 2 }],
-});
+import { useTranslation } from "react-i18next"; 
+import agrilcon from "../assets/images/agriIcon.png";
+import { useCart } from "../components/cart/CartContext"; // ✅ real hook
 
-const agriIcon = "https://placehold.co/100x100/A5D6A7/000000?text=AgroLink";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -26,14 +18,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import {
-  NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuItem,
-  NavigationMenuLink,
-} from "@/components/ui/navigation-menu";
 
-// Lucide-react icons.
 import {
   GlobeIcon,
   UserIcon,
@@ -52,12 +37,10 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const { t, i18n } = useTranslation();
   const location = useLocation();
-  const { cartItems } = useCart();
+  const { cartCount } = useCart(); // ✅ use cartCount directly
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-
-  const cartItemCount = cartItems.length;
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -105,7 +88,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
             <Link to="/" className="flex items-center gap-2 group mr-6 md:mr-8">
               <div className="p-1 bg-gradient-to-br from-green-500 to-green-700 rounded-full group-hover:rotate-6 transition-transform duration-500">
                 <img
-                  src={agriIcon}
+                  src={agrilcon}
                   alt="AgroLink Logo"
                   className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-white"
                 />
@@ -147,7 +130,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               <SearchIcon className="w-5 h-5" />
             </Button>
 
-            {/* Cart Icon with Item Count */}
+            {/* Cart Icon */}
             <Link to="/cart" className="relative">
               <Button
                 variant="ghost"
@@ -155,9 +138,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                 className="relative text-green-700 hover:bg-green-50 transition-colors"
               >
                 <ShoppingCart className="w-5 h-5" />
-                {cartItemCount > 0 && (
+                {cartCount > 0 && (
                   <span className="absolute top-0 right-0 inline-flex items-center justify-center h-4 w-4 rounded-full bg-red-500 text-xs font-bold text-white transform translate-x-1/2 -translate-y-1/2">
-                    {cartItemCount}
+                    {cartCount}
                   </span>
                 )}
               </Button>
@@ -206,6 +189,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                 </Button>
               </Link>
             </div>
+
             {/* Profile Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -236,6 +220,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           </div>
         </div>
 
+        {/* Mobile search */}
         {isSearchVisible && (
           <div className="absolute top-16 left-0 right-0 bg-white flex items-center p-3 shadow-md animate-slideDown md:hidden">
             <SearchIcon className="w-5 h-5 text-green-600 mr-2" />
@@ -256,6 +241,8 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
             </Button>
           </div>
         )}
+
+        {/* Mobile menu */}
         {!onMenuClick && (
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
@@ -271,7 +258,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               <SheetHeader>
                 <SheetTitle className="flex items-center gap-3">
                   <img
-                    src={agriIcon}
+                    src={agrilcon}
                     alt="AgroLink"
                     className="w-10 h-10 rounded-full border-2 border-white"
                   />

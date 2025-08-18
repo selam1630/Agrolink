@@ -32,15 +32,17 @@ const SignIn: React.FC = () => {
   };
 
   const handleLoginSuccess = (data: any) => {
-    setSuccessMessage('Login successful! Redirecting...');
-    setAuth(data.token, data.userId); 
-    localStorage.setItem('role', data.role);
-    if (data.role === 'farmer') {
-      navigate('/create-product');
-    } else {
-      navigate('/dashboard');
-    }
-  };
+    setSuccessMessage('Login successful! Redirecting...');
+    // ADD THIS CRUCIAL LINE
+    localStorage.setItem('authToken', data.token); 
+    setAuth(data.token, data.userId); 
+    localStorage.setItem('role', data.role);
+    if (data.role === 'farmer') {
+      navigate('/create-product');
+    } else {
+      navigate('/dashboard');
+    }
+};
 
   const handlePasswordLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

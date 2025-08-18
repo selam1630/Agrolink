@@ -11,43 +11,27 @@
     "uploadImage": "Upload Image",
     "postButton": "Post"
   },
-  "header": {
-    "connectingFarmers": "Connecting Farmers"
-  },
-  "product": {
-    "list": {
-      "title": "Product List",
-      "subtitle": "Connecting Farmers to Consumers",
-      "searchPlaceholder": "Search for products...",
-      "noProductsFound": "No products found."
-    },
-    "detail": {
-      "loading": "Loading product details...",
-      "notFound": "Product not found.",
-      "errorMessage": "An error occurred: {{error}}",
-      "backToProducts": "Back to Products",
-      "noDescription": "No description available.",
-      "inStock": "In Stock",
-      "addToCart": "Add to Cart"
-    }
-  },
   "nav": {
     "weather": "Weather",
     "settings": "Settings",
     "home": "Home",
-    "createProduct": "Create Product",
+    "about us": "About us",
+    "contact": "Contact",
     "createProduct": "Create Product",
     "marketplace": "Marketplace",
     "allProducts": "All Products",
     "products": "Products",
     "services": "Services",
-    "aboutUs": "About Us",
     "diseaseDetection": "Disease Detection",
     "news": "News",
-    "products": "Products",
     "calendar": "Calendar",
-    "helpCenter": "Help Center",
-    "logout": "Logout"
+    "helpCenter": "Help Center"
+  },
+  "header": {
+    "searchPlaceholder": "Search...",
+    "notifications": "Notifications",
+    "noNotifications": "No new notifications.",
+    "connectingFarmers": "Connecting Farmers"
   },
   "auth": {
     "signIn": "Sign In",
@@ -88,10 +72,6 @@
     "viewAllResources": "View All Resources"
   },
   "signIn": {
-    "welcomeBack": "Welcome Back!",
-    "signInToAccount": "Sign in to your AgroLink account.",
-    "phoneNumberLabel": "Phone Number",
-    "phoneNumberPlaceholder": "Enter your phone number",
     "title": "Sign In",
     "description": "Sign in to your AgroLink account.",
     "phoneLabel": "Phone Number",
@@ -109,7 +89,6 @@
   },
   "signUp": {
     "title": "AgroLink",
-    "title": "AgroLink",
     "description": "Sign up to connect with your community.",
     "nameLabel": "Full Name",
     "namePlaceholder": "Enter your full name",
@@ -117,36 +96,82 @@
     "phonePlaceholder": "e.g., +251912345678",
     "emailLabel": "Email Address (Optional)",
     "emailPlaceholder": "e.g., you@example.com",
-    "submitButton": "Create Your Account",
-    "alreadyAccountText": "Already have an account?",
-    "loginHere": "Log in here"
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "roleSelect": "Select your role",
+    "roleFarmer": "Farmer",
+    "roleBuyer": "Buyer",
+    "createAccount": "Create Your Account",
+    "alreadyAccount": "Already have an account?",
+    "loginHere": "Log in here",
+    "registrationSuccess": "Your account has been successfully registered",
+    "registrationFailed": "Registration failed",
+    "networkError": "Network error",
+    "unknownError": "Unknown error"
+  },
+  "forgotPassword": {
+    "title": "Forgot Password?",
+    "description": "Enter your email address to reset your password.",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "you@example.com",
+    "button": "Send Reset Link",
+    "remember": "Remembered your password?",
+    "signInLink": "Sign in here",
+    "success": "If this email is registered, a password reset link will be sent.",
+    "failed": "Password reset failed",
+    "networkError": "Network error or service unavailable",
+    "unknownError": "Unknown error"
+  },
+  "resetPassword": {
+    "title": "Reset Password",
+    "description": "Enter your new password.",
+    "newPasswordLabel": "New Password",
+    "newPasswordPlaceholder": "Enter your new password",
+    "confirmPasswordLabel": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "button": "Reset Password"
+  },
+  "footer": {
+    "copyright": "© 2025 AgroLink. All rights reserved."
+  },
+  "product": {
+    "list": {
+      "title": "Fresh & Organic Produce",
+      "subtitle": "Discover a wide range of locally sourced, high-quality products delivered to your door.",
+      "searchPlaceholder": "Search products...",
+      "inStock": "in stock",
+      "noProductsFound": "No Products Found",
+      "adjustSearch": "Please adjust your search terms or check back later.",
+      "viewDetails": "View Details"
+    },
+    "detail": {
+      "loading": "Loading product details...",
+      "notFound": "Product not found",
+      "errorMessage": "There was an error loading the product details. Error: {{error}}",
+      "backToProducts": "Back to Products",
+      "noDescription": "No description provided.",
+      "inStock": "In Stock",
+      "addToCart": "Add to Cart"
+    }
   },
   "cart": {
-    "title": "My Cart",
-    "subtitle": "Review your selected items before you check out.",
-    "loading": "Loading...",
-    "error": "Failed to load cart items",
-    "empty": "Your cart is empty!",
+    "title": "Your Shopping Cart",
+    "empty": "Your Cart is Empty",
     "emptyMessage": "Looks like you haven't added anything to your cart yet.",
     "startShopping": "Start Shopping",
-    "product": "Product",
-    "price": "Price",
     "orderSummary": "Order Summary",
-    "finalizeOrder": "Ready to finalize your order?",
-    "items": "Items",
+    "finalizeOrder": "Finalize your order before payment.",
+    "items": "Items ({{count}})",
     "total": "Total",
     "payWithChapa": "Pay with Chapa",
     "continueShopping": "Continue Shopping",
-    "addToCart": "Add to Cart",
-    "addedToCart": "Added to Cart"
+    "itemPerItem": "per item",
+    "chapaPaymentMessage": "Proceeding to Chapa payment. Your backend will handle the integration."
   },
-  "checkout": {
-    "title": "Checkout",
-    "subtitle": "Finalize your order and make a secure payment.",
-    "summary": "Order Summary",
-    "summaryDescription": "Review your cart before payment.",
-    "itemsInCart": "Items in Cart",
-    "totalAmount": "Total Amount",
-    "payWithChapa": "Pay with Chapa"
+  "addToCart": "Add to Cart",
+  "paymentSuccess": {
+    "title": "Payment Successful",
+    "message": "Your payment has been successfully processed.",
+    "backToDashboard": "Back to Dashboard"
   }
 }
