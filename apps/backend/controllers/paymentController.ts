@@ -1,40 +1,31 @@
 import { Request, Response } from "express";
 import axios from "axios";
 import prisma from "../prisma/prisma";
-
 const CHAPA_SECRET_KEY = process.env.CHAPA_SECRET_KEY || "";
 const CHAPA_VERIFY_URL = "https://api.chapa.co/v1/transaction/verify/";
 const CHAPA_INITIATE_URL = "https://api.chapa.co/v1/transaction/initialize";
-
-// This function creates the payment and is now included again
 export const createPayment = async (req: Request, res: Response) => {
   const { amount, currency } = req.body;
   const userId = req.user?.id;
-
   if (!userId) {
     return res.status(401).json({ error: "User not authenticated." });
   }
-
   if (!amount) {
     return res.status(400).json({ error: "Missing payment amount." });
   }
-
   try {
     const cartItems = await prisma.cartItem.findMany({
       where: { userId: userId },
       include: { product: true },
     });
-
     if (cartItems.length === 0) {
       return res.status(400).json({ error: "Cart is empty." });
     }
-
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user || !user.phone) {
       return res.status(400).json({ error: "User phone number not found." });
     }
-
     const txRef = `order_${Date.now()}`;
     await prisma.$transaction(async (prisma) => {
       const newOrder = await prisma.order.create({
@@ -97,11 +88,8 @@ export const createPayment = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Failed to initiate payment." });
   }
 };
-
-// This function fetches products and is now included
 export const getProducts = async (req: Request, res: Response) => {
   try {
-    // Only fetch products that have not been sold yet
     const products = await prisma.product.findMany({
       where: {
         isSold: false,
@@ -113,8 +101,6 @@ export const getProducts = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Failed to fetch products." });
   }
 };
-
-// This is the updated verifyPayment function with added logging
 export const verifyPayment = async (req: Request, res: Response) => {
   const { tx_ref } = req.query;
 
@@ -178,7 +164,6 @@ export const verifyPayment = async (req: Request, res: Response) => {
     } else {
       console.log("Conditions for updating not met. Status was not 'success' or was not 'pending'.");
     }
-
     return res.status(200).json(response.data);
   } catch (err: any) {
     console.error("Chapa verification error:", err.response?.data || err.message);

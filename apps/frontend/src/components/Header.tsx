@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation ,useNavigate} from "react-router-dom";
 import { useTranslation } from "react-i18next"; 
 import agrilcon from "../assets/images/agriIcon.png";
-import { useCart } from "../components/cart/CartContext"; // ✅ real hook
+import { useCart } from "../components/cart/CartContext"; 
+import { useAuth } from "../context/AuthContext"; 
 
 import { Button } from "@/components/ui/button";
 import {
@@ -37,7 +38,9 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const { t, i18n } = useTranslation();
   const location = useLocation();
-  const { cartCount } = useCart(); // ✅ use cartCount directly
+  const navigate = useNavigate();
+  const { cartCount } = useCart(); 
+  const { signOut } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -68,6 +71,10 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
       {children}
     </Link>
   );
+const handleLogout = () => {
+    signOut(); 
+    navigate("/sign-in"); 
+  };
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-lg bg-white/90 border-b border-gray-200 shadow-sm">
@@ -212,7 +219,10 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                     {t("profile.myProducts")}
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="py-2 text-red-600 focus:bg-red-50 cursor-pointer">
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="py-2 text-red-600 focus:bg-red-50 cursor-pointer"
+                >
                   {t("profile.logout")}
                 </DropdownMenuItem>
               </DropdownMenuContent>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import agriIcon from '@/assets/images/agriIcon.png'; // Assuming this is a valid path
+import { useTranslation } from 'react-i18next';
 
 interface FormData {
   name: string;
@@ -11,6 +12,8 @@ interface FormData {
 }
 
 const SignUp: React.FC = () => {
+  const { t } = useTranslation();
+
   const [formData, setFormData] = useState<FormData>({
     name: '',
     phoneNumber: '',
@@ -51,7 +54,6 @@ const SignUp: React.FC = () => {
     };
 
     try {
-      // Step 1: Send registration data to the backend to get an OTP
       const response = await fetch('http://localhost:5000/api/auth/register-with-otp', {
         method: 'POST',
         headers: {
@@ -63,14 +65,14 @@ const SignUp: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setSuccessMessage(data.message);
+        setSuccessMessage(t('signUp.sendOtpMessage') as string);
         setStep('otp');
       } else {
-        setError(data.error || 'Registration failed: Unknown error');
+        setError(data.error || (t('signUp.unknownError') as string));
       }
     } catch (err) {
       console.error('Error during OTP request:', err);
-      setError('Registration failed: Network error or backend down');
+      setError(t('signUp.networkError') as string);
     } finally {
       setIsLoading(false);
     }
@@ -99,7 +101,7 @@ const SignUp: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setSuccessMessage('Registration successful! Redirecting...');
+        setSuccessMessage(t('signUp.registrationSuccess') as string);
         localStorage.setItem('token', data.token);
         localStorage.setItem('role', data.role);
         if (data.role === 'farmer') {
@@ -110,11 +112,11 @@ const SignUp: React.FC = () => {
           navigate('/dashboard');
         }
       } else {
-        setError(data.error || 'Invalid or expired OTP.');
+        setError(data.error || (t('signUp.otpError') as string));
       }
     } catch (err) {
       console.error('Error during OTP verification:', err);
-      setError('Verification failed: Network error or backend down');
+      setError(t('signUp.networkError') as string);
     } finally {
       setIsLoading(false);
     }
@@ -131,10 +133,10 @@ const SignUp: React.FC = () => {
 
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-green-700">
-            አግሮLink
+            {t('signUp.title')}
           </h1>
           <p className="text-gray-600 mt-2">
-            Sign up to connect with your community.
+            {t('signUp.description')}
           </p>
         </div>
 
@@ -153,7 +155,7 @@ const SignUp: React.FC = () => {
           <form onSubmit={handleRequestOtp}>
             <div className="mb-6">
               <label htmlFor="name" className="block text-sm font-medium text-gray-800 mb-2">
-                Full Name
+                {t('signUp.nameLabel')}
               </label>
               <input
                 type="text"
@@ -162,13 +164,13 @@ const SignUp: React.FC = () => {
                 value={formData.name}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
-                placeholder="Enter your full name"
+                placeholder={t('signUp.namePlaceholder') as string}
                 required
               />
             </div>
             <div className="mb-6">
               <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-800 mb-2">
-                Phone Number
+                {t('signUp.phoneLabel')}
               </label>
               <input
                 type="tel"
@@ -177,13 +179,13 @@ const SignUp: React.FC = () => {
                 value={formData.phoneNumber}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
-                placeholder="e.g., +251912345678"
+                placeholder={t('signUp.phonePlaceholder') as string}
                 required
               />
             </div>
             <div className="mb-8">
               <label htmlFor="email" className="block text-sm font-medium text-gray-800 mb-2">
-                Email Address (Optional)
+                {t('signUp.emailLabel')}
               </label>
               <input
                 type="email"
@@ -192,12 +194,12 @@ const SignUp: React.FC = () => {
                 value={formData.email}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
-                placeholder="e.g., you@example.com"
+                placeholder={t('signUp.emailPlaceholder') as string}
               />
             </div>
             <div className="mb-6">
               <label htmlFor="password" className="block text-sm font-medium text-gray-800 mb-2">
-                Password
+                {t('signUp.passwordLabel')}
               </label>
               <input
                 type="password"
@@ -206,7 +208,7 @@ const SignUp: React.FC = () => {
                 value={formData.password}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
-                placeholder="Enter a strong password"
+                placeholder={t('signUp.passwordPlaceholder') as string}
                 required
               />
             </div>
@@ -217,25 +219,25 @@ const SignUp: React.FC = () => {
               required
               className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300 mb-6"
             >
-              <option value="farmer">Farmer</option>
-              <option value="buyer">Buyer</option>
+              <option value="farmer">{t('signUp.roleFarmer')}</option>
+              <option value="buyer">{t('signUp.roleBuyer')}</option>
             </select>
             <button
               type="submit"
               className="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50"
               disabled={isLoading}
             >
-              {isLoading ? 'Processing...' : 'Create Your Account'}
+              {isLoading ? '...' : t('signUp.createAccount')}
             </button>
           </form>
         ) : (
           <form onSubmit={handleVerifyOtp}>
             <p className="text-center text-gray-600 mb-6">
-              An OTP has been sent to your phone number.
+              {t('signUp.sendOtpMessage')}
             </p>
             <div className="mb-6">
               <label htmlFor="otp" className="block text-sm font-medium text-gray-800 mb-2">
-                Enter OTP
+                {t('signUp.enterOtpLabel')}
               </label>
               <input
                 type="text"
@@ -254,15 +256,15 @@ const SignUp: React.FC = () => {
               className="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50"
               disabled={isLoading}
             >
-              {isLoading ? 'Verifying...' : 'Verify OTP'}
+              {isLoading ? '...' : t('signUp.verifyButton')}
             </button>
           </form>
         )}
 
         <div className="text-center mt-6 text-sm text-gray-600">
-          Already have an account?{' '}
+          {t('signUp.alreadyAccount')}{' '}
           <Link to="/sign-in" className="font-medium text-green-600 hover:text-green-800 transition-colors duration-300 ml-1">
-            Log in here
+            {t('signUp.loginHere')}
           </Link>
         </div>
       </div>

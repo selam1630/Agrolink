@@ -173,5 +173,57 @@
     "title": "Payment Successful",
     "message": "Your payment has been successfully processed.",
     "backToDashboard": "Back to Dashboard"
+  },
+
+  "landingPage": {
+    "heroPhrase1": "አግሮLink",
+    "heroPhrase2": "የገበሬው ምርጥ አጋር",
+    "heroSubtext": "Farmer's Best Partner",
+    "getStarted": "Get Started →",
+    "servicesTitle": "Services",
+    "connectBuyers": {
+      "title": "Connect Buyers & Farmers",
+      "description": "Direct marketplace eliminating middlemen. Farmers get fair prices, buyers get fresh produce straight from source."
+    },
+    "aiDetection": {
+      "title": "AI Crop Disease Detection",
+      "description": "Instant diagnosis from plant photos. Get treatment plans to save your crops before damage spreads."
+    },
+    "advisor": {
+      "title": "24/7 Farming Advisor",
+      "description": "Virtual agronomist in your pocket. Get personalized advice on soil health, pest control, and crop cycles in Amharic or Oromiffa."
+    },
+    "weather": {
+      "title": "Hyper-Local Weather Alerts & Prediction",
+      "description": "Precision forecasts and future predictions for your exact location. We also offer soil moisture analysis"
+    },
+    "learnMore": "Learn More",
+    "signUp": "Sign Up",
+    "appName": "አግሮLink"
+  },
+  "weatherAdvice": {
+    "geolocationNotSupported": "Geolocation is not supported by your browser.",
+    "serverError": "Failed to get advice from server.",
+    "fetchError": "An error occurred while fetching advice.",
+    "locationPermissionError": "Unable to retrieve your location. Please ensure location services are enabled.",
+    "loadingAuth": "Loading authentication...",
+    "loginRequiredTitle": "🚫 Login Required",
+    "loginRequiredText": "Please log in to access the Agricultural Climate Advisor.",
+    "goToLogin": "Go to Login",
+    "advisorTitle": "Agricultural Climate Advisor",
+    "advisorSubtitle": "Get personalized weather forecasts and crop advice for your farm.",
+    "fetchingAdvice": "Fetching Advice...",
+    "getAdviceButton": "Get Advice for My Location",
+    "currentWeatherTitle": "Current Weather in {{location}}",
+    "predictedAdviceTitle": "Predicted Advice",
+    "weatherForecastTitle": "Weather Forecast:",
+    "predictedSoilTitle": "Predicted Soil Type:",
+    "suggestedCropsTitle": "Suggested Crops:",
+    "potentialEventsTitle": "Potential Extreme Events:"
+  },
+  "dashboard": {
+    "welcomeTitle": "🌱 Welcome to AgroLink",
+    "descriptionPart1": "AgroLink is your smart agricultural assistant. We connect farmers, buyers, and experts in one platform to improve productivity, decision-making, and market access.",
+    "descriptionPart2": "Explore weather predictions, crop recommendations, and trading opportunities – all in one place."
   }
 }

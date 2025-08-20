@@ -36,7 +36,7 @@ const DashboardLayout: React.FC = () => {
           <SidebarLayout />
         </aside>
 
-        <main className="flex-1 overflow-auto bg-gray-50 pt-16 md:pt-0 p-6">
+        <main className="flex-1 overflow-auto bg-gray-50 pt-16 md:pt-30 p-6">
           {/* Show AgroLink Home Page text only when on dashboard root */}
           {location.pathname === "/dashboard" && (
             <div className="max-w-3xl mx-auto text-center mt-10">

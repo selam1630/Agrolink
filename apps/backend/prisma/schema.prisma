@@ -33,21 +33,21 @@ model User {
 }
 
 model Product {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   quantity    Int
   price       Float?
   description String?
   imageUrl    String?
-  status      String      @default("available")
-  isSold    Boolean  @default(false)
-  userId      String      @db.ObjectId
-  user        User        @relation(fields: [userId], references: [id])
+  status      String   @default("available")
+  isSold      Boolean  @default(false)
+  userId      String?  @db.ObjectId  // Make this field optional
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)  // Make the relation optional
   cartItems   CartItem[]
   orderItems  OrderItem[]
-  
-  createdAt   DateTime?   @default(now()) @map("createdAt")
-  updatedAt   DateTime?   @updatedAt @map("updatedAt")
+
+  createdAt   DateTime? @default(now()) @map("createdAt")
+  updatedAt   DateTime? @updatedAt @map("updatedAt")
 }
 
 model CartItem {
@@ -100,14 +100,13 @@ model Transaction {
   updatedAt DateTime? @updatedAt @map("updatedAt")
 }
 model Advice {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
   advice  String
   crop    String
   region  String
   problem String
-  // This line was changed to remove @db.ObjectId
-  userId  String
-  user    User   @relation(fields: [userId], references: [id])
+  userId  String  @db.ObjectId 
+  user    User    @relation(fields: [userId], references: [id])
 }
 
 model DiseaseAdvice {

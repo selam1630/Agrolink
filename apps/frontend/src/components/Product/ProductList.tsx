@@ -13,16 +13,18 @@ import {
 import { Plus, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 import type { Variants } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 interface Product {
     id: string;
     name: string;
     price?: number;
     imageUrl: string;
-    isSold: boolean; // Added the isSold property
+    isSold: boolean;
 }
 
 const ProductList: React.FC = () => {
+    const { t } = useTranslation();
     const { cartItems, addToCart } = useCart();
     const { token, loading: authLoading } = useAuth();
     const [products, setProducts] = useState<Product[]>([]);
@@ -46,7 +48,7 @@ const ProductList: React.FC = () => {
 
                 if (!response.ok) {
                     const errorData = await response.json();
-                    throw new Error(errorData.error || 'Failed to fetch products.');
+                    throw new Error(errorData.error || (t('productList.fetchError') as string));
                 }
                 const data = await response.json();
                 setProducts(data);
@@ -57,7 +59,7 @@ const ProductList: React.FC = () => {
             }
         };
         fetchProducts();
-    }, [token, authLoading]);
+    }, [token, authLoading, t]);
 
     const handleAddToCart = (productId: string) => {
         addToCart(productId);
@@ -89,7 +91,7 @@ const ProductList: React.FC = () => {
     if (isLoading || authLoading) {
         return (
             <div className="container mx-auto px-4 py-12 text-center text-gray-500">
-                <p>Loading products...</p>
+                <p>{t('productList.loading')}</p>
             </div>
         );
     }
@@ -97,7 +99,7 @@ const ProductList: React.FC = () => {
     if (error) {
         return (
             <div className="container mx-auto px-4 py-12 text-center text-red-500">
-                <p>Error: {error}</p>
+                <p>{t('productList.error')}: {error}</p>
             </div>
         );
     }
@@ -105,15 +107,15 @@ const ProductList: React.FC = () => {
     if (products.length === 0) {
         return (
             <div className="container mx-auto px-4 py-12 text-center text-gray-500">
-                <p>No products available at the moment.</p>
+                <p>{t('productList.noProducts')}</p>
             </div>
         );
     }
 
     return (
         <div className="container mx-auto px-4 py-12">
-            <h1 className="text-4xl font-bold text-green-800 mb-2">Product List</h1>
-            <p className="text-xl text-gray-600 mb-8">Browse our available products below.</p>
+            <h1 className="text-4xl font-bold text-green-800 mb-2">{t('productList.title')}</h1>
+            <p className="text-xl text-gray-600 mb-8">{t('productList.description')}</p>
 
             <motion.div
                 className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
@@ -138,7 +140,7 @@ const ProductList: React.FC = () => {
                                 <Link to={`/products/${product.id}`} className="relative pb-[75%] block">
                                     <img
                                         src={product.imageUrl || 'https://placehold.co/400x300'}
-                                        alt={product.name}
+                                        alt={t('productList.imageAlt', { productName: product.name }) as string}
                                         className="absolute inset-0 w-full h-full object-cover"
                                     />
                                 </Link>
@@ -147,9 +149,9 @@ const ProductList: React.FC = () => {
                                 </CardHeader>
                                 <CardContent className="p-4 pt-0">
                                     <p className="text-2xl font-bold text-green-700">
-                                        {product.price ? `ETB ${product.price.toFixed(2)}` : 'Price not available'}
+                                        {product.price ? t('productList.price', { price: product.price.toFixed(2) }) : t('productList.priceUnavailable')}
                                     </p>
-                                    <p className="text-sm text-gray-500 mt-1">per unit</p>
+                                    <p className="text-sm text-gray-500 mt-1">{t('productList.priceUnit')}</p>
                                 </CardContent>
                                 <CardFooter className="p-4 pt-0">
                                     {isProductInCart ? (
@@ -158,7 +160,7 @@ const ProductList: React.FC = () => {
                                             disabled
                                         >
                                             <Check className="mr-2 h-4 w-4" />
-                                            Added to Cart
+                                            {t('productList.addedToCart')}
                                         </Button>
                                     ) : (
                                         <Button
@@ -166,7 +168,7 @@ const ProductList: React.FC = () => {
                                             onClick={() => handleAddToCart(product.id)}
                                         >
                                             <Plus className="mr-2 h-4 w-4" />
-                                            Add to Cart
+                                            {t('productList.addToCart')}
                                         </Button>
                                     )}
                                 </CardFooter>

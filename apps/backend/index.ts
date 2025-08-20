@@ -1,16 +1,17 @@
-import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
+import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/auth.route";
 import smsRoutes from "./routes/sms.route";
 import productRoutes from "./routes/product.route";
-import adviceRoutes from "./routes/advice.route";
+import adviceRoutes from "./routes/diseaseDetection.route";
 import weatherPredictionRoutes from "./routes/weatherPrediction.Route";
 import cartRoutes from './routes/cart.routes';
 import paymentRoute from './routes/paymentRoute';
-import profileRoutes from './routes/profile.route'; 
+import profileRoutes from './routes/profile.route';
+import diseaseDetectionRoute from "./routes/diseaseDetection.route";
 
-dotenv.config();
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -28,6 +29,7 @@ app.use("/api/advice", adviceRoutes);
 app.use("/api/weather-prediction", weatherPredictionRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/profile', profileRoutes);
+app.use("/api/diseaseDetection", diseaseDetectionRoute);
 
 const PORT = 5000;
 app.listen(PORT, "0.0.0.0", () => {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import agriIcon from '@/assets/images/agriIcon.png'; // Assuming this is a valid path
 import { useAuth } from '@/context/AuthContext'; // Import useAuth hook
+import { useTranslation } from 'react-i18next'; // Import the useTranslation hook
 
 interface SignInData {
   phoneNumber: string;
@@ -9,7 +10,8 @@ interface SignInData {
 }
 
 const SignIn: React.FC = () => {
-  const { setAuth } = useAuth(); 
+  const { setAuth } = useAuth();
+  const { t } = useTranslation(); // Initialize the translation hook
 
   const [formData, setFormData] = useState<SignInData>({
     phoneNumber: '',
@@ -32,17 +34,16 @@ const SignIn: React.FC = () => {
   };
 
   const handleLoginSuccess = (data: any) => {
-    setSuccessMessage('Login successful! Redirecting...');
-    // ADD THIS CRUCIAL LINE
-    localStorage.setItem('authToken', data.token); 
-    setAuth(data.token, data.userId); 
-    localStorage.setItem('role', data.role);
-    if (data.role === 'farmer') {
-      navigate('/create-product');
-    } else {
-      navigate('/dashboard');
-    }
-};
+    setSuccessMessage(t('signIn.loginSuccess') as string);
+    localStorage.setItem('authToken', data.token);
+    setAuth(data.token, data.userId);
+    localStorage.setItem('role', data.role);
+    if (data.role === 'farmer') {
+      navigate('/create-product');
+    } else {
+      navigate('/dashboard');
+    }
+  };
 
   const handlePasswordLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -59,9 +60,9 @@ const SignIn: React.FC = () => {
       const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -69,11 +70,11 @@ const SignIn: React.FC = () => {
       if (response.ok) {
         handleLoginSuccess(data);
       } else {
-        setError(data.error || 'Unknown error');
+        setError(data.error || (t('signIn.loginFailed') as string));
       }
     } catch (err) {
       console.error('Error during password login:', err);
-      setError('Login failed: Network error or backend down');
+      setError(t('signIn.networkError') as string);
     } finally {
       setIsLoading(false);
     }
@@ -93,9 +94,9 @@ const SignIn: React.FC = () => {
       const response = await fetch('http://localhost:5000/api/auth/login-with-otp', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -104,11 +105,11 @@ const SignIn: React.FC = () => {
         setSuccessMessage(data.message);
         setLoginMethod('otpInput');
       } else {
-        setError(data.error || 'Failed to send OTP. Please check your phone number and try again.');
+        setError(data.error || (t('signIn.loginFailed') as string));
       }
     } catch (err) {
       console.error('Error requesting OTP:', err);
-      setError('Login failed: Network error or backend down');
+      setError(t('signIn.networkError') as string);
     } finally {
       setIsLoading(false);
     }
@@ -129,9 +130,9 @@ const SignIn: React.FC = () => {
       const response = await fetch('http://localhost:5000/api/auth/verify-login-otp', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -139,32 +140,25 @@ const SignIn: React.FC = () => {
       if (response.ok) {
         handleLoginSuccess(data);
       } else {
-        setError(data.error || 'Invalid or expired OTP.');
+        setError(data.error || (t('signIn.loginFailed') as string));
       }
     } catch (err) {
       console.error('Error verifying OTP:', err);
-      setError('Verification failed: Network error or backend down');
+      setError(t('signIn.networkError') as string);
     } finally {
       setIsLoading(false);
     }
   };
-  
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-green-100 p-4">
       <div className="relative bg-white p-8 md:p-10 rounded-xl shadow-2xl w-full max-w-lg">
-        <img
-          src={agriIcon}
-          alt="AgroTech Logo"
-          className="absolute top-6 left-6 w-20 h-20 p-2"
-        />
+        <img src={agriIcon} alt="AgroTech Logo" className="absolute top-6 left-6 w-20 h-20 p-2" />
 
         <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-green-700">
-            Welcome Back!
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Sign in to your አግሮLink account.
-          </p>
+          {/* Using translation key for title and description */}
+          <h1 className="text-3xl md:text-4xl font-bold text-green-700">{t('signIn.title')}</h1>
+          <p className="text-gray-600 mt-2">{t('signIn.description')}</p>
         </div>
 
         {error && (
@@ -181,8 +175,9 @@ const SignIn: React.FC = () => {
         {loginMethod === 'password' && (
           <form onSubmit={handlePasswordLogin}>
             <div className="mb-6">
+              {/* Using translation key for label and placeholder */}
               <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-800 mb-2">
-                Phone Number
+                {t('signIn.phoneLabel')}
               </label>
               <input
                 type="tel"
@@ -191,17 +186,19 @@ const SignIn: React.FC = () => {
                 value={formData.phoneNumber}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
-                placeholder="Enter your phone number"
+                placeholder={t('signIn.phonePlaceholder') as string}
                 required
               />
             </div>
             <div className="mb-8">
               <div className="flex justify-between items-center">
+                {/* Using translation key for label */}
                 <label htmlFor="password" className="block text-sm font-medium text-gray-800 mb-2">
-                  Password
+                  {t('signIn.passwordLabel')}
                 </label>
+                {/* Using translation key for forgot password link */}
                 <Link to="/forgot-password" className="text-xs text-green-600 hover:text-green-800 transition-colors duration-300">
-                  Forgot password?
+                  {t('auth.forgotPassword')}
                 </Link>
               </div>
               <input
@@ -211,7 +208,7 @@ const SignIn: React.FC = () => {
                 value={formData.password}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
-                placeholder="Enter your password"
+                placeholder={t('signIn.passwordPlaceholder') as string}
                 required
               />
             </div>
@@ -220,7 +217,8 @@ const SignIn: React.FC = () => {
               className="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50"
               disabled={isLoading}
             >
-              {isLoading ? 'Signing In...' : 'Sign In with Password'}
+              {/* Using translation key for button text */}
+              {isLoading ? '...' : (t('signIn.signInButton') as string)}
             </button>
             <div className="mt-4 text-center">
               <button
@@ -228,7 +226,8 @@ const SignIn: React.FC = () => {
                 onClick={() => setLoginMethod('otp')}
                 className="text-sm font-medium text-green-600 hover:text-green-800 transition-colors duration-300"
               >
-                Or, Sign In with OTP
+                {/* Hard-coded text to be fixed */}
+                Or, {t('signIn.signInButton')} with OTP
               </button>
             </div>
           </form>
@@ -238,7 +237,7 @@ const SignIn: React.FC = () => {
           <form onSubmit={handleRequestOtp}>
             <div className="mb-6">
               <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-800 mb-2">
-                Phone Number
+                {t('signIn.phoneLabel')}
               </label>
               <input
                 type="tel"
@@ -247,7 +246,7 @@ const SignIn: React.FC = () => {
                 value={formData.phoneNumber}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
-                placeholder="Enter your phone number"
+                placeholder={t('signIn.phonePlaceholder') as string}
                 required
               />
             </div>
@@ -256,7 +255,8 @@ const SignIn: React.FC = () => {
               className="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50"
               disabled={isLoading}
             >
-              {isLoading ? 'Sending OTP...' : 'Send OTP'}
+              {/* Hard-coded text to be fixed */}
+              {isLoading ? '...' : 'Send OTP'}
             </button>
             <div className="mt-4 text-center">
               <button
@@ -264,7 +264,8 @@ const SignIn: React.FC = () => {
                 onClick={() => setLoginMethod('password')}
                 className="text-sm font-medium text-green-600 hover:text-green-800 transition-colors duration-300"
               >
-                Or, Sign In with Password
+                {/* Hard-coded text to be fixed */}
+                Or, {t('signIn.signInButton')} with Password
               </button>
             </div>
           </form>
@@ -272,12 +273,10 @@ const SignIn: React.FC = () => {
 
         {loginMethod === 'otpInput' && (
           <form onSubmit={handleVerifyOtp}>
-            <p className="text-center text-gray-600 mb-6">
-              An OTP has been sent to your phone number.
-            </p>
+            <p className="text-center text-gray-600 mb-6">{t('signIn.sendOtpMessage')}</p>
             <div className="mb-6">
               <label htmlFor="otp" className="block text-sm font-medium text-gray-800 mb-2">
-                Enter OTP
+                {t('signIn.enterOtpLabel')}
               </label>
               <input
                 type="text"
@@ -296,15 +295,16 @@ const SignIn: React.FC = () => {
               className="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50"
               disabled={isLoading}
             >
-              {isLoading ? 'Verifying...' : 'Verify OTP'}
+              {/* Hard-coded text to be fixed */}
+              {isLoading ? '...' : 'Verify OTP'}
             </button>
           </form>
         )}
 
         <div className="text-center mt-6 text-sm text-gray-600">
-          Don't have an account?{' '}
+          {t('signIn.noAccount')}{' '}
           <Link to="/sign-up" className="font-medium text-green-600 hover:text-green-800 transition-colors duration-300 ml-1">
-            Sign up now
+            {t('signIn.signUpNow')}
           </Link>
         </div>
       </div>

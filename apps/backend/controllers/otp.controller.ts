@@ -42,8 +42,8 @@ const sendTextBeeSMS = async (recipient: string, message: string) => {
 };
 
 /**
- * @route POST /api/auth/request-otp
- * @description Sends an OTP to the user's phone number.
+ * @route 
+ * @description 
  */
 export const requestOtp = async (req: Request, res: Response) => {
   const { phone } = req.body;
@@ -88,8 +88,8 @@ export const requestOtp = async (req: Request, res: Response) => {
 };
 
 /**
- * @route POST /api/auth/verify-otp
- * @description Verifies the provided OTP and logs the user in.
+ * @route 
+ * @description 
  */
 export const verifyOtp = async (req: Request, res: Response) => {
   const { phone, otp } = req.body;
@@ -126,8 +126,8 @@ export const verifyOtp = async (req: Request, res: Response) => {
 };
 
 /**
- * @route POST /api/auth/resend-otp
- * @description Resends a new OTP to the user's phone number.
+ * @route 
+ * @description 
  */
 export const resendOtp = async (req: Request, res: Response) => {
     const { phone } = req.body;

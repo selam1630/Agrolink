@@ -8,7 +8,7 @@ const generateProductImage = async (prompt: string) => {
   console.log(`Attempting to generate image for prompt: ${fullPrompt}`);
   
   const payload = { instances: { prompt: fullPrompt }, parameters: { "sampleCount": 1 } };
-  const apiKey = "";
+  const apiKey = "AIzaSyA7Q8nlGg4vbDghYGJzXB5O_LvL0kG5iNg";
   const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
 
   try {

@@ -20,7 +20,7 @@ import MainLayout from "./components/MainLayout";
 import About from "./pages/About";
 import Services from "./pages/Services";
 import PaymentSuccessPage from "./components/cart/PaymentSuccessPage";
-import AdviceForm from "./components/advice/AdviceForm";
+import AdviceForm from "./components/advice/DiseaseDetection";
 
 
 function App() {

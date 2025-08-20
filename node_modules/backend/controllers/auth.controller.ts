@@ -290,3 +290,11 @@ export const verifyLoginOtp = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Login failed" });
   }
 };
+
+/**
+ * @route 
+ * @description 
+ */
+export const logout = (req: Request, res: Response) => {
+  res.status(200).json({ message: "Logout successful" });
+};

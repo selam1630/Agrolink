@@ -49,7 +49,7 @@ const PaymentSuccessPage: React.FC = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
           >
-            <Link to="/">
+            <Link to="/dashboard">
               <Button className="bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors duration-300">
                 {t("paymentSuccess.backToDashboard")}
               </Button>

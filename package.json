@@ -12,6 +12,8 @@
     "dev:apps": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
   },
   "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/express-serve-static-core": "^5.0.7",
     "@types/node-fetch": "^2.6.13",
     "concurrently": "^8.2.0",
     "turbo": "^1.13.4"
