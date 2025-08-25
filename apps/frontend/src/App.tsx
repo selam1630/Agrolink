@@ -21,6 +21,8 @@ import About from "./pages/About";
 import Services from "./pages/Services";
 import PaymentSuccessPage from "./components/cart/PaymentSuccessPage";
 import AdviceForm from "./components/advice/DiseaseDetection";
+import FarmerProfile from "./components/profile/FarmerProfile";
+import NewsPage from "./pages/news"
 
 
 function App() {
@@ -36,8 +38,8 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
             <Route path="/" element={<LandingPage />} />
+            <Route path="/profile" element={<FarmerProfile />} />
           </Route>
 
           {/* Dashboard Pages with the Header and Sidebar */}
@@ -51,7 +53,8 @@ function App() {
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/weather-detector" element={<Weather />} />
             <Route path="/dashboard" element={<Dashboard />} />
-
+            <Route path="/services" element={<Services />} />
+            <Route path="/news" element={<NewsPage />} />
             {/* The new route for the Calendar page */}
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/disease-detection" element={<AdviceForm />} />

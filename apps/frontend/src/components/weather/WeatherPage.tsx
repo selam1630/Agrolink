@@ -1,4 +1,14 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  CloudSunIcon,
+  SunIcon,
+  CloudIcon,
+  CloudRainIcon,
+  CloudLightningIcon,
+  MapPinIcon,
+  DropletIcon
+} from "lucide-react";
 
 interface WeatherForecast {
   location: string;
@@ -19,63 +29,82 @@ interface WeatherData {
 }
 
 type Status = "idle" | "loading" | "success" | "error";
-
 const WeatherCard = ({ data }: { data: WeatherForecast }) => {
   const { location, temp, humidity, description, icon } = data;
+  const { t } = useTranslation();
 
-  const getWeatherEmoji = (weatherIcon: string) => {
+  const getWeatherIcon = (weatherIcon: string) => {
     switch (weatherIcon.toLowerCase()) {
       case "sunny":
-        return "☀️";
+        return <SunIcon className="w-16 h-16 text-yellow-400" />;
       case "cloudy":
-        return "☁️";
+        return <CloudIcon className="w-16 h-16 text-gray-400" />;
       case "rain":
-        return "🌧️";
+        return <CloudRainIcon className="w-16 h-16 text-blue-400" />;
       case "storm":
-        return "⛈️";
+        return <CloudLightningIcon className="w-16 h-16 text-purple-400" />;
       default:
-        return "❓";
+        return <CloudSunIcon className="w-16 h-16 text-green-400" />;
     }
   };
 
   return (
-    <div className="flex flex-col items-center p-8 bg-white rounded-3xl shadow-lg transition-all duration-500 hover:shadow-xl">
-      <div className="flex items-center justify-center w-full mb-4">
-        <span className="text-6xl">{getWeatherEmoji(icon)}</span>
+    <div className="flex flex-col p-8 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl transform hover:scale-105 border border-gray-100">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center text-gray-700">
+          <MapPinIcon className="w-5 h-5 mr-2" />
+          <p className="text-xl font-medium">{location}</p>
+        </div>
+        {getWeatherIcon(icon)}
       </div>
-      <h2 className="text-5xl font-extrabold text-gray-800 leading-none">{temp}°C</h2>
-      <p className="text-xl font-light text-gray-600 mt-2">{location}</p>
-      <div className="mt-6 w-full text-center border-t border-gray-300 pt-4">
-        <p className="text-lg font-semibold text-gray-700">{description}</p>
-        <p className="mt-1 text-md text-gray-500">💧 Humidity: {humidity}%</p>
+
+      <div className="flex-grow">
+        <h2 className="text-6xl font-extrabold text-gray-900 leading-none">
+          {temp}°C
+        </h2>
+        <p className="text-lg font-light text-gray-600 mt-2 capitalize">
+          {t(`weatherPage.weatherCard.description.${icon.toLowerCase()}`)}
+        </p>
+      </div>
+
+      <div className="mt-6 flex items-center justify-between border-t border-gray-200 pt-4">
+        <div className="flex items-center text-gray-500">
+          <DropletIcon className="w-5 h-5 mr-1" />
+          <p className="text-md font-semibold">
+            {t("weatherPage.weatherCard.humidity")}: {humidity}%
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+const CropAdviceCard = ({ data }: { data: CropAdvice }) => {
+  const { t } = useTranslation();
+  return (
+    <div className="p-8 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl transform hover:scale-105 border border-gray-100">
+      <div className="flex items-center space-x-4 mb-6">
+        <span className="text-4xl">🌱</span>
+        <h2 className="text-3xl font-bold text-gray-800">{t("weatherPage.cropAdviceCard.title")}</h2>
+      </div>
+      <div className="space-y-4 text-gray-700">
+        <p className="text-lg">
+          <span className="font-semibold">{t("weatherPage.cropAdviceCard.soilType")}:</span> {data.soilType}
+        </p>
+        <div>
+          <p className="text-lg font-semibold mb-2">{t("weatherPage.cropAdviceCard.recommendedCrops")}:</p>
+          <ul className="list-disc list-inside space-y-1">
+            {data.recommendedCrops.map((crop, index) => (
+              <li key={index}>{crop}</li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
 };
 
-const CropAdviceCard = ({ data }: { data: CropAdvice }) => (
-  <div className="p-8 bg-white rounded-3xl shadow-lg transition-all duration-500 hover:shadow-xl">
-    <div className="flex items-center space-x-4 mb-4">
-      <span className="text-4xl">🌱</span>
-      <h2 className="text-3xl font-bold text-gray-800">Crop Advice</h2>
-    </div>
-    <div className="space-y-4 text-gray-700">
-      <p className="text-lg">
-        <span className="font-semibold">Soil Type:</span> {data.soilType}
-      </p>
-      <div>
-        <p className="text-lg font-semibold mb-2">Recommended Crops:</p>
-        <ul className="list-disc list-inside space-y-1">
-          {data.recommendedCrops.map((crop, index) => (
-            <li key={index}>{crop}</li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  </div>
-);
-
 const WeatherPage = () => {
+  const { t } = useTranslation();
   const [data, setData] = useState<WeatherData | null>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
@@ -92,7 +121,7 @@ const WeatherPage = () => {
 
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.message || "Failed to fetch weather data.");
+          throw new Error(errorData.message || t("weatherPage.errorMessage.generic"));
         }
 
         const data: WeatherData = await response.json();
@@ -100,7 +129,7 @@ const WeatherPage = () => {
         setStatus("success");
       } catch (err: any) {
         console.error("Fetch error:", err);
-        setError(err.message || "An error occurred.");
+        setError(err.message || t("weatherPage.errorMessage.generic"));
         setStatus("error");
       }
     };
@@ -110,7 +139,7 @@ const WeatherPage = () => {
         (position) => {
           fetchWeatherData(position.coords.latitude, position.coords.longitude);
         },
-        () => fetchWeatherData() // fallback if location not allowed
+        () => fetchWeatherData()
       );
     } else {
       fetchWeatherData();
@@ -119,10 +148,10 @@ const WeatherPage = () => {
 
   if (status === "loading") {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-200 text-gray-800">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-500 to-lime-600 text-white">
         <div className="text-center p-8">
           <div className="animate-pulse h-16 w-16 text-6xl mx-auto">☁️</div>
-          <p className="mt-4 text-gray-600">Loading forecast...</p>
+          <p className="mt-4 text-lg font-medium">{t("weatherPage.loadingMessage")}</p>
         </div>
       </div>
     );
@@ -130,29 +159,29 @@ const WeatherPage = () => {
 
   if (status === "error" || !data) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-200 text-gray-800">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-500 to-lime-600 text-white">
         <div className="text-center p-8">
           <span className="text-6xl animate-bounce">⚠️</span>
-          <h2 className="mt-4 text-xl font-bold text-red-500">Failed to load data.</h2>
-          <p className="mt-2 text-gray-600">{error}</p>
+          <h2 className="mt-4 text-2xl font-bold text-red-300">{t("weatherPage.errorMessage.title")}</h2>
+          <p className="mt-2 text-lg">{error}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-8 bg-gray-200 flex items-center justify-center font-sans">
-      <div className="w-full max-w-5xl mx-auto space-y-12">
-        <header className="text-center mb-10">
-          <h1 className="text-5xl font-extrabold tracking-tight text-gray-800">
-            Weather prediction
+    <div className="min-h-screen p-8 bg-gradient-to-br from-green-500 to-lime-600 flex items-center justify-center font-sans text-gray-800">
+      <div className="w-full max-w-6xl mx-auto space-y-16">
+        <header className="text-center mb-10 text-white">
+          <h1 className="text-6xl font-extrabold tracking-tight">
+            {t("weatherPage.header.title")}
           </h1>
-          <p className="mt-2 text-lg text-gray-600">
-            Sun, clouds, or rain?
+          <p className="mt-2 text-xl font-light opacity-90">
+            {t("weatherPage.header.subtitle")}
           </p>
         </header>
 
-        <main className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <main className="grid grid-cols-1 md:grid-cols-2 gap-10">
           <WeatherCard data={data.weatherForecast} />
           <CropAdviceCard data={data.cropAdvice} />
         </main>

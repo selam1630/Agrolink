@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import prisma from "../prisma/prisma";
-import fs from "fs/promises"; 
+import fs from "fs/promises";
 import { Multer } from "multer";
 
 declare global {
@@ -11,12 +11,9 @@ declare global {
     }
   }
 }
-
 export const diseaseDetection = async (req: Request, res: Response) => {
   try {
     const API_KEY = process.env.GEMINI_API_KEY;
-    
-    // Log the API key to confirm it's being read
     console.log("Attempting to use API Key:", API_KEY ? 'Key found' : 'Key not found');
 
     if (!API_KEY) {
@@ -33,7 +30,7 @@ export const diseaseDetection = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "No image file uploaded." });
     }
 
-    const filePath = req.file.path; 
+    const filePath = req.file.path;
     const mimeType = req.file.mimetype;
 
     console.log("Uploaded image path:", filePath);
@@ -78,7 +75,7 @@ export const diseaseDetection = async (req: Request, res: Response) => {
         },
       },
     };
-    
+
     const result = await model.generateContent(payload as any);
     const response = await result.response;
     let text = response.text();
@@ -90,11 +87,9 @@ export const diseaseDetection = async (req: Request, res: Response) => {
 
     let parsedData;
     try {
-      // First, try to parse the text directly.
       parsedData = JSON.parse(text);
     } catch (parseError) {
-      // If direct parsing fails, try to extract a JSON-like string with a regex.
-      // This is a common and necessary fallback when models don't strictly adhere to formatting.
+      console.log("Direct JSON parse failed. Attempting fallback extraction.");
       const jsonMatch = text.match(/\{[\s\S]*\}/);
       if (jsonMatch && jsonMatch[0]) {
         try {
@@ -115,9 +110,10 @@ export const diseaseDetection = async (req: Request, res: Response) => {
     const diseaseName = parsedData.diseaseName ?? "Unknown Disease";
     const causes = parsedData.causes ?? "Information not available.";
     const treatment = parsedData.treatment ?? "Information not available.";
+
     const savedAdvice = await prisma.diseaseAdvice.create({
       data: {
-        image: filePath, 
+        image: filePath,
         diseaseName: diseaseName,
         causes: causes,
         treatment: treatment,

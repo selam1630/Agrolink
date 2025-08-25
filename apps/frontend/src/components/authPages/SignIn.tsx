@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import agriIcon from '@/assets/images/agriIcon.png'; // Assuming this is a valid path
-import { useAuth } from '@/context/AuthContext'; // Import useAuth hook
-import { useTranslation } from 'react-i18next'; // Import the useTranslation hook
+import agriIcon from '@/assets/images/agriIcon.png'; 
+import { useAuth } from '@/context/AuthContext'; 
+import { useTranslation } from 'react-i18next'; 
 
 interface SignInData {
   phoneNumber: string;
@@ -11,7 +11,7 @@ interface SignInData {
 
 const SignIn: React.FC = () => {
   const { setAuth } = useAuth();
-  const { t } = useTranslation(); // Initialize the translation hook
+  const { t } = useTranslation();
 
   const [formData, setFormData] = useState<SignInData>({
     phoneNumber: '',
@@ -39,9 +39,9 @@ const SignIn: React.FC = () => {
     setAuth(data.token, data.userId);
     localStorage.setItem('role', data.role);
     if (data.role === 'farmer') {
-      navigate('/create-product');
-    } else {
       navigate('/dashboard');
+    } else {
+      navigate('/products');
     }
   };
 

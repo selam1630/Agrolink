@@ -107,7 +107,21 @@
     "registrationSuccess": "Your account has been successfully registered",
     "registrationFailed": "Registration failed",
     "networkError": "Network error",
-    "unknownError": "Unknown error"
+    "unknownError": "Unknown error",
+    "bannerTitle": "Join AgroLink",
+    "bannerDescription": "Connect with Ethiopia's agricultural community. Access markets, resources, and tools.",
+    "appTitle": "AgroLink",
+    "formDescription": "Create your account in minutes",
+    "roleLabel": "I am a",
+    "processing": "Processing...",
+    "continue": "Continue",
+    "verifyPhoneTitle": "Verify your phone",
+    "sentOtpMessage": "We've sent a 6-digit code to",
+    "didntReceive": "Didn't receive the code?",
+    "resend": "Resend",
+    "verifyButton": "Verify & Create Account",
+    "otpError": "Invalid or expired OTP.",
+    "sendOtpMessage": "We've sent an OTP to your phone. Please enter it below to verify."
   },
   "forgotPassword": {
     "title": "Forgot Password?",
@@ -225,5 +239,100 @@
     "welcomeTitle": "🌱 Welcome to AgroLink",
     "descriptionPart1": "AgroLink is your smart agricultural assistant. We connect farmers, buyers, and experts in one platform to improve productivity, decision-making, and market access.",
     "descriptionPart2": "Explore weather predictions, crop recommendations, and trading opportunities – all in one place."
+  },
+  "productList": {
+    "title": "Product List",
+    "description": "See our available products below.",
+    "loading": "Loading products...",
+    "error": "Error",
+    "fetchError": "Failed to load products.",
+    "noProducts": "No products are currently available.",
+    "imageAlt": "{{productName}} image",
+    "price": "ETB {{price}}",
+    "priceUnit": "Per unit",
+    "addedToCart": "Added to cart",
+    "addToCart": "Add to cart"
+  },
+  "servicesPage": {
+    "hero": {
+      "title": "Our Services",
+      "subtitle": "Empowering Ethiopian farmers with innovative tools and support for a prosperous future."
+    },
+    "solutions": {
+      "title": "Solutions Designed for You",
+      "description": "We offer a range of digital services to help you manage your farm, increase productivity, and connect with the market."
+    },
+    "serviceCards": [
+      {
+        "title": "Disease Detection",
+        "description": "Utilize our advanced tools to detect crop diseases early and get recommendations for treatment, ensuring healthy yields."
+      },
+      {
+        "title": "Product Marketplace",
+        "description": "Connect directly with buyers and sellers. List your agricultural products and find what you need with ease and transparency."
+      },
+      {
+        "title": "Accurate Weather Forecasts",
+        "description": "Receive timely and localized weather predictions to plan your farming activities, from planting to harvesting."
+      },
+      {
+        "title": "Agricultural Equipment",
+        "description": "Find or list farming equipment for sale or rent. Get access to the machinery you need to improve efficiency and productivity."
+      },
+      {
+        "title": "Agronomy Expertise",
+        "description": "Access a library of resources and connect with experts for advice on best farming practices, soil management, and crop optimization."
+      },
+      {
+        "title": "Farmer Community",
+        "description": "Join a thriving community of farmers to share knowledge, discuss challenges, and support one another."
+      }
+    ],
+    "cta": {
+      "title": "Ready to Get Started?",
+      "subtitle": "Join AgroLink today and transform the way you farm.",
+      "button": "Join Now"
+    }
+  },
+  "newsPage": {
+    "hero": {
+      "title": "Farming News & Market Insights",
+      "subtitle": "Stay informed with the latest updates from the agricultural sector and market trends."
+    },
+    "marketPrices": {
+      "title": "Weekly Market Prices",
+      "lastWeek": "Price changes over the last week.",
+      "priceUnit": "ETB"
+    },
+    "latestNews": {
+      "title": "Latest News",
+      "readMore": "Read More",
+      "articles": [
+        {
+          "title": "New drought-resistant crops to boost yields",
+          "snippet": "Researchers announce a breakthrough in crop science, introducing new seeds designed to thrive in challenging conditions."
+        },
+        {
+          "title": "Government announces new subsidy for smallholder farmers",
+          "snippet": "A new initiative aims to provide financial support and resources to improve farming practices and productivity across the country."
+        },
+        {
+          "title": "The rise of organic farming in Ethiopia",
+          "snippet": "More farmers are adopting organic methods, driven by consumer demand and environmental benefits."
+        },
+        {
+          "title": "Weather advisory: Forecast calls for heavy rainfall",
+          "snippet": "An official advisory warns farmers in the southern regions to prepare for potential flooding in the coming days."
+        }
+      ]
+    },
+    "crops": {
+      "wheat": "Wheat",
+      "coffee": "Coffee",
+      "teff": "Teff",
+      "maize": "Maize",
+      "sesame": "Sesame"
+    }
   }
 }
+

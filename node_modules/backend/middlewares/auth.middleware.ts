@@ -27,10 +27,6 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     return res.status(401).json({ error: 'Unauthorized: Invalid or expired token' });
   }
 };
-
-/**
- * Middleware to protect routes by role
- */
 export const protect = (roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.split(' ')[1];

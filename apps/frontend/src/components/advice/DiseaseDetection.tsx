@@ -50,7 +50,8 @@ const DiseaseDetection: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-green-50 p-6">
-      <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-lg">
+      {/* Increased max-w-lg to max-w-3xl for a larger container */}
+      <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-3xl"> 
         <h1 className="text-2xl font-bold text-green-700 mb-4">
           🌿 Plant Disease Detection
         </h1>
@@ -68,7 +69,7 @@ const DiseaseDetection: React.FC = () => {
           <img
             src={URL.createObjectURL(file)}
             alt="Preview"
-            className="w-full h-48 object-cover rounded-lg mb-4 border"
+            className="w-full h-[500px] object-cover rounded-lg mb-4 border"
           />
         )}
 
@@ -93,7 +94,7 @@ const DiseaseDetection: React.FC = () => {
             <p><strong>Treatment:</strong></p>
             <ul className="list-decimal list-inside">
               {result.treatment
-                .split(/\n|[0-9]\./) // split by newlines or "1. 2. 3."
+                .split(/\n|[0-9]\./)
                 .filter(line => line.trim() !== "")
                 .map((line, idx) => (
                   <li key={idx}>{line.trim()}</li>

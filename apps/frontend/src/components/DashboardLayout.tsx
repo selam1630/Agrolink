@@ -2,28 +2,28 @@ import React, { useState } from "react";
 import Header from "./Header";
 import SidebarLayout from "./SidebarLayout";
 import { XIcon } from "lucide-react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 const DashboardLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const location = useLocation();
 
   return (
-    <div className="flex flex-col h-screen relative">
-      <Header onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
-
+    <div className="h-screen flex flex-col">
+      {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden overlay-transition"
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      <div className="flex flex-1 overflow-hidden">
+      {/* Grid container */}
+      <div className="grid grid-cols-[auto_1fr] grid-rows-[auto_1fr] h-screen">
+        {/* Sidebar - fixed on all screens */}
         <aside
-          className={`fixed md:relative z-40 w-64 bg-white border-r border-gray-200 flex flex-col h-full sidebar-transition ${
+          className={`fixed md:relative w-64 bg-white border-r border-gray-200 z-50 md:z-auto transform transition-transform duration-300 ease-in-out ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } md:translate-x-0`}
+          } md:translate-x-0 row-span-2 h-screen`}
         >
           <div className="md:hidden p-4 flex justify-end">
             <button
@@ -36,26 +36,13 @@ const DashboardLayout: React.FC = () => {
           <SidebarLayout />
         </aside>
 
-        <main className="flex-1 overflow-auto bg-gray-50 pt-16 md:pt-30 p-6">
-          {/* Show AgroLink Home Page text only when on dashboard root */}
-          {location.pathname === "/dashboard" && (
-            <div className="max-w-3xl mx-auto text-center mt-10">
-              <h1 className="text-3xl font-bold text-green-700 mb-4">
-                🌱 Welcome to AgroLink
-              </h1>
-              <p className="text-gray-600 text-lg">
-                AgroLink is your smart agricultural assistant.  
-                We connect farmers, buyers, and experts in one platform 
-                to improve productivity, decision-making, and market access.
-              </p>
-              <p className="text-gray-600 text-lg mt-3">
-                Explore weather predictions, crop recommendations, 
-                and trading opportunities – all in one place.
-              </p>
-            </div>
-          )}
+        {/* Header - fixed */}
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-30 col-span-2 md:col-span-1">
+          <Header onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+        </header>
 
-          {/* Render child routes */}
+        {/* Main content - scrollable */}
+        <main className="col-start-2 row-start-2 overflow-auto bg-gray-50 p-6">
           <Outlet />
         </main>
       </div>
