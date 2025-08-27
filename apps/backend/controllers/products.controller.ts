@@ -69,6 +69,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Server error fetching products.' });
   }
 };
+
 export const getProductById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -149,5 +150,72 @@ export const addProduct = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error adding product:', error);
     return res.status(500).json({ error: 'Server error' });
+  }
+};
+export const updateProduct = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { name, quantity, price, description } = req.body;
+
+  try {
+    const userId = getUserIdFromToken(req);
+    const product = await prisma.product.findUnique({
+      where: { id },
+    });
+
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found.' });
+    }
+
+    if (product.userId !== userId) {
+      return res.status(403).json({ error: 'You do not have permission to update this product.' });
+    }
+
+    const updatedProduct = await prisma.product.update({
+      where: { id },
+      data: {
+        name: name,
+        quantity: quantity !== undefined ? parseInt(quantity, 10) : undefined,
+        price: price !== undefined ? parseFloat(price) : undefined,
+        description: description,
+      },
+    });
+
+    return res.status(200).json({ message: 'Product updated successfully', product: updatedProduct });
+  } catch (error) {
+    console.error('Error updating product:', error);
+    if (error instanceof Error && error.message.includes('token')) {
+      return res.status(401).json({ error: error.message });
+    }
+    return res.status(500).json({ error: 'Failed to update product' });
+  }
+};
+export const deleteProduct = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const userId = getUserIdFromToken(req);
+    const product = await prisma.product.findUnique({
+      where: { id },
+    });
+
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found.' });
+    }
+
+    if (product.userId !== userId) {
+      return res.status(403).json({ error: 'You do not have permission to delete this product.' });
+    }
+
+    await prisma.product.delete({
+      where: { id },
+    });
+
+    return res.status(200).json({ message: 'Product deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    if (error instanceof Error && error.message.includes('token')) {
+      return res.status(401).json({ error: error.message });
+    }
+    return res.status(500).json({ error: 'Failed to delete product' });
   }
 };

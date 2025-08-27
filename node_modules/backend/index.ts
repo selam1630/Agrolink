@@ -9,8 +9,8 @@ import adviceRoutes from "./routes/diseaseDetection.route";
 import weatherPredictionRoutes from "./routes/weatherPrediction.Route";
 import cartRoutes from './routes/cart.routes';
 import paymentRoute from './routes/paymentRoute';
-import profileRoutes from './routes/profile.route';
 import diseaseDetectionRoute from "./routes/diseaseDetection.route";
+import profileRoute from "./routes/profileRoute"
 
 const app = express();
 
@@ -28,8 +28,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/advice", adviceRoutes);
 app.use("/api/weather-prediction", weatherPredictionRoutes);
 app.use('/api/cart', cartRoutes);
-app.use('/api/profile', profileRoutes);
 app.use("/api/diseaseDetection", diseaseDetectionRoute);
+app.use("/api/profile", profileRoute)
 
 const PORT = 5000;
 app.listen(PORT, "0.0.0.0", () => {
