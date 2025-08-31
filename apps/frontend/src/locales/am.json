@@ -152,7 +152,13 @@
       "backToProducts": "ወደ ምርቶች ተመለስ",
       "noDescription": "ምንም መግለጫ አልተሰጠም።",
       "inStock": "በክምችት ውስጥ",
-      "addToCart": "ወደ ጋሪ አክል"
+      "addToCart": "ወደ ጋሪ አክል",
+      "farmerInfo": "የገበሬ መረጃ",
+    "noFarmerInfo": "የገበሬ መረጃ አልተገኘም።",
+    "noFarmerDescription": "ገበሬው ምንም መግለጫ አልሰጠም።",
+     "unknownFarmer": "ያልታወቀ ገበሬ",
+  "farmerDescription": "ይህ ምርት በታመነ አካባቢ ገበሬ ተዘጋጅቷል።",
+  "info":"የገበሬ መረጃ"
     }
   },
   "productList": {

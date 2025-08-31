@@ -165,7 +165,10 @@
       "backToProducts": "Back to Products",
       "noDescription": "No description provided.",
       "inStock": "In Stock",
-      "addToCart": "Add to Cart"
+      "addToCart": "Add to Cart",
+      "unknownFarmer": "Unknown Farmer",
+  "farmerDescription": "This product is provided by a trusted local farmer.",
+  "info": "info"
     }
   },
   "cart": {
