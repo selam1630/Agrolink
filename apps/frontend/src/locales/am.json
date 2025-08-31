@@ -167,7 +167,10 @@
     "priceUnavailable": "ዋጋ የለም",
     "priceUnit": "በአንድ አሃድ",
     "addedToCart": "ወደ ጋሪ ታክሏል",
-    "addToCart": "ወደ ጋሪ ጨምር"
+    "addToCart": "ወደ ጋሪ ጨምር",
+    "farmer": "ገበሬ",
+"phone": "ስልክ"
+
   },
   "signUp": {
     "title": "አግሮLink",

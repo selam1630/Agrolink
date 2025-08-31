@@ -251,7 +251,9 @@
     "price": "ETB {{price}}",
     "priceUnit": "Per unit",
     "addedToCart": "Added to cart",
-    "addToCart": "Add to cart"
+    "addToCart": "Add to cart",
+    "farmer": "Farmer",
+    "phone": "Phone"
   },
   "servicesPage": {
     "hero": {

@@ -16,11 +16,15 @@ import type { Variants } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
 interface Product {
-    id: string;
+  id: string;
+  name: string;
+  price?: number;
+  imageUrl: string;
+  isSold: boolean;
+  user: {
     name: string;
-    price?: number;
-    imageUrl: string;
-    isSold: boolean;
+    phone: string;
+  };
 }
 
 const ProductList: React.FC = () => {
@@ -149,9 +153,17 @@ const ProductList: React.FC = () => {
                                 </CardHeader>
                                 <CardContent className="p-4 pt-0">
                                     <p className="text-2xl font-bold text-green-700">
-                                        {product.price ? t('productList.price', { price: product.price.toFixed(2) }) : t('productList.priceUnavailable')}
+                                        {product.price
+                                          ? t('productList.price', { price: product.price.toFixed(2) })
+                                          : t('productList.priceUnavailable')}
                                     </p>
                                     <p className="text-sm text-gray-500 mt-1">{t('productList.priceUnit')}</p>
+
+                                    {/* 👨‍🌾 Farmer Info */}
+                                    <div className="mt-3 text-sm text-gray-700">
+                                        <p><span className="font-semibold">{t('productList.farmer')}:</span> {product.user?.name}</p>
+                                        <p><span className="font-semibold">{t('productList.phone')}:</span> {product.user?.phone}</p>
+                                    </div>
                                 </CardContent>
                                 <CardFooter className="p-4 pt-0">
                                     {isProductInCart ? (

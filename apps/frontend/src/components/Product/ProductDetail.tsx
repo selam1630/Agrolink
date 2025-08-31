@@ -26,7 +26,6 @@ const ProductDetail: React.FC = () => {
 
     useEffect(() => {
         const fetchProduct = async () => {
-            // Wait until authentication is done and a token is available
             if (authLoading || !token) {
                 setLoading(false);
                 return;
@@ -52,7 +51,7 @@ const ProductDetail: React.FC = () => {
             }
         };
         fetchProduct();
-    }, [id, token, authLoading]); // Re-run effect when id, token, or authLoading state changes
+    }, [id, token, authLoading]); 
 
     const handleAddToCart = () => {
         if (product) {
@@ -60,8 +59,6 @@ const ProductDetail: React.FC = () => {
             console.log(`${product.name} added to cart!`);
         }
     };
-
-    // Show loading state while auth is loading or products are being fetched
     if (loading || authLoading) {
         return (
             <div className="container mx-auto px-4 py-12 text-center">
