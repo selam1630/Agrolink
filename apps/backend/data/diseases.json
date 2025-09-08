@@ -1,0 +1,43 @@
+{
+  "diseases": [
+    {
+      "key": "Apple_Apple_scab",
+      "en": {
+        "diseaseName": "Apple Scab",
+        "causes": "Caused by the fungus Venturia inaequalis. It thrives in cool, wet spring weather and overwinters on fallen leaves, which release spores in the spring.",
+        "treatment": "1. **Sanitation:** Rake and destroy fallen leaves in the autumn to reduce overwintering fungi. 2. **Pruning:** Ensure good air circulation by pruning trees properly. 3. **Fungicides:** Apply a suitable fungicide at the start of the growing season."
+      },
+      "am": {
+        "diseaseName": "የፖም ስካብ በሽታ",
+        "causes": "በ*Venturia inaequalis* የተባለ ፈንገስ ይከሰታል። በቀዝቃዛና እርጥበት ባለው የአየር ሁኔታ ውስጥ ይበቅላል። ፈንገሱ በወደቁ ቅጠሎች ላይ ተደብቆ ይተኛል፣ በፀደይ ወራት ደግሞ ስፖሮችን ይለቃል።",
+        "treatment": "1. **ንጽህና:** በመኸር ወቅት የወደቁ ቅጠሎችን በመሰብሰብና በማቃጠል የፈንገሱን መስፋፋት ይከላከሉ። 2. **መከርከም:** የአየር ዝውውርን ለማሻሻል ዛፎችን በትክክል ይከርክሙ። 3. **ፈንገስ ማጥፊያ:** በማደግ ወቅት መጀመሪያ ላይ ተገቢውን የፈንገስ ማጥፊያ ይርጩ።"
+      }
+    },
+    {
+      "key": "Potato_Late_blight",
+      "en": {
+        "diseaseName": "Potato Late Blight",
+        "causes": "Caused by the oomycete (water mold) *Phytophthora infestans*. It spreads in cool, moist conditions via wind and splashing rain.",
+        "treatment": "1. **Remove Infected Plants:** Immediately remove and destroy any infected plants and tubers. 2. **Fungicides:** Apply preventative fungicides, especially during periods of cool, wet weather. 3. **Cultural Practices:** Use disease-free seed potatoes, ensure proper plant spacing, and avoid overhead watering."
+      },
+      "am": {
+        "diseaseName": "የድንች ብሌት በሽታ",
+        "causes": "በ*Phytophthora infestans* ኦኦሚሴቴ የሚከሰት ሲሆን በቀዝቃዛና እርጥበት ባለው የአየር ሁኔታ ውስጥ በነፋስና በዝናብ ይሰራጫል።",
+        "treatment": "1. **የተበከሉ ተክሎችን ያስወግዱ:** የተበከሉ ተክሎችንና ድንችን ወዲያውኑ ያስወግዱ። 2. **ፈንገስ ማጥፊያ:** በተለይ በቀዝቃዛና እርጥበት ባለው የአየር ሁኔታ ወቅት አስቀድሞ የፈንገስ ማጥፊያ ይርጩ። 3. **የአሰራር ዘዴ:** ከበሽታ ነጻ የሆነ የድንች ዘር ይጠቀሙ፣ ለተክሎች ተገቢውን ርቀት ይስጡ፣ እና ከላይ የሚደረግን ውሃ ማጠጣት ያስወግዱ።"
+      }
+    },
+    {
+      "key": "Corn_Common_rust",
+      "en": {
+        "diseaseName": "Corn Common Rust",
+        "causes": "Caused by the fungus *Puccinia sorghi*. It is not able to survive winter and is brought to new areas by wind-blown spores from southern regions.",
+        "treatment": "1. **Resistant Varieties:** Plant disease-resistant corn varieties. 2. **Fungicides:** In severe cases, apply fungicides early in the season to prevent spread. 3. **Monitor:** Regularly scout fields to identify early signs of the disease."
+      },
+      "am": {
+        "diseaseName": "የበቆሎ ዝገት በሽታ",
+        "causes": "በ*Puccinia sorghi* ፈንገስ የሚከሰት ነው። በክረምት ወራት ህያው ሆኖ መቆየት ስለማይችል ከደቡባዊ አካባቢዎች በነፋስ ይሰራጫል።",
+        "treatment": "1. **በሽታን የሚቋቋሙ ዝርያዎችን ይትከሉ:** በሽታን የሚቋቋሙ የበቆሎ ዝርያዎችን ይምረጡ። 2. **ፈንገስ ማጥፊያ:** በሽታው በከፍተኛ ሁኔታ ከተስፋፋ፣ ስርጭቱን ለመከላከል በማደግ ወቅት መጀመሪያ ላይ ፈንገስ ማጥፊያ ይርጩ። 3. **ክትትል:** የበሽታውን ምልክቶች ቀድመው ለማወቅ ማሳውን በየጊዜው ይመርምሩ።"
+      }
+    }
+  ]
+}

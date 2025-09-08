@@ -39,7 +39,6 @@ function App() {
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/about" element={<About />} />
             <Route path="/" element={<LandingPage />} />
-            <Route path="/profile" element={<FarmerProfile />} />
           </Route>
 
           {/* Dashboard Pages with the Header and Sidebar */}
@@ -48,6 +47,7 @@ function App() {
             <Route path="/cart" element={<CartPage />} />
             {/* Added the CheckoutPage route */}
             {/* Added the PaymentSuccessPage route to handle Chapa redirects */}
+            <Route path="/profile" element={<FarmerProfile />} />
             <Route path="/payment-success" element={<PaymentSuccessPage />} />
             <Route path="/create-product" element={<PostProduct />} />
             <Route path="/products/:id" element={<ProductDetail />} />
