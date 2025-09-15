@@ -173,6 +173,11 @@ export const registerAndSendOtp = async (req: Request, res: Response) => {
 /**
  * @route 
  */
+// File: authController.ts
+
+/**
+ * @route 
+ */
 export const verifyAndCompleteRegistration = async (req: Request, res: Response) => {
   const { phone, otp } = req.body;
 
@@ -195,8 +200,12 @@ export const verifyAndCompleteRegistration = async (req: Request, res: Response)
         email: storedData.email,
         password: storedData.password,
         role: storedData.role,
+        status: "registered", // <-- Add this line to set the status
       },
     });
+
+    // Remove temporary data after successful registration
+    registrationData.delete(phone);
 
     const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, { expiresIn: "1d" });
 
@@ -211,7 +220,6 @@ export const verifyAndCompleteRegistration = async (req: Request, res: Response)
     res.status(500).json({ error: "Registration failed" });
   }
 };
-
 /**
  * @route 
  */
