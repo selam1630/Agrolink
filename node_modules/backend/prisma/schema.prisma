@@ -118,3 +118,11 @@ model DiseaseAdvice {
   
   createdAt   DateTime @default(now())
 }
+model DisasterAlert {
+id        String   @id @default(cuid()) @map("_id")
+  type      String
+  severity  String
+  description String
+  date      DateTime
+  createdAt DateTime @default(now())
+}

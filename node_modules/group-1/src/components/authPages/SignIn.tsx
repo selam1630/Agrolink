@@ -32,19 +32,21 @@ const SignIn: React.FC = () => {
       [name]: value,
     });
   };
-
-  const handleLoginSuccess = (data: any) => {
+const handleLoginSuccess = (data: any) => {
     setSuccessMessage(t('signIn.loginSuccess') as string);
     localStorage.setItem('authToken', data.token);
     setAuth(data.token, data.userId);
     localStorage.setItem('role', data.role);
-    if (data.role === 'farmer') {
-      navigate('/dashboard');
-    } else {
-      navigate('/products');
+    if (data.role === 'super_admin') {
+        navigate('/admin-dashboard'); 
+    } else if (data.role === 'farmer') {
+        navigate('/dashboard'); 
+    } else if (data.role === 'admin') {
+        navigate('/weather-detector');}
+    else {
+        navigate('/products'); 
     }
-  };
-
+};
   const handlePasswordLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);

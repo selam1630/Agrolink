@@ -1,263 +1,223 @@
-import React, { useState } from "react";
-import { useAuth } from "../../context/AuthContext";
-import { useTranslation } from "react-i18next";
+import React, { useState, useEffect } from 'react';
+
+interface Weather {
+  id: number;
+  main: string;
+  description: string;
+  icon: string;
+}
+
+interface Main {
+  temp: number;
+  feels_like: number;
+  temp_min: number;
+  temp_max: number;
+  pressure: number;
+  humidity: number;
+}
+
+interface Wind {
+  speed: number;
+  deg: number;
+}
 
 interface WeatherData {
+  weather: Weather[];
+  main: Main;
+  wind: Wind;
   name: string;
-  weather: Array<{
-    main: string;
-    description: string;
-  }>;
-  main: {
-    temp: number;
-  };
 }
 
-interface CropAdvice {
-  weatherForecast: string;
-  soilType: string;
-  suggestedCrops: string;
-  potentialExtremeEvents?: string;
+interface Advice {
+  weatherPrediction: string;
+  soilAndWaterAdvice: string;
+  pestAndDiseaseAdvice: string;
+  recommendedCrops: string[];
+  emergencyPreparedness: string;
+  locationSpecificTips: string;
+  disasterAlerts: { description: string }[]; // CORRECTED: This interface must match the backend's data structure
 }
 
-const weatherIcons: { [key: string]: string } = {
-  clear: "☀️",
-  clouds: "☁️",
-  rain: "🌧️",
-  snow: "❄️",
-  thunderstorm: "⛈️",
-  wind: "🌬️",
-  mist: "🌫️",
-  smoke: "💨",
-  haze: "💨",
-  dust: "💨",
-  fog: "🌫️",
-  sand: "🌪️",
-  ash: "🌋",
-  squall: "🌪️",
-  tornado: "🌪️",
-  unknown: "❓",
-};
+interface APIResponse {
+  location: string;
+  weatherData: WeatherData;
+  advice: Advice;
+}
 
-const WeatherAdvice = () => {
-  const { t } = useTranslation("weatherAdvice");
-  const { token, loading: authLoading } = useAuth();
-  const [loading, setLoading] = useState<boolean>(false);
+const WeatherDashboard: React.FC = () => {
+  const [data, setData] = useState<APIResponse | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
-  const [cropAdvice, setCropAdvice] = useState<CropAdvice | null>(null);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null);
+  const [language, setLanguage] = useState<string>('en');
 
-  const fetchWeatherAdvice = () => {
-    if (!navigator.geolocation) {
-      setError(t("geolocationNotSupported"));
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-    setWeatherData(null);
-    setCropAdvice(null);
-
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
-
-        try {
-          const response = await fetch(
-            "http://localhost:5000/api/weather-prediction",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ lat: latitude, lon: longitude }),
-            }
-          );
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(
-              errorData.message || t("serverError")
-            );
-          }
-
-          const data = await response.json();
-          setWeatherData(data.weatherForecast);
-          setCropAdvice(data.cropAdvice);
-        } catch (err: any) {
-          console.error("Error fetching data:", err);
-          setError(err.message || t("fetchError"));
-        } finally {
-          setLoading(false);
+  // Get real user location
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+          });
+        },
+        (err) => {
+          console.error("Error getting location:", err);
+          setError("Unable to fetch location. Please allow location access.");
+          setIsLoading(false);
         }
-      },
-      (err) => {
-        setLoading(false);
-        console.error("Geolocation error:", err);
-        setError(t("locationPermissionError"));
-      }
-    );
-  };
-
-  const getWeatherIcon = (weatherMain: string): string => {
-    const iconKey = weatherMain.toLowerCase();
-    if (weatherIcons.hasOwnProperty(iconKey)) {
-      return weatherIcons[iconKey];
+      );
+    } else {
+      setError("Geolocation is not supported by this browser.");
+      setIsLoading(false);
     }
-    return weatherIcons.unknown;
-  };
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-lg text-gray-600">{t("loadingAuth")}</p>
-      </div>
-    );
-  }
-  if (!token) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-green-50 text-gray-800 p-6">
-        <h1 className="text-2xl font-bold mb-4">🚫 {t("loginRequiredTitle")}</h1>
-        <p className="mb-6 text-gray-600">
-          {t("loginRequiredText")}
-        </p>
-        <a
-          href="/sign-in"
-          className="px-6 py-3 bg-green-600 text-white rounded-lg shadow-lg hover:bg-green-700 transition"
-        >
-          {t("goToLogin")}
-        </a>
-      </div>
-    );
-  }
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 flex flex-col items-center justify-center p-4 font-sans text-gray-800">
-      <div className="w-full max-w-3xl bg-white rounded-xl shadow-2xl p-8 transform transition-all duration-300 hover:scale-105">
-        <h1 className="text-4xl font-extrabold text-center text-green-700 mb-2">
-          {t("advisorTitle")}
-        </h1>
-        <p className="text-center text-gray-600 mb-8">
-          {t("advisorSubtitle")}
-        </p>
+  }, []);
 
-        <div className="flex justify-center mb-8">
-          <button
-            onClick={fetchWeatherAdvice}
-            disabled={loading}
-            className="flex items-center space-x-2 px-6 py-3 bg-green-600 text-white font-bold rounded-full shadow-lg hover:bg-green-700 transition duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? (
-              <svg
-                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="w-5 h-5 text-white"
-              >
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-              </svg>
-            )}
-            <span>{loading ? t("fetchingAdvice") : t("getAdviceButton")}</span>
-          </button>
+  // Fetch weather and advice after getting location or changing language
+  useEffect(() => {
+    const fetchWeatherAndAdvice = async () => {
+      if (!userLocation) return;
+      setIsLoading(true);
+      setError(null);
+      try {
+        const backendUrl = "http://localhost:5000/api/weather-prediction/advice";
+
+        const response = await fetch(backendUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...userLocation, language }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Failed to fetch data from backend.");
+        }
+
+        const result: APIResponse = await response.json();
+        setData(result);
+      } catch (err: unknown) {
+        console.error("Error fetching from backend:", err);
+        if (err instanceof Error) setError(err.message);
+        else setError("An unknown error occurred.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchWeatherAndAdvice();
+  }, [userLocation, language]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-gray-600 text-xl font-semibold">Loading agricultural advice...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-red-50 p-6">
+        <div className="bg-white p-8 rounded-2xl shadow-xl text-red-700 font-medium max-w-lg text-center">
+          <h2 className="text-2xl font-bold mb-4">Error</h2>
+          <p>{error}</p>
+          <p className="text-sm mt-2 text-gray-500">Please make sure your backend server is running and accessible.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data || !data.advice) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
+        <div className="bg-white p-8 rounded-2xl shadow-xl text-gray-700 font-medium max-w-lg text-center">
+          <h2 className="text-2xl font-bold mb-4">No Advice Available</h2>
+          <p>Please check the response from the server.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const { weatherData, advice, location } = data;
+  const { weatherPrediction, soilAndWaterAdvice, pestAndDiseaseAdvice, recommendedCrops, emergencyPreparedness, locationSpecificTips, disasterAlerts } = advice;
+
+  return (
+    <div className="min-h-screen bg-green-50 flex flex-col items-center justify-start p-6 font-sans">
+      {/* Language selector */}
+      <div className="w-full max-w-4xl mb-4 flex justify-end">
+        <select
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+          className="border border-gray-300 rounded-xl p-2 shadow-sm"
+        >
+          <option value="en">English</option>
+          <option value="am">Amharic</option>
+          <option value="om">Oromo</option>
+          <option value="ti">Tigrinya</option>
+        </select>
+      </div>
+
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl p-8 transform transition-all duration-500 hover:scale-105">
+        <div className="flex flex-col md:flex-row justify-between items-start mb-8">
+          <div>
+            <h1 className="text-4xl font-extrabold text-green-900 mb-2">Agricultural Dashboard</h1>
+            <p className="text-xl text-gray-600 font-medium">{location || 'Your Location'}</p>
+          </div>
+          {weatherData && (
+            <div className="mt-4 md:mt-0 text-right">
+              <p className="text-5xl font-bold text-blue-600">{Math.round(weatherData.main.temp)}°C</p>
+              <p className="text-gray-500">{weatherData.weather[0].description}</p>
+            </div>
+          )}
         </div>
 
-        {error && (
-          <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg shadow-inner text-center">
-            <p>{error}</p>
-          </div>
-        )}
-
-        {weatherData && (
-          <div className="space-y-8 mt-8">
-            {/* Weather Section */}
-            <div className="bg-green-100 p-6 rounded-lg shadow-md border border-green-200">
-              <h2 className="flex items-center text-2xl font-bold text-green-800 mb-4 space-x-2">
-                <span className="text-3xl">🌤️</span>
-                <span>{t("currentWeatherTitle", { location: weatherData.name })}</span>
-              </h2>
-              <div className="flex items-center justify-between text-lg">
-                <div className="flex items-center space-x-2">
-                  <span className="text-4xl">
-                    {getWeatherIcon(weatherData.weather[0].main)}
-                  </span>
-                  <span className="capitalize">
-                    {weatherData.weather[0].description}
-                  </span>
-                </div>
-                <div className="flex items-center space-x-2 font-semibold">
-                  <span>{weatherData.main.temp}°C</span>
-                </div>
-              </div>
+        {disasterAlerts && disasterAlerts.length > 0 && (
+          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-xl mb-8 shadow-sm">
+            <div className="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.53-1.636 1.748-3.098L13.196 3.098C12.414 1.636 10.59 1.636 9.808 3.098L4.312 11.902C3.53 13.364 4.52 15 6.062 15z" />
+              </svg>
+              <h3 className="font-bold text-lg">Disaster Alert</h3>
             </div>
-
-            {/* Advice Section */}
-            {cropAdvice && (
-              <div className="bg-gray-50 p-6 rounded-lg shadow-md border border-gray-200">
-                <h2 className="text-2xl font-bold text-gray-700 mb-4">
-                  {t("predictedAdviceTitle")}
-                </h2>
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-800">
-                      {t("weatherForecastTitle")}
-                    </h3>
-                    <p className="mt-2 text-gray-600 leading-relaxed">
-                      {cropAdvice.weatherForecast}
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-800">
-                      {t("predictedSoilTitle")}
-                    </h3>
-                    <p className="mt-2 text-gray-600 leading-relaxed">
-                      {cropAdvice.soilType}
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-800">
-                      {t("suggestedCropsTitle")}
-                    </h3>
-                    <p className="mt-2 text-gray-600 leading-relaxed">
-                      {cropAdvice.suggestedCrops}
-                    </p>
-                  </div>
-                  {cropAdvice.potentialExtremeEvents && (
-                    <div>
-                      <h3 className="text-xl font-semibold text-red-600">
-                        {t("potentialEventsTitle")}
-                      </h3>
-                      <p className="mt-2 text-red-500 leading-relaxed">
-                        {cropAdvice.potentialExtremeEvents}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
+            {disasterAlerts.map((alert, index) => (
+              <p key={index} className="mt-2 text-sm md:text-base">{alert.description}</p> // FIXED LINE
+            ))}
           </div>
         )}
+
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="bg-gray-50 p-6 rounded-2xl shadow-inner">
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">Weather & Forecast</h3>
+            <p className="text-gray-700 leading-relaxed">{weatherPrediction}</p>
+          </div>
+          <div className="bg-gray-50 p-6 rounded-2xl shadow-inner">
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">Soil & Water Management</h3>
+            <p className="text-gray-700 leading-relaxed">{soilAndWaterAdvice}</p>
+          </div>
+          <div className="bg-gray-50 p-6 rounded-2xl shadow-inner">
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">Pest & Disease Prevention</h3>
+            <p className="text-gray-700 leading-relaxed">{pestAndDiseaseAdvice}</p>
+          </div>
+          <div className="bg-gray-50 p-6 rounded-2xl shadow-inner">
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">Recommended Crops</h3>
+            <ul className="list-disc pl-5 text-gray-700">
+              {recommendedCrops.map((crop, index) => (
+                <li key={index} className="mb-1">{crop}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="bg-gray-50 p-6 rounded-2xl shadow-inner col-span-1 md:col-span-2">
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">Emergency Preparedness</h3>
+            <p className="text-gray-700 leading-relaxed">{emergencyPreparedness}</p>
+          </div>
+          <div className="bg-gray-50 p-6 rounded-2xl shadow-inner col-span-1 md:col-span-2">
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">Location-Specific Tips</h3>
+            <p className="text-gray-700 leading-relaxed">{locationSpecificTips}</p>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default WeatherAdvice;
+export default WeatherDashboard;

@@ -6,7 +6,8 @@
     "onlyBack": "nodemon index.ts",
     "dev": "nodemon --legacy-watch index.ts",
     "build": "tsc",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "create-super-admin": "ts-node createSuperAdmin.ts"
   },
   "author": "",
   "license": "ISC",

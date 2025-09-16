@@ -338,6 +338,26 @@
       "maize": "Maize",
       "sesame": "Sesame"
     }
+  },
+  "adminDashboard": {
+    "title": "Create a New Admin",
+    "description": "Please fill out the form below to create a new admin account.",
+    "nameLabel": "Full Name",
+    "namePlaceholder": "Enter full name",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "Enter email address",
+    "phoneLabel": "Phone Number",
+    "phonePlaceholder": "Enter phone number",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter password",
+    "createAdminButton": "Create Admin",
+    "logoutButton": "Log Out",
+    "successMessage": "Admin account created successfully!",
+    "failedMessage": "Failed to create admin account. Please try again.",
+    "networkError": "Network error. Please check your connection and try again."
+  },
+  "auth": {
+    "notAuthenticated": "You are not authenticated to perform this action."
   }
 }
 

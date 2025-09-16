@@ -316,6 +316,65 @@ export const verifyLoginOtp = async (req: Request, res: Response) => {
   }
 };
 
+
+
+// File: controllers/auth.controller.ts
+
+// ... (existing imports)
+
+/**
+ * @route POST /api/auth/register-admin
+ * @description Creates a new admin user. Accessible only by a super_admin.
+ * @access Private
+ */
+export const createAdmin = async (req: Request, res: Response) => {
+    // Role is expected to be 'admin', but we force it to ensure security.
+    const { name, phone, email, password } = req.body; 
+
+    // Check for required fields
+    if (!name || !phone || !password) {
+        return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    try {
+        // Check if a user with the same phone or email already exists
+        const existingUser = await prisma.user.findFirst({
+            where: {
+                OR: [{ phone }, { email }],
+            },
+        });
+
+        if (existingUser) {
+            return res.status(400).json({ error: "User with this phone or email already exists" });
+        }
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create the new admin user
+        const newAdmin = await prisma.user.create({
+            data: {
+                name,
+                phone,
+                email,
+                password: hashedPassword,
+                role: 'admin', // Force the role to 'admin'
+                status: 'registered',
+            },
+        });
+
+        res.status(201).json({ 
+            message: "Admin user created successfully", 
+            userId: newAdmin.id 
+        });
+
+    } catch (error) {
+        console.error("Error creating admin user:", error);
+        res.status(500).json({ error: "Failed to create admin user" });
+    }
+};
+
+// ... (existing exports)
 /**
  * @route 
  */

@@ -1,8 +1,7 @@
-import express from "express";
+import { Router } from "express";
 import { getWeatherAndCropAdvice } from "../controllers/weatherPrediction.controller";
 
-const router = express.Router();
-
-router.post("/", getWeatherAndCropAdvice);
+const router = Router();
+router.post("/advice", getWeatherAndCropAdvice);
 
 export default router;
