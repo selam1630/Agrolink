@@ -9,7 +9,8 @@ const OPENCAGE_API_KEY = process.env.OPENCAGE_API_KEY || "";
 const TEXTBEE_API_KEY = process.env.TEXTBEE_API_KEY || "";
 const TEXTBEE_DEVICE_ID = process.env.TEXTBEE_DEVICE_ID || "";
 
-const OPENWEATHER_API_URL = "https://api.openweathermap.org/data/2.5/weather";
+const OPENWEATHER_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather";
+const OPENWEATHER_FORECAST_URL = "https://api.openweathermap.org/data/2.5/forecast";
 const OPENCAGE_API_URL = "https://api.opencagedata.com/geocode/v1/json";
 
 const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
@@ -55,6 +56,13 @@ const sendDisasterAlertsToFarmers = async (alerts: string[]) => {
     }
 };
 
+const generateDIYAlertsFromForecast = (forecastData: any) => {
+    const alerts: string[] = [];
+    alerts.push("🚨 TEST ALERT: Fake flood warning on Sept 25!");
+
+    return alerts;
+};
+
 const getWeatherAndCropAdvice = async (req: import("express").Request, res: import("express").Response) => {
     const { lat, lon } = req.body;
 
@@ -62,15 +70,22 @@ const getWeatherAndCropAdvice = async (req: import("express").Request, res: impo
 
     try {
         let locationName = await getLocationName(lat, lon);
-
-        const weatherUrl = `${OPENWEATHER_API_URL}?lat=${lat}&lon=${lon}&units=metric&appid=${OPENWEATHER_API_KEY}`;
+        const weatherUrl = `${OPENWEATHER_WEATHER_URL}?lat=${lat}&lon=${lon}&units=metric&appid=${OPENWEATHER_API_KEY}`;
         const weatherResponse = await axios.get(weatherUrl);
         const weatherData = weatherResponse.data;
+        const forecastUrl = `${OPENWEATHER_FORECAST_URL}?lat=${lat}&lon=${lon}&units=metric&appid=${OPENWEATHER_API_KEY}`;
+        const forecastResponse = await axios.get(forecastUrl);
+        const forecastData = forecastResponse.data;
+        const disasterAlerts = generateDIYAlertsFromForecast(forecastData);
+        if (disasterAlerts.length > 0) {
+            await sendDisasterAlertsToFarmers(disasterAlerts);
+        }
 
         const prompt = `
             You are an agricultural advisor for Ethiopian farmers.
             Location: ${locationName} (lat: ${lat}, lon: ${lon})
-            Weather Data: ${JSON.stringify(weatherData)}
+            Current Weather Data: ${JSON.stringify(weatherData)}
+            Forecast Data (5 days): ${JSON.stringify(forecastData)}
 
             Provide JSON advice in this format:
             {
@@ -86,14 +101,65 @@ const getWeatherAndCropAdvice = async (req: import("express").Request, res: impo
         const geminiResult = await model.generateContent(prompt);
         const geminiText = geminiResult.response.text();
         const formattedOutput = JSON.parse(geminiText.replace(/```json|```/g, "").trim());
-        const disasterAlerts = [{ description: "Flood warning: Heavy rains expected this week!" }];
-        const alertMessages = disasterAlerts.map(a => a.description);
-
-        if (alertMessages.length > 0) await sendDisasterAlertsToFarmers(alertMessages);
 
         res.status(200).json({ 
             location: locationName, 
             weatherData, 
+            forecastData, 
+            advice: { ...formattedOutput, disasterAlerts } 
+        });
+
+    } catch (error) {
+        console.error("Error in fetching data:", error);
+        let errorMessage = "An unexpected error occurred.";
+        if (axios.isAxiosError(error as any) && (error as any).response) {
+            errorMessage = `Weather API error: ${(error as any).response.status} - ${(error as any).response.data.message}`;
+        } else if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+        res.status(500).json({ message: errorMessage });
+    }
+};
+const getWeatherAndCropAdviceForDashboard = async (req: import("express").Request, res: import("express").Response) => {
+    const { lat, lon } = req.body;
+
+    if (!lat || !lon) return res.status(400).json({ error: "Missing required parameters: lat and lon." });
+
+    try {
+        let locationName = await getLocationName(lat, lon);
+        const weatherUrl = `${OPENWEATHER_WEATHER_URL}?lat=${lat}&lon=${lon}&units=metric&appid=${OPENWEATHER_API_KEY}`;
+        const weatherResponse = await axios.get(weatherUrl);
+        const weatherData = weatherResponse.data;
+        const forecastUrl = `${OPENWEATHER_FORECAST_URL}?lat=${lat}&lon=${lon}&units=metric&appid=${OPENWEATHER_API_KEY}`;
+        const forecastResponse = await axios.get(forecastUrl);
+        const forecastData = forecastResponse.data;
+        const disasterAlerts = generateDIYAlertsFromForecast(forecastData);
+
+        const prompt = `
+            You are an agricultural advisor for Ethiopian farmers.
+            Location: ${locationName} (lat: ${lat}, lon: ${lon})
+            Current Weather Data: ${JSON.stringify(weatherData)}
+            Forecast Data (5 days): ${JSON.stringify(forecastData)}
+
+            Provide JSON advice in this format:
+            {
+                "weatherPrediction": "...",
+                "soilAndWaterAdvice": "...",
+                "pestAndDiseaseAdvice": "...",
+                "recommendedCrops": ["..."],
+                "emergencyPreparedness": "...",
+                "locationSpecificTips": "..."
+            }
+        `;
+
+        const geminiResult = await model.generateContent(prompt);
+        const geminiText = geminiResult.response.text();
+        const formattedOutput = JSON.parse(geminiText.replace(/```json|```/g, "").trim());
+
+        res.status(200).json({ 
+            location: locationName, 
+            weatherData, 
+            forecastData, 
             advice: { ...formattedOutput, disasterAlerts } 
         });
 
@@ -109,4 +175,4 @@ const getWeatherAndCropAdvice = async (req: import("express").Request, res: impo
     }
 };
 
-export { getWeatherAndCropAdvice };
+export { getWeatherAndCropAdvice, getWeatherAndCropAdviceForDashboard };

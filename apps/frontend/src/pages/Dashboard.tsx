@@ -83,7 +83,7 @@ const Dashboard = () => {
 
                     try {
                         const weatherResponse = await axios.post<WeatherAdviceResponse>(
-                            'http://localhost:5000/api/weather-prediction/advice',
+                            'http://localhost:5000/api/weather-prediction/advice-for-dashboard',
                             { lat: latitude, lon: longitude },
                             { headers: { 'Authorization': `Bearer ${token}` } }
                         );

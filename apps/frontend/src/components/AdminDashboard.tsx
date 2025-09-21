@@ -54,8 +54,6 @@ const AdminDashboard: React.FC = () => {
     setIsLoading(true);
     setError('');
     setSuccessMessage('');
-
-    // Retrieve the auth token from local storage
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
       setError(t('auth.notAuthenticated') as string);
@@ -95,7 +93,7 @@ const AdminDashboard: React.FC = () => {
   };
 
   if (!isAdmin) {
-    return null; // or a loading spinner
+    return null;
   }
 
   return (
