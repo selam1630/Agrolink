@@ -58,11 +58,35 @@ const sendDisasterAlertsToFarmers = async (alerts: string[]) => {
 
 const generateDIYAlertsFromForecast = (forecastData: any) => {
     const alerts: string[] = [];
-    alerts.push("🚨 TEST ALERT: Fake flood warning on Sept 25!");
+
+    if (!forecastData || !forecastData.list) return alerts;
+
+    for (const item of forecastData.list) {
+        const dtTxt = item.dt_txt; 
+        const weather = item.weather[0]?.main || "";
+        const description = item.weather[0]?.description || "";
+        const rain = item.rain?.["3h"] || 0;
+        const windSpeed = item.wind?.speed || 0;
+        const temp = item.main?.temp || 0;
+        if (rain > 20) {
+            alerts.push(`🚨 Flood Alert: Heavy rainfall (${rain}mm) expected on ${dtTxt}. Take precautions!`);
+        }
+        if (windSpeed > 15) {
+            alerts.push(`🌪️ Storm Alert: High winds (${windSpeed} m/s) expected on ${dtTxt}. Secure your crops and equipment.`);
+        }
+        if (temp > 35) {
+            alerts.push(`🔥 Heatwave Alert: Extremely high temperature (${temp}°C) expected on ${dtTxt}. Irrigate crops and provide shade if possible.`);
+        }
+        if (temp < 5) {
+            alerts.push(`❄️ Frost Alert: Low temperature (${temp}°C) expected on ${dtTxt}. Protect seedlings and sensitive crops.`);
+        }
+        if (weather.toLowerCase().includes("thunderstorm")) {
+            alerts.push(`⚡ Thunderstorm Alert: ${description} expected on ${dtTxt}. Stay safe and avoid fieldwork.`);
+        }
+    }
 
     return alerts;
 };
-
 const getWeatherAndCropAdvice = async (req: import("express").Request, res: import("express").Response) => {
     const { lat, lon } = req.body;
 
@@ -136,21 +160,27 @@ const getWeatherAndCropAdviceForDashboard = async (req: import("express").Reques
         const disasterAlerts = generateDIYAlertsFromForecast(forecastData);
 
         const prompt = `
-            You are an agricultural advisor for Ethiopian farmers.
-            Location: ${locationName} (lat: ${lat}, lon: ${lon})
-            Current Weather Data: ${JSON.stringify(weatherData)}
-            Forecast Data (5 days): ${JSON.stringify(forecastData)}
+  You are an agricultural advisor for Ethiopian farmers.
+  Provide all advice in the following language: ${req.body.language === 'en' ? 'English' :
+        req.body.language === 'am' ? 'Amharic' :
+        req.body.language === 'om' ? 'Oromo' :
+        req.body.language === 'ti' ? 'Tigrinya' : 'English'
+  }.
+  
+  Location: ${locationName} (lat: ${lat}, lon: ${lon})
+  Current Weather Data: ${JSON.stringify(weatherData)}
+  Forecast Data (5 days): ${JSON.stringify(forecastData)}
 
-            Provide JSON advice in this format:
-            {
-                "weatherPrediction": "...",
-                "soilAndWaterAdvice": "...",
-                "pestAndDiseaseAdvice": "...",
-                "recommendedCrops": ["..."],
-                "emergencyPreparedness": "...",
-                "locationSpecificTips": "..."
-            }
-        `;
+  Provide JSON advice in this format:
+  {
+      "weatherPrediction": "...",
+      "soilAndWaterAdvice": "...",
+      "pestAndDiseaseAdvice": "...",
+      "recommendedCrops": ["..."],
+      "emergencyPreparedness": "...",
+      "locationSpecificTips": "..."
+  }
+`;
 
         const geminiResult = await model.generateContent(prompt);
         const geminiText = geminiResult.response.text();
