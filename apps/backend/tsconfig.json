@@ -7,12 +7,15 @@
 
     /* Modules */
     "module": "commonjs",
-    "moduleResolution": "node", // Add this line
-    "outDir": "./dist",        // Add this line
+    "moduleResolution": "node",
+    "outDir": "./dist",
     "rootDir": "./",
-    
+
     /* Type Checking */
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+
+    /* 👇 Add this so TypeScript picks up your custom gtts.d.ts */
+    "typeRoots": ["./src/types", "./node_modules/@types"]
   }
 }

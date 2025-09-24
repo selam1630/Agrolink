@@ -29,7 +29,8 @@ app.use("/api/advice", adviceRoutes);
 app.use("/api/weather-prediction", weatherPredictionRoutes);
 app.use('/api/cart', cartRoutes);
 app.use("/api/diseaseDetection", diseaseDetectionRoute);
-app.use("/api/profile", profileRoute)
+app.use("/api/profile", profileRoute);
+app.use("/public", express.static("public"));
 
 const PORT = 5000;
 app.listen(PORT, "0.0.0.0", () => {
