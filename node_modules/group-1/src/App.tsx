@@ -1,5 +1,3 @@
-// File: src/App.tsx
-
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ForgotPassword from "./components/authPages/ForgotPassword";
@@ -26,6 +24,8 @@ import AdviceForm from "./components/advice/DiseaseDetection";
 import FarmerProfile from "./components/profile/FarmerProfile";
 import NewsPage from "./pages/news";
 import AdminDashboard from "./components/AdminDashboard";
+import AdminDashboard2 from "./components/Admin2Dashboard";
+import AdminDashboard3 from "./components/authPages/admin page"
 
 function App() {
   return (
@@ -41,6 +41,9 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/" element={<LandingPage />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/admin-dashboard2" element={<AdminDashboard2 />} />
+            <Route path="/admin-dashboard3" element={<AdminDashboard3 />} />
+            <Route path="/weather-detector" element={<Weather />} />
           </Route>
 
           {/* Dashboard Pages with the Header and Sidebar */}
@@ -51,7 +54,6 @@ function App() {
             <Route path="/payment-success" element={<PaymentSuccessPage />} />
             <Route path="/create-product" element={<PostProduct />} />
             <Route path="/products/:id" element={<ProductDetail />} />
-            <Route path="/weather-detector" element={<Weather />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/services" element={<Services />} />
             <Route path="/news" element={<NewsPage />} />

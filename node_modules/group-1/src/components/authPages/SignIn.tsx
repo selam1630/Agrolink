@@ -42,7 +42,7 @@ const handleLoginSuccess = (data: any) => {
     } else if (data.role === 'farmer') {
         navigate('/dashboard'); 
     } else if (data.role === 'admin') {
-        navigate('/weather-detector');}
+        navigate('/admin-dashboard3');}
     else {
         navigate('/products'); 
     }

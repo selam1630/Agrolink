@@ -138,6 +138,23 @@ export const registerAndSendOtp = async (req: Request, res: Response) => {
         .json({ error: "User with this phone or email already exists" });
     }
 
+    // ===== Step 2: Check Farmer Registry =====
+    const farmerInList = await prisma.farmerRegistry.findUnique({
+      where: { phone },
+    });
+
+    if (!farmerInList) {
+      return res.status(403).json({ 
+        error: "Your phone is not in the farmer registry. Please contact your local admin." 
+      });
+    }
+
+    if (farmerInList.isRegistered) {
+      return res.status(400).json({ 
+        error: "This farmer has already registered." 
+      });
+    }
+
     const otp = generateOTP();
     const hashedPassword = await bcrypt.hash(password, 10);
     const otpExpiresAt = new Date(Date.now() + 5 * 60 * 1000);
@@ -203,6 +220,13 @@ export const verifyAndCompleteRegistration = async (req: Request, res: Response)
         status: "registered", 
       },
     });
+
+    // ===== Step 3: Mark Farmer as Registered =====
+    await prisma.farmerRegistry.update({
+      where: { phone },
+      data: { isRegistered: true },
+    });
+
     registrationData.delete(phone);
 
     const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, { expiresIn: "1d" });
@@ -218,6 +242,7 @@ export const verifyAndCompleteRegistration = async (req: Request, res: Response)
     res.status(500).json({ error: "Registration failed" });
   }
 };
+
 /**
  * @route 
  */

@@ -361,5 +361,21 @@
       "maize": "በቆሎ",
       "sesame": "ሰሊጥ"
     }
+  },
+  "adminDashboard": {
+    "title": "አስተዳደር - አዲስ ገበሬ መዝግብ",
+    "description": "እባክዎን አዲስ ገበሬዎችን ለማስመዝገብ ይህን ቅጽ ይጠቀሙ።",
+    "farmerNameLabel": "የገበሬ ስም",
+    "farmerNamePlaceholder": "የገበሬ ስም ያስገቡ",
+    "phoneLabel": "የስልክ ቁጥር",
+    "phonePlaceholder": "የስልክ ቁጥር ያስገቡ",
+    "regionLabel": "ክልል",
+    "regionPlaceholder": "ክልል ያስገቡ",
+    "addFarmerButton": "ገበሬ ያክሉ",
+    "logoutButton": "ውጣ",
+    "farmerAddedSuccess": "ገበሬ በሚታወቀው ሁኔታ ተከትሏል!",
+    "failedMessage": "ገበሬን ማከል አልተቻለም። እባክዎን ደግመው ይሞክሩ።",
+    "networkError": "የኔትዎርክ ስህተት። እባክዎን ግንኙነትዎን ያረጋግጡ።",
+    "notAuthenticated": "አልተገባውም። እባክዎን ይግቡ።"
   }
 }

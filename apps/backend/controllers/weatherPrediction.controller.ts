@@ -14,7 +14,7 @@ const OPENWEATHER_FORECAST_URL = "https://api.openweathermap.org/data/2.5/foreca
 const OPENCAGE_API_URL = "https://api.opencagedata.com/geocode/v1/json";
 
 const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
 
 interface DisasterAlert {
   description: string;

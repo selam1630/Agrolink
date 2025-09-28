@@ -358,6 +358,22 @@
   },
   "auth": {
     "notAuthenticated": "You are not authenticated to perform this action."
+  },
+  "adminDashboard": {
+    "title": "Admin - Add Farmer",
+    "description": "Use this form to register new farmers in the system.",
+    "farmerNameLabel": "Farmer Name",
+    "farmerNamePlaceholder": "Enter farmer name",
+    "phoneLabel": "Phone Number",
+    "phonePlaceholder": "Enter phone number",
+    "regionLabel": "Region",
+    "regionPlaceholder": "Enter region",
+    "addFarmerButton": "Add Farmer",
+    "logoutButton": "Log Out",
+    "farmerAddedSuccess": "Farmer added successfully!",
+    "failedMessage": "Failed to add farmer. Please try again.",
+    "networkError": "Network error. Please check your connection.",
+    "notAuthenticated": "You are not authenticated. Please sign in."
   }
 }
 

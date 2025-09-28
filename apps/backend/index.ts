@@ -10,7 +10,8 @@ import weatherPredictionRoutes from "./routes/weatherPrediction.Route";
 import cartRoutes from './routes/cart.routes';
 import paymentRoute from './routes/paymentRoute';
 import diseaseDetectionRoute from "./routes/diseaseDetection.route";
-import profileRoute from "./routes/profileRoute"
+import profileRoute from "./routes/profileRoute";
+import adminRoutes from "./routes/adminRoute";
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use('/api/cart', cartRoutes);
 app.use("/api/diseaseDetection", diseaseDetectionRoute);
 app.use("/api/profile", profileRoute);
 app.use("/public", express.static("public"));
+app.use("/api/admin", adminRoutes);
 
 const PORT = 5000;
 app.listen(PORT, "0.0.0.0", () => {
