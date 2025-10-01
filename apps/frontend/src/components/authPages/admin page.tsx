@@ -31,7 +31,12 @@ const AdminDashboard3: React.FC = () => {
           >
             ➕ Create Farmer
           </button>
-
+         <button
+            onClick={() => navigate("/new-posting")}
+            className="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300"
+          >
+            📝 New Posting
+          </button>
           {/* ✅ Goes to Weather Detector */}
           <button
             onClick={() => navigate("/weather-detector")}
@@ -39,6 +44,8 @@ const AdminDashboard3: React.FC = () => {
           >
             📢 Send Alert
           </button>
+
+          
         </div>
       </div>
     </div>
