@@ -1,55 +1,109 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import agriIcon from "@/assets/images/agriIcon.png";
+import axios from "axios";
+import { useAuth } from "@/context/AuthContext";
 
-const AdminDashboard3: React.FC = () => {
+interface AdminMetrics {
+  totalFarmers: number;
+  pendingPosts: number;
+  alertsSent: number;
+  activeMarkets: number;
+}
+
+const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
+  const { token } = useAuth();
+  const [metrics, setMetrics] = useState<AdminMetrics | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchMetrics = async () => {
+      if (!token) return;
+
+      try {
+        // Example API call to fetch admin metrics
+        const response = await axios.get<AdminMetrics>(
+          "http://localhost:5000/api/admin/metrics",
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setMetrics(response.data);
+      } catch (err) {
+        setError("Failed to load metrics.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMetrics();
+  }, [token]);
+
+  if (loading) return <div className="p-6 text-center">Loading admin dashboard...</div>;
+  if (error) return <div className="p-6 text-center text-red-500">{error}</div>;
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-green-100 p-4">
-      <div className="relative bg-white p-8 md:p-10 rounded-xl shadow-2xl w-full max-w-lg">
-        <img
-          src={agriIcon}
-          alt="AgroTech Logo"
-          className="absolute top-6 left-6 w-20 h-20 p-2"
-        />
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="flex items-center mb-6">
+        <img src={agriIcon} alt="AgroTech Logo" className="w-16 h-16 mr-4" />
+        <h1 className="text-3xl font-bold text-green-700">Admin Dashboard</h1>
+      </div>
 
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-green-700">
-            Admin Dashboard
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Choose an action to manage your farmers.
-          </p>
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+          <h2 className="text-lg font-semibold text-gray-700 mb-2">Total Farmers</h2>
+          <div className="text-3xl font-bold text-gray-800">{metrics?.totalFarmers}</div>
         </div>
 
-        <div className="space-y-6">
-          {/* ✅ Goes to AdminDashboard2 */}
+        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-yellow-500">
+          <h2 className="text-lg font-semibold text-gray-700 mb-2">Pending Posts</h2>
+          <div className="text-3xl font-bold text-gray-800">{metrics?.pendingPosts}</div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-red-500">
+          <h2 className="text-lg font-semibold text-gray-700 mb-2">Alerts Sent</h2>
+          <div className="text-3xl font-bold text-gray-800">{metrics?.alertsSent}</div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+          <h2 className="text-lg font-semibold text-gray-700 mb-2">Active Markets</h2>
+          <div className="text-3xl font-bold text-gray-800">{metrics?.activeMarkets}</div>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-lg font-semibold text-gray-700 mb-4">Quick Actions</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <button
             onClick={() => navigate("/admin-dashboard2")}
-            className="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300"
+            className="bg-green-500 hover:bg-green-600 text-white py-3 px-4 rounded-lg font-medium transition duration-200"
           >
             ➕ Create Farmer
           </button>
-         <button
+          <button
             onClick={() => navigate("/new-posting")}
-            className="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300"
+            className="bg-green-500 hover:bg-green-600 text-white py-3 px-4 rounded-lg font-medium transition duration-200"
           >
             📝 New Posting
           </button>
-          {/* ✅ Goes to Weather Detector */}
           <button
             onClick={() => navigate("/weather-detector")}
-            className="w-full bg-yellow-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 transition-all duration-300"
+            className="bg-yellow-500 hover:bg-yellow-600 text-white py-3 px-4 rounded-lg font-medium transition duration-200"
           >
             📢 Send Alert
           </button>
-
-          
+          <button
+            onClick={() => navigate("/manage-markets")}
+            className="bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg font-medium transition duration-200"
+          >
+            📊 Manage Markets
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-export default AdminDashboard3;
+export default AdminDashboard;

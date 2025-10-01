@@ -58,3 +58,37 @@ export const listFarmers = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to fetch farmers" });
   }
 };
+
+/**
+ * @route GET /api/admin/metrics
+ * @description Fetch metrics for the admin dashboard
+ */
+export const getAdminMetrics = async (req: Request, res: Response) => {
+  try {
+    // Total farmers
+    const totalFarmers = await prisma.farmerRegistry.count();
+
+    // Total news/posts
+    const totalNews = await prisma.news.count();
+
+    // Pending tasks (example static value, update logic if needed)
+    const pendingTasks = 3;
+
+    // Market data (mock data, can be dynamic)
+    const marketData = [
+      { crop: "Teff", price: 1200, trend: "up" },
+      { crop: "Maize", price: 800, trend: "down" },
+      { crop: "Wheat", price: 950, trend: "stable" },
+    ];
+
+    res.status(200).json({
+      totalFarmers,
+      totalNews,
+      pendingTasks,
+      marketData,
+    });
+  } catch (error) {
+    console.error("Error fetching admin metrics:", error);
+    res.status(500).json({ error: "Failed to fetch admin metrics" });
+  }
+};
