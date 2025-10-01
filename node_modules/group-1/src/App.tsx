@@ -26,7 +26,7 @@ import NewsPage from "./pages/news";
 import AdminDashboard from "./components/AdminDashboard";
 import AdminDashboard2 from "./components/Admin2Dashboard";
 import AdminDashboard3 from "./components/authPages/admin page"
-
+import NewPostingPage from "./pages/NewPostingPage";
 function App() {
   return (
     <CartProvider>
@@ -44,6 +44,7 @@ function App() {
             <Route path="/admin-dashboard2" element={<AdminDashboard2 />} />
             <Route path="/admin-dashboard3" element={<AdminDashboard3 />} />
             <Route path="/weather-detector" element={<Weather />} />
+            <Route path="/new-posting" element={<NewPostingPage />} />
           </Route>
 
           {/* Dashboard Pages with the Header and Sidebar */}

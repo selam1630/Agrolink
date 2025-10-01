@@ -142,3 +142,13 @@ model FarmerRegistry {
 
   createdAt DateTime @default(now())
 }
+model News {
+  id          String   @id @map("_id") @default(auto()) @db.ObjectId
+  category    String
+  title       String
+  description String
+  prices      Json?     
+  createdAt   DateTime @default(now())
+}
+
+

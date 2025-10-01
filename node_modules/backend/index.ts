@@ -12,6 +12,7 @@ import paymentRoute from './routes/paymentRoute';
 import diseaseDetectionRoute from "./routes/diseaseDetection.route";
 import profileRoute from "./routes/profileRoute";
 import adminRoutes from "./routes/adminRoute";
+import newsRoutes from "./routes/newsRoute";
 
 const app = express();
 
@@ -33,6 +34,8 @@ app.use("/api/diseaseDetection", diseaseDetectionRoute);
 app.use("/api/profile", profileRoute);
 app.use("/public", express.static("public"));
 app.use("/api/admin", adminRoutes);
+app.use("/news", newsRoutes);
+
 
 const PORT = 5000;
 app.listen(PORT, "0.0.0.0", () => {
