@@ -152,3 +152,26 @@ model News {
 }
 
 
+model SoilReading {
+  id         String   @id @map("_id") @default(auto()) @db.ObjectId
+  farmerId   String?  @db.ObjectId       // optional, null if sensor isn't linked
+  region     String?
+  lat        Float?
+  lon        Float?
+  pH         Float
+  nitrogen   Float
+  phosphorus Float
+  potassium  Float
+  moisture   Float?
+  temperature Float?
+  createdAt  DateTime @default(now())
+}
+
+model FertilizerRecommendation {
+  id                     String   @id @map("_id") @default(auto()) @db.ObjectId
+  soilReadingId          String?  @db.ObjectId
+  farmerId               String?  @db.ObjectId
+  recommendedFertilizers Json?
+  explanation            String?
+  createdAt              DateTime @default(now())
+}

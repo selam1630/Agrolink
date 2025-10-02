@@ -23,7 +23,6 @@ const AdminDashboard: React.FC = () => {
       if (!token) return;
 
       try {
-        // Example API call to fetch admin metrics
         const response = await axios.get<AdminMetrics>(
           "http://localhost:5000/api/admin/metrics",
           { headers: { Authorization: `Bearer ${token}` } }
